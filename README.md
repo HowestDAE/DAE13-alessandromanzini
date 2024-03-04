@@ -4,15 +4,15 @@
 <br />
 <div align="center">
 
-  <h1 align="center">NAME OF CHOSEN GAME</h1>
+  <h1 align="center">Cuphead</h1>
 
   <p align="center">
-    Short description of the game.
+    Cuphead is a 2017 side-scrolling run and gun video game developed and published by Studio MDHR.
     <br />
     <strong>Original game : </strong>
-    <a href="https://www.google.be/"><strong>General info »</strong></a>
+    <a href="https://en.wikipedia.org/wiki/Cuphead"><strong>General info »</strong></a>
     ·
-    <a href="https://www.google.be/"><strong>Youtube video »<strong></a>
+    <a href="https://www.youtube.com/watch?v=qMA11zEC9S4"><strong>Youtube video »<strong></a>
     <br />
     <br />
   </p>
@@ -46,12 +46,12 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-TODO: add screenshot 
+<img src="game_screenshot.png" />
 
 Here's why:
-TODO: describe why you chose this game 
-* reason 1
-* reason .. 
+* The graphics are stunning
+* The game is fun and challenging
+* Making the game itself is a challenge
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -61,16 +61,20 @@ TODO: describe why you chose this game
 This section gives a clear and detailed overview of which parts of the original game I planned to make.
 
 ### The minimum I will most certainly develop:
-* .. 
-* .. 
+* Level scrolling and camera stop
+* Weapons
+* Powers and resources
+* Fighting
+* Main menu
 
 ### What I will probably make as well:
-* .. 
-* .. 
+* Flawless animations
+* Good IA
+* Good sound implementation
 
 ### What I plan to create if I have enough time left:
-* .. 
-* .. 
+* Tutorial mission
+* Polishing the game
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -81,7 +85,7 @@ Detailed instructions on how to run your game project are in this section.
 
 ### Prerequisites
 
-This is an example of how to list things you need to use the software and how to install them.
+To run this project you will need the following software:
 * Visual Studio 2022
 
 ### How to run the project
@@ -144,9 +148,9 @@ Explain where you applied inheritance (mandatory).
 <!-- CONTACT -->
 ## Contact
 
-Your Name - email@student.howest.be
+Manzini Alessandro - alessandro.manzini@student.howest.be
 
-Project Link: [https://github.com/your_username/repo_name](https://github.com/your_username/repo_name)
+Project Link: [https://github.com/HowestDAE/DAE13-alessandromanzini](https://github.com/HowestDAE/DAE13-alessandromanzini)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -156,7 +160,7 @@ Project Link: [https://github.com/your_username/repo_name](https://github.com/yo
 
 Use this space to list resources you find helpful and would like to give credit to. 
 
-* [Example 1: cpp reference on std::vector](https://en.cppreference.com/w/cpp/container/vector)
+* [All the game sprites on Spriters Resource](https://www.spriters-resource.com/pc_computer/cupheaddontdealwiththedevil/)
 * ..
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
