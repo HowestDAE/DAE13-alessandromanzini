@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "Game.h"
+#include "iostream"
 
 Game::Game( const Window& window ) 
 	:BaseGame{ window }
@@ -14,53 +15,45 @@ Game::~Game( )
 
 void Game::Initialize( )
 {
-	
+	m_pResourcesLinker = new ResourcesLinker( );
+	m_pCamera = new Camera( GetViewPort( ) );
+	m_pStageManager = new StageManager( m_pCamera, m_pResourcesLinker ); // Association1 + Aggregation
+	m_pCamera->SetStageManager( m_pStageManager ); // Association2
+
+	m_pStageManager->Start( );
 }
 
 void Game::Cleanup( )
 {
+	delete m_pResourcesLinker;
+	delete m_pCamera;
+	delete m_pStageManager;
+
+	m_pResourcesLinker = nullptr;
+	m_pCamera = nullptr;
+	m_pStageManager = nullptr;
 }
 
 void Game::Update( float elapsedSec )
 {
-	// Check keyboard state
-	//const Uint8 *pStates = SDL_GetKeyboardState( nullptr );
-	//if ( pStates[SDL_SCANCODE_RIGHT] )
-	//{
-	//	std::cout << "Right arrow key is down\n";
-	//}
-	//if ( pStates[SDL_SCANCODE_LEFT] && pStates[SDL_SCANCODE_UP])
-	//{
-	//	std::cout << "Left and up arrow keys are down\n";
-	//}
+	m_pStageManager->Update( elapsedSec );
 }
 
 void Game::Draw( ) const
 {
 	ClearBackground( );
+
+	m_pCamera->Draw( );
 }
 
 void Game::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )
 {
-	//std::cout << "KEYDOWN event: " << e.keysym.sym << std::endl;
+	m_pStageManager->KeyPressEvent( e );
 }
 
 void Game::ProcessKeyUpEvent( const SDL_KeyboardEvent& e )
 {
-	//std::cout << "KEYUP event: " << e.keysym.sym << std::endl;
-	//switch ( e.keysym.sym )
-	//{
-	//case SDLK_LEFT:
-	//	//std::cout << "Left arrow key released\n";
-	//	break;
-	//case SDLK_RIGHT:
-	//	//std::cout << "`Right arrow key released\n";
-	//	break;
-	//case SDLK_1:
-	//case SDLK_KP_1:
-	//	//std::cout << "Key 1 released\n";
-	//	break;
-	//}
+	m_pStageManager->KeyPressEvent( e );
 }
 
 void Game::ProcessMouseMotionEvent( const SDL_MouseMotionEvent& e )
@@ -83,7 +76,7 @@ void Game::ProcessMouseDownEvent( const SDL_MouseButtonEvent& e )
 	//	std::cout << " middle button " << std::endl;
 	//	break;
 	//}
-	
+	std::cout << e.x << " " << e.y << std::endl;
 }
 
 void Game::ProcessMouseUpEvent( const SDL_MouseButtonEvent& e )

@@ -170,6 +170,11 @@ Vector2f operator*( Vector2f lhs, float rhs )
 	return lhs *= rhs;
 }
 
+Vector2f operator*( Vector2f lhs, Vector2f rhs )
+{
+	return Vector2f( lhs.x * rhs.x, lhs.y * rhs.y );
+}
+
 Vector2f operator/( Vector2f lhs, float rhs )
 {
 	return lhs *= (1 / rhs);

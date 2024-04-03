@@ -68,6 +68,3 @@ struct Ellipsef
 	float radiusX;
 	float radiusY;
 };
-
-
-

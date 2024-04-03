@@ -1,5 +1,9 @@
 #pragma once
 #include "BaseGame.h"
+#include "ResourcesLinker.h"
+#include "Camera.h"
+#include "StageManager.h"
+
 class Game : public BaseGame
 {
 public:
@@ -22,6 +26,9 @@ public:
 	void ProcessMouseUpEvent( const SDL_MouseButtonEvent& e ) override;
 
 private:
+	ResourcesLinker* m_pResourcesLinker;
+	Camera* m_pCamera;
+	StageManager* m_pStageManager;
 
 	// FUNCTIONS
 	void Initialize();

@@ -214,7 +214,7 @@ void Texture::CreateFromSurface( SDL_Surface* pSurface )
 	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
 }
 
-void Texture::Draw( const Point2f& dstBottomLeft, const Rectf& srcRect ) const
+void Texture::Draw( const Point2f& dstBottomLeft, const Rectf& srcRect, bool flipX, bool flipY ) const
 {
 	const float epsilon{ 0.001f };
 	if ( !m_CreationOk )
@@ -236,11 +236,11 @@ void Texture::Draw( const Point2f& dstBottomLeft, const Rectf& srcRect ) const
 			dstRect.width = m_Width;
 			dstRect.height = m_Height;
 		}
-		Draw( dstRect, srcRect );
+		Draw( dstRect, srcRect, flipX, flipY );
 	}
 }
 
-void Texture::Draw( const Rectf& dstRect, const Rectf& srcRect ) const
+void Texture::Draw( const Rectf& dstRect, const Rectf& srcRect, bool flipX, bool flipY ) const
 {
 	const float epsilon{ 0.001f };
 	if ( !m_CreationOk )
@@ -273,8 +273,8 @@ void Texture::Draw( const Rectf& dstRect, const Rectf& srcRect ) const
 		// Convert to the range [0.0, 1.0]
 		textLeft = srcRect.left / m_Width;
 		textRight = ( srcRect.left + srcRect.width ) / m_Width;
-		textTop = ( srcRect.bottom - srcRect.height ) / m_Height;
-		textBottom = srcRect.bottom / m_Height;
+		textTop = srcRect.bottom / m_Height;
+		textBottom = (srcRect.bottom + srcRect.height) / m_Height;
 
 		defaultDestHeight = srcRect.height;
 		defaultDestWidth = srcRect.width;
@@ -294,7 +294,21 @@ void Texture::Draw( const Rectf& dstRect, const Rectf& srcRect ) const
 	{
 		vertexRight = vertexLeft + dstRect.width;
 		vertexTop = vertexBottom + dstRect.height;
+	}
 
+
+	// Flip textures
+	if ( flipX )
+	{
+		float temp{ textLeft };
+		textLeft = textRight;
+		textRight = temp;
+	}
+	if ( flipY )
+	{
+		float temp{ textTop };
+		textTop = textBottom;
+		textBottom = temp;
 	}
 
 	// Tell opengl which texture we will use

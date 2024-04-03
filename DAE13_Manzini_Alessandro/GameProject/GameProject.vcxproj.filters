@@ -1,36 +1,149 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Header Files">
+    <Filter Include="Managers">
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    <Filter Include="GameFiles">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Helpers">
+      <UniqueIdentifier>{cc689c8d-e708-4ba9-950c-35ab5c2a9d8f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Managers\Player">
+      <UniqueIdentifier>{7411f2ea-8781-44c1-bfc4-ce9d82869468}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Managers\Texture">
+      <UniqueIdentifier>{ce62dc27-5db8-4b87-aafb-bd395f4573a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Models">
+      <UniqueIdentifier>{bad7ecd1-c51f-41a5-9b6b-86abab81d585}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Artifacts">
+      <UniqueIdentifier>{e02c8a91-19d7-4eed-a450-fc59491fb4b2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Artifacts\Entities">
+      <UniqueIdentifier>{1c33205d-4947-421d-ad59-eaad93e657a7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>GameFiles</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>GameFiles</Filter>
     </ClCompile>
     <ClCompile Include="pch.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>GameFiles</Filter>
+    </ClCompile>
+    <ClCompile Include="Cuphead.cpp">
+      <Filter>Artifacts\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourcesLinker.cpp">
+      <Filter>Helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="MovementManager.cpp">
+      <Filter>Managers\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureManager.cpp">
+      <Filter>Managers\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="WeaponsManager.cpp">
+      <Filter>Managers\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="StageManager.cpp">
+      <Filter>Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="SpriteManager.cpp">
+      <Filter>Managers\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="Constants.cpp">
+      <Filter>Helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="StageManagerInit.cpp">
+      <Filter>Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="Entity.cpp">
+      <Filter>Artifacts</Filter>
+    </ClCompile>
+    <ClCompile Include="NonInterractableProp.cpp">
+      <Filter>Artifacts</Filter>
+    </ClCompile>
+    <ClCompile Include="TexturedModel.cpp">
+      <Filter>Artifacts</Filter>
+    </ClCompile>
+    <ClCompile Include="KeysState.cpp">
+      <Filter>Models</Filter>
+    </ClCompile>
+    <ClCompile Include="PatternManager.cpp">
+      <Filter>Managers\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="PlatformManager.cpp">
+      <Filter>Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="CompositeSpriteManager.cpp">
+      <Filter>Managers\Texture</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Cuphead.h">
+      <Filter>Artifacts\Entities</Filter>
+    </ClInclude>
     <ClInclude Include="Game.h">
-      <Filter>Header Files</Filter>
+      <Filter>GameFiles</Filter>
     </ClInclude>
     <ClInclude Include="pch.h">
-      <Filter>Header Files</Filter>
+      <Filter>GameFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourcesLinker.h">
+      <Filter>Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="MovementManager.h">
+      <Filter>Managers\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureManager.h">
+      <Filter>Managers\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="WeaponsManager.h">
+      <Filter>Managers\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="StageManager.h">
+      <Filter>Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="PlatformManager.h">
+      <Filter>Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="SpriteManager.h">
+      <Filter>Managers\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="Constants.h">
+      <Filter>Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="Entity.h">
+      <Filter>Artifacts</Filter>
+    </ClInclude>
+    <ClInclude Include="NonInterractableProp.h">
+      <Filter>Artifacts</Filter>
+    </ClInclude>
+    <ClInclude Include="TexturedModel.h">
+      <Filter>Artifacts</Filter>
+    </ClInclude>
+    <ClInclude Include="KeysState.h">
+      <Filter>Models</Filter>
+    </ClInclude>
+    <ClInclude Include="PatternManager.h">
+      <Filter>Managers\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="CompositeSpriteManager.h">
+      <Filter>Managers\Texture</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
