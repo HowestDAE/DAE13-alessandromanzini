@@ -13,7 +13,6 @@ public:
 
 	int GetDepth() const;
 
-	virtual void Draw( ) const override;
 	virtual void Draw( float offsetX ) const;
 
 	virtual void Update( float elapsedSec ) override;

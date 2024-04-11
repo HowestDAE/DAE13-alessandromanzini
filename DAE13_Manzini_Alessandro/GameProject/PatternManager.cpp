@@ -31,6 +31,7 @@ void PatternManager::Draw( const Point2f& pos, bool flipX, bool flipY ) const
 void PatternManager::Update( float elapsedSec )
 {
 	// No behaviour
+	return;
 }
 
 float PatternManager::GetWidth( ) const
@@ -41,4 +42,26 @@ float PatternManager::GetWidth( ) const
 float PatternManager::GetHeight( ) const
 {
 	return m_pTexture->GetHeight( );
+}
+
+void PatternManager::ForceReady( )
+{
+	// No behaviour
+	return;
+}
+
+bool PatternManager::GetIsReady( ) const
+{
+	return true;
+}
+
+float PatternManager::GetAnimationTimer( ) const
+{
+	return 0.0f;
+}
+
+void PatternManager::Reset( )
+{
+	// No behaviour
+	return;
 }

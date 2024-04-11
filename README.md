@@ -46,7 +46,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-<img src="game_screenshot.png" />
+<img src="images/game_screenshot.png" />
 
 Here's why:
 * The graphics are stunning
@@ -161,7 +161,6 @@ Project Link: [https://github.com/HowestDAE/DAE13-alessandromanzini](https://git
 Use this space to list resources you find helpful and would like to give credit to. 
 
 * [All the game sprites on Spriters Resource](https://www.spriters-resource.com/pc_computer/cupheaddontdealwiththedevil/)
-* ..
-
+* [Deleting list item while iterating](https://stackoverflow.com/questions/16269696/erasing-while-iterating-an-stdlist/)
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

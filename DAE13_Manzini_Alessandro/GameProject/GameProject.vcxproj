@@ -147,6 +147,7 @@ xcopy "$(SolutionDir)Resources\*.*" "$(TargetDir)" /y /d /s</Command>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AnimationQueue.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CompositeSpriteManager.cpp" />
     <ClCompile Include="Constants.cpp" />
@@ -159,16 +160,21 @@ xcopy "$(SolutionDir)Resources\*.*" "$(TargetDir)" /y /d /s</Command>
     <ClCompile Include="NonInterractableProp.cpp" />
     <ClCompile Include="PatternManager.cpp" />
     <ClCompile Include="pch.cpp" />
+    <ClCompile Include="Peashooter.cpp" />
     <ClCompile Include="PlatformManager.cpp" />
+    <ClCompile Include="Projectile.cpp" />
     <ClCompile Include="ResourcesLinker.cpp" />
+    <ClCompile Include="Spread.cpp" />
     <ClCompile Include="SpriteManager.cpp" />
     <ClCompile Include="StageManager.cpp" />
     <ClCompile Include="StageManagerInit.cpp" />
     <ClCompile Include="TexturedModel.cpp" />
     <ClCompile Include="TextureManager.cpp" />
+    <ClCompile Include="Weapon.cpp" />
     <ClCompile Include="WeaponsManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AnimationQueue.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CompositeSpriteManager.h" />
     <ClInclude Include="Constants.h" />
@@ -180,12 +186,16 @@ xcopy "$(SolutionDir)Resources\*.*" "$(TargetDir)" /y /d /s</Command>
     <ClInclude Include="NonInterractableProp.h" />
     <ClInclude Include="PatternManager.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="Peashooter.h" />
     <ClInclude Include="PlatformManager.h" />
+    <ClInclude Include="Projectile.h" />
     <ClInclude Include="ResourcesLinker.h" />
+    <ClInclude Include="Spread.h" />
     <ClInclude Include="SpriteManager.h" />
     <ClInclude Include="StageManager.h" />
     <ClInclude Include="TexturedModel.h" />
     <ClInclude Include="TextureManager.h" />
+    <ClInclude Include="Weapon.h" />
     <ClInclude Include="WeaponsManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

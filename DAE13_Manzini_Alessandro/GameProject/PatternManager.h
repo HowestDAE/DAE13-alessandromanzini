@@ -16,6 +16,12 @@ public:
 	virtual float GetWidth( ) const override;
 	virtual float GetHeight( ) const override;
 
+	virtual void ForceReady( ) override;
+	virtual bool GetIsReady( ) const override;
+	virtual float GetAnimationTimer( ) const override;
+
+	virtual void Reset( ) override;
+
 	PatternManager& operator=( const PatternManager& rhs ) = delete;
 
 private:

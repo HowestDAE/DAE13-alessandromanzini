@@ -12,8 +12,17 @@ public:
 	virtual void Draw( const Point2f& pos, bool flipX = false, bool flipY = false ) const = 0;
 	virtual void Update( float elapsedSec ) = 0;
 
+	Vector2f GetOffset( ) const;
 	virtual float GetWidth( ) const = 0;
 	virtual float GetHeight( ) const = 0;
+
+	virtual void ForceReady( ) = 0;		
+	// By default, texture is ready.
+	virtual bool GetIsReady( ) const = 0;	
+	// By default, texture has no animation timer.
+	virtual float GetAnimationTimer( ) const = 0;
+
+	virtual void Reset( ) = 0;
 
 	TextureManager& operator=( const TextureManager& rhs ) = delete;
 

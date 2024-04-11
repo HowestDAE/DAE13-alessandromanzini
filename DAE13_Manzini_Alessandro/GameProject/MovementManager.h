@@ -12,26 +12,51 @@ public:
 
 	AimDirection GetAimDirection( ) const;
 	MovementType GetMovementType( ) const;
+	bool IsFacingRight( ) const;
+	bool IsShooting( ) const;
 
 	void SetGravity( bool isDefault );
+	void TouchingFloor( );
 
-	void UpdateVelocity( Vector2f& velocity );
+	void UpdateVelocity( Vector2f& velocity, float elapsedSec );
 
 	void KeyPressEvent( const SDL_KeyboardEvent& e );
-	void CalculateMovementData( );
+	void ProcessMovementData( );
 
 private:
+	struct DirectionData
+	{
+		AimDirection direction;
+		bool facingRight;
+
+		void Fix( MovementType movement, const DirectionData& previous );
+	};
+
+	static const float smk_CupheadRunSpeed;
+	static const float smk_CupheadJumpSpeed;
+	static const float smk_CupheadDashSpeed;
+	static const float smk_CupheadDashTime;
+	static const float smk_CupheadDashCooldownTime;
+
 	KeysState m_KeysStates;
 
-	AimDirection m_Direction;
+	DirectionData m_DirectionData;
 	MovementType m_MovementType;
 
-	bool m_IsAirborne;
-	bool m_IsGravityReversed;
+	bool m_IsShooting;
 
-	const Vector2f mk_BaseVelocity;
-	const Vector2f mk_BaseJumpVelocity;
-	Vector2f m_VelocityModifiers; // One Time Modifiers
+	bool m_IsDashing;
+	float m_DashingAccumulatedTime;
+	float m_DashingCooldownAccumulatedTime;
+
+	bool m_IsAirborne;
+	float m_AirborneAccumulatedTime;
+
+	bool m_IsGravityReversed;
+	Vector2f m_VelocityModifiers;
+
+	DirectionData CalculateAimDirection( DirectionData previous );
+	MovementType CalculateMovementType( MovementType previous );
 };
 
 enum class MovementManager::AimDirection
@@ -54,6 +79,7 @@ enum class MovementManager::MovementType
 	run,
 	jump,
 	parry,
-	dash,
+	dashGround,
+	dashAir,
 	duck
 };

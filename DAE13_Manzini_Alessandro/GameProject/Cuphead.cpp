@@ -1,33 +1,29 @@
 #include "pch.h"
 #include "Cuphead.h"
-
 #include "TextureManager.h"
 #include "SpriteManager.h"
-#include "WeaponsManager.h"
-#include "MovementManager.h"
+#include "CompositeSpriteManager.h"
 
 Cuphead::Cuphead(const Point2f& position )
-	: m_pIdleSprite{}
+	: Entity( position )
+	, m_pIdleSprite{}
 	, m_pRunSprite{}
-	, m_FlipTextureX{}
-	, m_FlipTextureY{}
+	, m_pDuckSprite{}
+	, m_pJumpSprite{}
 {
 	m_Velocity = Vector2f{ 0.f, 0.f };
-	m_Location = Vector2f{ position };
 }
 
 void Cuphead::Draw( ) const
 {
-	m_pTextureManager->Draw( m_Location.ToPoint2f(), m_FlipTextureX, m_FlipTextureY );
+	Entity::Draw( );
 }
 
 void Cuphead::Update( float elapsedSec )
 {
-	m_MovementManager.CalculateMovementData( );
-	m_MovementManager.UpdateVelocity( m_Velocity );
-	m_Location += m_Velocity * elapsedSec;
+	UpdateMovement( elapsedSec );
+	UpdateWeapons( elapsedSec );
 
-	SelectTexture( );
 	m_pTextureManager->Update( elapsedSec );
 }
 
@@ -36,45 +32,79 @@ void Cuphead::KeyPressEvent( const SDL_KeyboardEvent& e )
 	m_MovementManager.KeyPressEvent( e );
 }
 
-void Cuphead::SelectTexture( )
+void Cuphead::ProcessPlatformCollision( const Vector2f& displacement )
 {
-	MovementManager::AimDirection direction{ m_MovementManager.GetAimDirection( ) };
-	MovementManager::MovementType movementType{ m_MovementManager.GetMovementType( ) };
+	if ( displacement.y )
+	{
+		m_Velocity.y = 0;
+		m_MovementManager.TouchingFloor( );
+	}
 
-	switch ( movementType )
+	Entity::ProcessPlatformCollision( displacement );
+}
+
+float Cuphead::GetTextureWidth( ) const
+{
+	return m_pIdleSprite->GetWidth();
+}
+
+bool Cuphead::SelectTexture( MovementManager::AimDirection direction, MovementManager::MovementType movement )
+{
+	TextureManager* pSelectedTexture{};
+	bool flipX{ !m_MovementManager.IsFacingRight() }, flipY{};
+	bool isShooting{ m_MovementManager.IsShooting( ) };
+
+	switch ( movement )
 	{
 	case MovementManager::MovementType::idle:
+		pSelectedTexture = m_pIdleSprite;
+		break;
 	case MovementManager::MovementType::duck:
-		m_pTextureManager = m_pIdleSprite;
+		pSelectedTexture = isShooting ? m_pDuckSprite : m_pDuckSprite;
 		break;
 	case MovementManager::MovementType::aim:
 		break;
 	case MovementManager::MovementType::run:
-		m_pTextureManager = m_pRunSprite;
+		pSelectedTexture = isShooting ? m_pRunSprite : m_pRunSprite;
 		break;
 	case MovementManager::MovementType::jump:
+		pSelectedTexture = m_pJumpSprite;
 		break;
 	case MovementManager::MovementType::parry:
 		break;
-	case MovementManager::MovementType::dash:
+	case MovementManager::MovementType::dashGround:
+		pSelectedTexture = m_pDashGroundSprite;
+		break;
+	case MovementManager::MovementType::dashAir:
+		pSelectedTexture = m_pDashAirSprite;
 		break;
 	default:
 		break;
 	}
 
-	switch ( direction )
+	return TryQueueTexture( pSelectedTexture, flipX, flipY );
+}
+
+void Cuphead::UpdateMovement( float elapsedSec )
+{
+	m_MovementManager.ProcessMovementData( );
+
+	const MovementManager::AimDirection direction{ m_MovementManager.GetAimDirection( ) };
+	const MovementManager::MovementType movement{ m_MovementManager.GetMovementType( ) };
+
+	if ( SelectTexture( direction, movement ) )
 	{
-	case MovementManager::AimDirection::right:
-	case MovementManager::AimDirection::rightup:
-	case MovementManager::AimDirection::rightdown:
-		m_FlipTextureX = false;
-		break;
-	case MovementManager::AimDirection::left:
-	case MovementManager::AimDirection::leftup:
-	case MovementManager::AimDirection::leftdown:
-		m_FlipTextureX = true;
-		break;
-	default:
-		break;
+		//m_MovementManager.ApplyMovementData( );
+	}
+	m_MovementManager.UpdateVelocity( m_Velocity, elapsedSec );
+	m_Location += m_Velocity * elapsedSec;
+}
+
+void Cuphead::UpdateWeapons( float elapsedSec )
+{
+	m_WeaponManager.Update( elapsedSec );
+	if ( m_MovementManager.IsShooting( ) )
+	{
+		m_WeaponManager.Shoot( m_Location.ToPoint2f( ), 0.f );
 	}
 }

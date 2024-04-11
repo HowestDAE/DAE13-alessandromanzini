@@ -1,15 +1,24 @@
 #include "pch.h"
 #include "Camera.h"
-
 #include "StageManager.h"
 #include "Cuphead.h"
 #include "NonInterractableProp.h"
-#include <iostream>
+#include "Projectile.h"
+#include <math.h>
+
+// We only want the first fourth of the wave. Thus M_PI_2 instead of 2*M_PI.
+const float Camera::smk_CameraMaxSpeed{ 700.f };
+const float Camera::smk_GreenwichMeridian{ 100.f };
+const float Camera::smk_CameraPulsation{ float(M_PI / 2.) / (smk_GreenwichMeridian) };
+
+const float Camera::smk_CameraMovementEpsilon{ 10.f };
 
 Camera::Camera( const Rectf& viewPort )
 	: m_pStageManager{}
 	, mk_ViewPort{ viewPort }
-	, m_CameraTranslationPoint{}
+	, m_CameraLocationVector{}
+	, m_CameraTranslationVector{}
+	, m_AimLocationVector{}
 {
 }
 
@@ -20,29 +29,46 @@ void Camera::SetStageManager( StageManager const* pStageManager )
 
 void Camera::Aim( const Point2f& position, float width )
 {
-	const float screenTranslation{ position.x - width / 2 - mk_ViewPort.width / 2  };
+	// [position.x - viewport/2] gives the position relative to the actual point. 
+	// [+ width/2] makes it relative to the texture.
+	const float screenTranslation{ position.x - mk_ViewPort.width / 2 + width / 2 };
 
-	if ( screenTranslation < 0.f )
-	{
-		m_CameraTranslationPoint = Point2f{ 0.f, 0.f };
-	}
-	else
-	{
-		m_CameraTranslationPoint = Point2f{ screenTranslation, 0.f };
-	}
+	// avoid going off the screen
+	m_AimLocationVector.Set( (screenTranslation < 0.f) ? 0.f : screenTranslation, 0.f );
+
+	m_CameraTranslationVector = m_AimLocationVector - m_CameraLocationVector;
 }
 
 void Camera::Draw( ) const
 {
 	glPushMatrix( );
 	{
-		glTranslatef( -m_CameraTranslationPoint.x, -m_CameraTranslationPoint.y, 0.f ); // center camera on player
+		const float cameraX{ -m_CameraLocationVector.x }, cameraY{ -m_CameraLocationVector.y };
+		glTranslatef( cameraX, cameraY, 0.f ); // position camera
 
 		DrawBackground( m_pStageManager->GetBackgroundProps() ); // Draw background, midground
 		DrawEntities( );
+		DrawProjectiles( );
 		DrawBackground( m_pStageManager->GetFrontgroundProps( ) ); // Draw frontground
 	}
 	glPopMatrix( );
+}
+
+void Camera::Update( float elapsedSec )
+{
+	const float difference{ (m_AimLocationVector - m_CameraLocationVector).SquaredLength() };
+	// Apply movement only when difference is greater than epsilon
+	if ( difference > smk_CameraMovementEpsilon )
+	{
+		const float distance{ m_CameraTranslationVector.Length() };
+	
+		// The wave coefficient will be 1.f if greater than the max distance, but will get lower the closer to the target. 
+		const float waveCoefficient{ ( distance < smk_GreenwichMeridian ) ?
+			sinf( smk_CameraPulsation * distance ) : 1.f
+		};
+		const float relativeSpeed{ waveCoefficient * smk_CameraMaxSpeed * elapsedSec };
+		m_CameraLocationVector += m_CameraTranslationVector.Normalized( ) * relativeSpeed;
+	}
 }
 
 void Camera::DrawBackground( const std::vector<NonInterractableProp>& props ) const
@@ -60,9 +86,18 @@ void Camera::DrawEntities( ) const
 	pPlayer->Draw( );
 }
 
+void Camera::DrawProjectiles( ) const
+{
+	const std::list<Projectile*> pProjectiles{ m_pStageManager->GetProjectiles( ) };
+	for ( const Projectile* pProjectile : pProjectiles )
+	{
+		pProjectile->Draw( );
+	}
+}
+
 float Camera::GetXParallaxRatio( int depth ) const
 {
-	float offset{ m_CameraTranslationPoint.x };
+	float offset{ m_CameraLocationVector.x };
 	switch ( depth )
 	{
 	case 6: //bg5

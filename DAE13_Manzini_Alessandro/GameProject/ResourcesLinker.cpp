@@ -3,11 +3,14 @@
 #include "TextureManager.h"
 #include "SpriteManager.h"
 #include "PatternManager.h"
+#include "CompositeSpriteManager.h"
 #include "Cuphead.h"
 #include "NonInterractableProp.h"
+#include "Projectile.h"
 
 ResourcesLinker::ResourcesLinker( )
 	: m_pBackgroundTextures{}
+	, m_pProjectileSprites{}
 {
 	InitializeTextures( );
 }
@@ -17,17 +20,50 @@ ResourcesLinker::~ResourcesLinker( )
 	ReleaseTextures( );
 }
 
-void ResourcesLinker::LinkTexture( Cuphead* pPlayer ) const
+void ResourcesLinker::LinkTexture( Cuphead* pPlayer )
 {
 	pPlayer->m_pTextureManager = m_pCupheadIdle; // starting sprite
 
 	pPlayer->m_pIdleSprite = m_pCupheadIdle;
 	pPlayer->m_pRunSprite = m_pCupheadRun;
+	pPlayer->m_pDuckSprite = m_pCupheadDuck;
+	pPlayer->m_pJumpSprite = m_pCupheadJump;
+	pPlayer->m_pDashGroundSprite = m_pCupheadDashGround;
+	pPlayer->m_pDashAirSprite = m_pCupheadDashAir;
+
+	for ( int i{}; i < pPlayer->m_WeaponManager.smk_WeaponsCount; ++i )
+	{
+		Weapon* pWeapon{ pPlayer->m_WeaponManager.m_pWeapons[i] };
+		std::vector<Projectile*> pProjectiles{ pWeapon->GetProjectiles( ) };
+
+		for ( Projectile* pProjectile : pProjectiles )
+		{
+			LinkTexture( pProjectile );
+		}
+	}
 }
 
 void ResourcesLinker::LinkTexture( NonInterractableProp& nip, const std::string& uid ) const
 {
 	nip.m_pTextureManager = m_pBackgroundTextures.at( uid );
+}
+
+void ResourcesLinker::LinkTexture( Projectile* pProjectile )
+{
+	SpriteManager* sprite{};
+	switch ( pProjectile->GetType() )
+	{
+	case Weapon::WeaponType::peashooter:
+		//sprite = new SpriteManager( );
+		break;
+	case Weapon::WeaponType::spread:
+		//sprite = new SpriteManager( );
+		break;
+	default:
+		break;
+	}
+	m_pProjectileSprites.push_back( sprite );
+	pProjectile->m_pSpriteManager = sprite;
 }
 
 void ResourcesLinker::InitializeTextures( )
@@ -38,12 +74,50 @@ void ResourcesLinker::InitializeTextures( )
 
 void ResourcesLinker::InitializeEntities( )
 {
+	// Cuphead
 	{
 		const float idleFrameDelay{ .1f };
-		const float runFrameDelay{ .06f };
+
+		const float runFrameDelay{ .05f };
+		const float runLoopFrameDelay{ .06f };
+		const Vector2f runOffset{ -20.f, -3.f };
+		const Vector2f runLoopOffset{ -20.f, 0.f };
+
+		const float duckBeginFrameDelay{ .05f };
+		const float duckEndFrameDelay{ .03f };
+		const float duckLoopFrameDelay{ .09f };
+		const Vector2f duckOffset{ -24.f, -3.f };
+		const Vector2f duckLoopOffset{ -24.f, -3.f };
+
+		const float jumpFrameDelay{ .04f };
+		const Vector2f jumpOffset{ 0.f, 0.f };
+
+		const float dashFrameDelay{ .05f };
+		const Vector2f dashOffset{ -110.f, 0.f };
 
 		m_pCupheadIdle = new SpriteManager( "player/character/AS_cuphead_idle_1x5.png", 1, 5, idleFrameDelay, true );
-		m_pCupheadRun = new SpriteManager( "player/character/AS_cuphead_run_2x8.png", 2, 8, runFrameDelay, false, Vector2f{ -20.f, 0.f } );
+		
+		m_pCupheadRunLoop = new SpriteManager( "player/character/AS_cuphead_run_2x8.png", 2, 8, runLoopFrameDelay, false, runLoopOffset );
+		m_pCupheadRunBegin = new SpriteManager( "player/character/AS_cuphead_run_begin_1x2.png", 1, 2, runFrameDelay, false, runOffset );
+		m_pCupheadRunEnd = new SpriteManager( "player/character/AS_cuphead_run_end_1x2.png", 1, 2, runFrameDelay, false, runOffset );
+		m_pCupheadRun = new CompositeSpriteManager( m_pCupheadRunBegin, m_pCupheadRunLoop, m_pCupheadRunEnd );
+		
+		m_pCupheadDuckLoop = new SpriteManager( "player/character/AS_cuphead_duck_1x5.png", 1, 5, duckLoopFrameDelay, true, duckLoopOffset );
+		m_pCupheadDuckBegin = new SpriteManager( "player/character/AS_cuphead_duck_begin_1x5.png", 1, 5, duckBeginFrameDelay, false, duckOffset );
+		m_pCupheadDuckEnd = new SpriteManager( "player/character/AS_cuphead_duck_end_1x5.png", 1, 5, duckEndFrameDelay, false, duckOffset );
+		m_pCupheadDuck = new CompositeSpriteManager( m_pCupheadDuckBegin, m_pCupheadDuckLoop, m_pCupheadDuckEnd );
+		
+		m_pCupheadJump = new SpriteManager( "player/character/AS_cuphead_jump_2x4.png", 2, 4, jumpFrameDelay, false, jumpOffset );
+		
+		m_pCupheadDashGroundLoop = new SpriteManager( "player/character/AS_cuphead_dash_ground_2x3.png", 2, 3, dashFrameDelay, false, dashOffset );
+		m_pCupheadDashGroundBegin = new SpriteManager( "player/character/AS_cuphead_dash_ground_begin_1x2.png", 1, 2, dashFrameDelay, false, dashOffset );
+		m_pCupheadDashGroundEnd = new SpriteManager( "player/character/AS_cuphead_dash_ground_end_1x2.png", 1, 2, dashFrameDelay, false, dashOffset );
+		m_pCupheadDashGround = new CompositeSpriteManager( m_pCupheadDashGroundBegin, m_pCupheadDashGroundLoop, m_pCupheadDashGroundEnd );
+
+		m_pCupheadDashAirLoop = new SpriteManager( "player/character/AS_cuphead_dash_air_2x3.png", 2, 3, dashFrameDelay, false, dashOffset );
+		m_pCupheadDashAirBegin = new SpriteManager( "player/character/AS_cuphead_dash_air_begin_1x2.png", 1, 2, dashFrameDelay, false, dashOffset );
+		m_pCupheadDashAirEnd = new SpriteManager( "player/character/AS_cuphead_dash_air_end_1x2.png", 1, 2, dashFrameDelay, false, dashOffset );
+		m_pCupheadDashAir = new CompositeSpriteManager( m_pCupheadDashAirBegin, m_pCupheadDashAirLoop, m_pCupheadDashAirEnd );
 	}
 }
 
@@ -131,12 +205,34 @@ void ResourcesLinker::ReleaseTextures( )
 {
 	ReleaseEntities( );
 	ReleaseBackgroundProps( );
+	ReleaseProjectiles( );
 }
 
 void ResourcesLinker::ReleaseEntities( )
 {
 	delete m_pCupheadIdle;
+
+	delete m_pCupheadRunBegin;
+	delete m_pCupheadRunLoop;
+	delete m_pCupheadRunEnd;
 	delete m_pCupheadRun;
+
+	delete m_pCupheadDuckLoop;
+	delete m_pCupheadDuckBegin;
+	delete m_pCupheadDuckEnd;
+	delete m_pCupheadDuck;
+
+	delete m_pCupheadJump;
+
+	delete m_pCupheadDashGroundLoop;
+	delete m_pCupheadDashGroundBegin;
+	delete m_pCupheadDashGroundEnd;
+	delete m_pCupheadDashGround;
+
+	delete m_pCupheadDashAirLoop;
+	delete m_pCupheadDashAirBegin;
+	delete m_pCupheadDashAirEnd;
+	delete m_pCupheadDashAir;
 }
 
 void ResourcesLinker::ReleaseBackgroundProps( )
@@ -146,4 +242,13 @@ void ResourcesLinker::ReleaseBackgroundProps( )
 		delete pTexture.second;
 	}
 	m_pBackgroundTextures.clear( );
+}
+
+void ResourcesLinker::ReleaseProjectiles( )
+{
+	for ( SpriteManager* pSprite : m_pProjectileSprites )
+	{
+		delete pSprite;
+	}
+	m_pProjectileSprites.clear( );
 }

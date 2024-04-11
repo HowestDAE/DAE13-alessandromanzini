@@ -37,6 +37,7 @@ void Game::Cleanup( )
 void Game::Update( float elapsedSec )
 {
 	m_pStageManager->Update( elapsedSec );
+	m_pCamera->Update( elapsedSec );
 }
 
 void Game::Draw( ) const

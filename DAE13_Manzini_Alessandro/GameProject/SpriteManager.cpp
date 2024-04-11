@@ -3,15 +3,20 @@
 #include "Texture.h"
 
 SpriteManager::SpriteManager( const std::string& spritePath, int rows, int cols, float frameDelay, bool boomerang, const Vector2f& offset )
+	: SpriteManager( nullptr, rows, cols, frameDelay, boomerang, offset )
+{
+	m_pTexture = new Texture( spritePath );	
+}
+
+SpriteManager::SpriteManager( Texture* pTexture, int rows, int cols, float frameDelay, bool boomerang, const Vector2f& offset )
 	: TextureManager( offset )
 	, mk_Rows{ rows }
 	, mk_Cols{ cols }
 	, mk_FrameDelay{ frameDelay }
 	, mk_Boomerang{ boomerang }
+	, mk_TotalAnimationTime{ rows * cols * frameDelay }
 {
 	Reset( );
-
-	m_pTexture = new Texture( spritePath );
 	m_SourceRect = Rectf{ 0.f, 0.f,
 		m_pTexture->GetWidth( ) / mk_Cols,
 		m_pTexture->GetHeight( ) / mk_Rows
@@ -20,7 +25,10 @@ SpriteManager::SpriteManager( const std::string& spritePath, int rows, int cols,
 
 SpriteManager::~SpriteManager( )
 {
-	delete m_pTexture;
+	if ( !m_IsOutsourced )
+	{
+		delete m_pTexture;
+	}
 }
 
 void SpriteManager::Draw( const Point2f& pos, bool flipX, bool flipY ) const
@@ -37,7 +45,7 @@ void SpriteManager::Update( float elapsedSec )
 		m_CurrentFrame += m_Increment;
 		m_AccumulatedTime -= mk_FrameDelay;
 
-		if ( m_CurrentFrame >= (mk_Rows * mk_Cols - 1) || (m_CurrentFrame < 0) )
+		if ( m_CurrentFrame >= (mk_Rows * mk_Cols) || m_CurrentFrame < 0 )
 		{
 			if ( mk_Boomerang )
 			{
@@ -48,6 +56,7 @@ void SpriteManager::Update( float elapsedSec )
 			{
 				m_CurrentFrame = 0;
 			}
+			m_LastFrameReached = true;
 		}
 
 		m_SourceRect.left = float( m_CurrentFrame % mk_Cols ) * m_SourceRect.width;
@@ -60,7 +69,7 @@ void SpriteManager::Reset( )
 	m_CurrentFrame = 0;
 	m_Increment = 1;
 	m_AccumulatedTime = 0;
-	//m_IndexOffsetReached = false;
+	m_LastFrameReached = false;
 }
 
 float SpriteManager::GetWidth( ) const
@@ -71,4 +80,24 @@ float SpriteManager::GetWidth( ) const
 float SpriteManager::GetHeight( ) const
 {
 	return m_SourceRect.height;
+}
+
+bool SpriteManager::GetIsLastFrameReached( ) const
+{
+	return m_LastFrameReached;
+}
+
+void SpriteManager::ForceReady( )
+{
+	m_LastFrameReached = true;
+}
+
+bool SpriteManager::GetIsReady( ) const
+{
+	return GetIsLastFrameReached();
+}
+
+float SpriteManager::GetAnimationTimer( ) const
+{
+	return mk_TotalAnimationTime - (m_CurrentFrame * mk_FrameDelay) - m_AccumulatedTime;
 }

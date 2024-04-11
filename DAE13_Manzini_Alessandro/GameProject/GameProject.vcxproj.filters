@@ -27,6 +27,9 @@
     <Filter Include="Artifacts\Entities">
       <UniqueIdentifier>{1c33205d-4947-421d-ad59-eaad93e657a7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Artifacts\Weapons">
+      <UniqueIdentifier>{898ff4ce-a0bf-4bf3-87cd-da0d57645de3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp">
@@ -89,6 +92,21 @@
     <ClCompile Include="CompositeSpriteManager.cpp">
       <Filter>Managers\Texture</Filter>
     </ClCompile>
+    <ClCompile Include="AnimationQueue.cpp">
+      <Filter>Managers\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="Weapon.cpp">
+      <Filter>Artifacts\Weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="Projectile.cpp">
+      <Filter>Artifacts\Weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="Peashooter.cpp">
+      <Filter>Artifacts\Weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="Spread.cpp">
+      <Filter>Artifacts\Weapons</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Cuphead.h">
@@ -144,6 +162,21 @@
     </ClInclude>
     <ClInclude Include="CompositeSpriteManager.h">
       <Filter>Managers\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationQueue.h">
+      <Filter>Managers\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="Weapon.h">
+      <Filter>Artifacts\Weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="Projectile.h">
+      <Filter>Artifacts\Weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="Peashooter.h">
+      <Filter>Artifacts\Weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="Spread.h">
+      <Filter>Artifacts\Weapons</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
