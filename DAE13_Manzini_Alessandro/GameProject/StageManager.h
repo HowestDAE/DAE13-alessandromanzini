@@ -2,9 +2,10 @@
 #include "PlatformManager.h"
 #include <vector>
 #include <list>
-class Camera;
+#include "Camera.h"
 class ResourcesLinker;
 class Cuphead;
+class Toyduck;
 class NonInterractableProp;
 class Projectile;
 
@@ -22,13 +23,11 @@ public:
 	
 	void KeyPressEvent( const SDL_KeyboardEvent& e );
 
-	Cuphead const* GetPlayer( ) const;
-	const std::list<Projectile*>& GetProjectiles( ) const;
-
 	const std::vector<NonInterractableProp>& GetBackgroundProps( ) const;
 	const std::vector<NonInterractableProp>& GetFrontgroundProps( ) const;
 
-	static void PushProjectile( Projectile* pProjectile );
+	Cuphead const* GetPlayer( ) const;
+	Toyduck const* GetToyduck( ) const;
 
 	StageManager& operator=( const StageManager& rhs ) = delete;
 
@@ -45,10 +44,9 @@ private:
 
 #pragma region gameUnits
 	Cuphead* m_pPlayer;
+	Toyduck* m_pToyduck;
 	std::vector<NonInterractableProp> m_BackgroundProps;
 	std::vector<NonInterractableProp> m_FrontgroundProps;
-
-	static std::list<Projectile*> sm_pProjectiles;
 
 #pragma endregion
 

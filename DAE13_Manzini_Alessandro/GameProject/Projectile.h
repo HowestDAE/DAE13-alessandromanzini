@@ -14,12 +14,16 @@ public:
 	void Draw( ) const;
 	void Update( float elapsedSec );
 
-	void Reset( const Point2f& pos, float rotation );
+	void Reset( const Point2f& origin, float radius, float rotation );
 
 	friend void ResourcesLinker::LinkTexture( Projectile* pProjectile );
 
 private:
+	bool m_IsActive;
+
 	SpriteManager* m_pSpriteManager;
+
+	float m_Radius;
 	float m_Rotation;
 
 	const Weapon* mk_pWeapon;

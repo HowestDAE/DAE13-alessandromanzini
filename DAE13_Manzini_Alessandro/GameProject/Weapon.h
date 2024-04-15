@@ -1,5 +1,6 @@
 #pragma once
-#include<vector>
+#include <vector>
+#include <Vector2f.h>
 class Projectile;
 class Texture;
 class Weapon
@@ -8,14 +9,19 @@ public:
 	enum class WeaponType;
 
 	Weapon( int initialProjectilesCount, float projectileDamage, float projectileSpeed, float projectileRange );
+	~Weapon( );
 
-	Projectile* GetProjectile( const Point2f& pos, float rotation );
 	virtual WeaponType GetType( ) const = 0;
 
 	float GetProjectileDamage( ) const;
 	float GetProjectileSpeed( ) const;
 	float GetProjectileRange( ) const;
 	std::vector<Projectile*>& GetProjectiles( );
+
+	virtual void SpawnProjectile( const Point2f& origin, float radius, float rotation );
+
+	void Draw( ) const;
+	void Update( float elapsedSec );
 
 protected:
 	const int mk_InitialProjectilesCount;

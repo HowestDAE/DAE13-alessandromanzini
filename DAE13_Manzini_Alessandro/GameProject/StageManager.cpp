@@ -1,13 +1,11 @@
 #include "pch.h"
 #include "StageManager.h"
-#include "Camera.h"
 #include "ResourcesLinker.h"
 #include "PlatformManager.h"
 #include "Cuphead.h"
+#include "Toyduck.h"
 #include "NonInterractableProp.h"
 #include "Projectile.h"
-
-std::list<Projectile*> StageManager::sm_pProjectiles{};
 
 StageManager::StageManager( Camera* pCamera, ResourcesLinker* pResourcesLinker )
 	: m_pCamera{ pCamera }
@@ -25,6 +23,7 @@ StageManager::StageManager( Camera* pCamera, ResourcesLinker* pResourcesLinker )
 StageManager::~StageManager( )
 {
 	delete m_pPlayer;
+	delete m_pToyduck;
 }
 
 void StageManager::Start( )
@@ -68,47 +67,23 @@ void StageManager::UpdateBackground( float elapsedSec )
 void StageManager::UpdateEntities( float elapsedSec )
 {
 	m_pPlayer->Update( elapsedSec );
+	m_pToyduck->Update( elapsedSec );
 }
 
 void StageManager::UpdateProjectiles( float elapsedSec )
 {
-	for ( Projectile* pProjectile : sm_pProjectiles )
-	{
-		pProjectile->Update( elapsedSec );
-	}
+
 }
 
 void StageManager::CheckCollisions( )
 {
 	m_PlatformManager.CheckCollision( m_pPlayer );
 
-	// https://stackoverflow.com/questions/16269696/erasing-while-iterating-an-stdlist
-	for ( std::list<Projectile*>::iterator i = sm_pProjectiles.begin( ); i != sm_pProjectiles.end( );)
-	{
-		if ( (*i)->GetIsOutOfBound( ) )
-		{
-			i = sm_pProjectiles.erase( i );
-		}
-		else
-		{
-			++i;
-		}
-	}
 }
 
 void StageManager::KeyPressEvent( const SDL_KeyboardEvent& e )
 {
 	m_pPlayer->KeyPressEvent( e );
-}
-
-Cuphead const* StageManager::GetPlayer( ) const
-{
-	return m_pPlayer;
-}
-
-const std::list<Projectile*>& StageManager::GetProjectiles( ) const
-{
-	return sm_pProjectiles;
 }
 
 const std::vector<NonInterractableProp>& StageManager::GetBackgroundProps( ) const
@@ -121,9 +96,14 @@ const std::vector<NonInterractableProp>& StageManager::GetFrontgroundProps( ) co
 	return m_FrontgroundProps;
 }
 
-void StageManager::PushProjectile( Projectile* pProjectile )
+Cuphead const* StageManager::GetPlayer( ) const
 {
-	sm_pProjectiles.push_back( pProjectile );
+	return m_pPlayer;
+}
+
+Toyduck const* StageManager::GetToyduck( ) const
+{
+	return m_pToyduck;
 }
 
 void StageManager::LockCamera( const Point2f& centerPoint )

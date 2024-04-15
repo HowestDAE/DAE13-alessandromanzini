@@ -1,10 +1,12 @@
 #include "pch.h"
 #include "ResourcesLinker.h"
+#include "Texture.h"
 #include "TextureManager.h"
 #include "SpriteManager.h"
 #include "PatternManager.h"
 #include "CompositeSpriteManager.h"
 #include "Cuphead.h"
+#include "Toyduck.h"
 #include "NonInterractableProp.h"
 #include "Projectile.h"
 
@@ -30,6 +32,9 @@ void ResourcesLinker::LinkTexture( Cuphead* pPlayer )
 	pPlayer->m_pJumpSprite = m_pCupheadJump;
 	pPlayer->m_pDashGroundSprite = m_pCupheadDashGround;
 	pPlayer->m_pDashAirSprite = m_pCupheadDashAir;
+	pPlayer->m_pShootStraightSprite = m_pCupheadShootStraight;
+	pPlayer->m_pRunShootStraightSprite = m_pCupheadRunShootStraight;
+	pPlayer->m_pRunShootDiagonalupSprite = m_pCupheadRunShootDiagonalup;
 
 	for ( int i{}; i < pPlayer->m_WeaponManager.smk_WeaponsCount; ++i )
 	{
@@ -43,6 +48,12 @@ void ResourcesLinker::LinkTexture( Cuphead* pPlayer )
 	}
 }
 
+void ResourcesLinker::LinkTexture( Toyduck* pToyduck ) const
+{
+	pToyduck->m_pIdleSprite = m_pToyDuckIdle;
+	pToyduck->m_pBacktireSprite = m_pToyDuckBacktire;
+}
+
 void ResourcesLinker::LinkTexture( NonInterractableProp& nip, const std::string& uid ) const
 {
 	nip.m_pTextureManager = m_pBackgroundTextures.at( uid );
@@ -51,10 +62,11 @@ void ResourcesLinker::LinkTexture( NonInterractableProp& nip, const std::string&
 void ResourcesLinker::LinkTexture( Projectile* pProjectile )
 {
 	SpriteManager* sprite{};
+	const float frameDelay{ .1f };
 	switch ( pProjectile->GetType() )
 	{
 	case Weapon::WeaponType::peashooter:
-		//sprite = new SpriteManager( );
+		sprite = new SpriteManager( m_pPeashooterTexture, 1, 6, frameDelay );
 		break;
 	case Weapon::WeaponType::spread:
 		//sprite = new SpriteManager( );
@@ -95,6 +107,9 @@ void ResourcesLinker::InitializeEntities( )
 		const float dashFrameDelay{ .05f };
 		const Vector2f dashOffset{ -110.f, 0.f };
 
+		const float shootFrameDelay{ .06f };
+		const Vector2f shootOffset{ -20.f, -5.f };
+
 		m_pCupheadIdle = new SpriteManager( "player/character/AS_cuphead_idle_1x5.png", 1, 5, idleFrameDelay, true );
 		
 		m_pCupheadRunLoop = new SpriteManager( "player/character/AS_cuphead_run_2x8.png", 2, 8, runLoopFrameDelay, false, runLoopOffset );
@@ -118,6 +133,24 @@ void ResourcesLinker::InitializeEntities( )
 		m_pCupheadDashAirBegin = new SpriteManager( "player/character/AS_cuphead_dash_air_begin_1x2.png", 1, 2, dashFrameDelay, false, dashOffset );
 		m_pCupheadDashAirEnd = new SpriteManager( "player/character/AS_cuphead_dash_air_end_1x2.png", 1, 2, dashFrameDelay, false, dashOffset );
 		m_pCupheadDashAir = new CompositeSpriteManager( m_pCupheadDashAirBegin, m_pCupheadDashAirLoop, m_pCupheadDashAirEnd );
+		
+		m_pCupheadShootStraight = new SpriteManager( "player/character/AS_cuphead_shoot_straight_1x3.png", 1, 3, shootFrameDelay, false, shootOffset );
+		m_pCupheadRunShootStraight = new SpriteManager( "player/character/AS_cuphead_runshoot_straight_2x8.png", 2, 8, shootFrameDelay, false, shootOffset );
+		m_pCupheadRunShootDiagonalup = new SpriteManager( "player/character/AS_cuphead_runshoot_diagonalup_2x8.png", 2, 8, shootFrameDelay, false, shootOffset );
+		
+	}
+
+	// Weapons
+	{
+		m_pPeashooterTexture = new Texture( "player/weapons/AS_peashooter_loop_1x6.png" );
+	}
+
+	// Toyduck
+	{
+		const float idleFrameDelay{ .07f };
+
+		m_pToyDuckIdle = new SpriteManager( "enemy/toyduck/AS_toyduck_idle_2x8.png", 2, 8, idleFrameDelay, false );
+		m_pToyDuckBacktire = new SpriteManager( "enemy/toyduck/AS_toyduck_backtire_2x8.png", 2, 8, idleFrameDelay, false );
 	}
 }
 
@@ -233,6 +266,15 @@ void ResourcesLinker::ReleaseEntities( )
 	delete m_pCupheadDashAirBegin;
 	delete m_pCupheadDashAirEnd;
 	delete m_pCupheadDashAir;
+
+	delete m_pCupheadShootStraight;
+	delete m_pCupheadRunShootStraight;
+	delete m_pCupheadRunShootDiagonalup;
+
+	delete m_pPeashooterTexture;
+
+	delete m_pToyDuckIdle;
+	delete m_pToyDuckBacktire;
 }
 
 void ResourcesLinker::ReleaseBackgroundProps( )

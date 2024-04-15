@@ -35,6 +35,9 @@ private:
     SpriteManager* m_pJumpSprite;
     CompositeSpriteManager* m_pDashGroundSprite;
     CompositeSpriteManager* m_pDashAirSprite;
+    SpriteManager* m_pShootStraightSprite;
+    SpriteManager* m_pRunShootStraightSprite;
+    SpriteManager* m_pRunShootDiagonalupSprite;
 
     bool SelectTexture(MovementManager::AimDirection direction, MovementManager::MovementType movement );
     void UpdateMovement( float elapsedSec );

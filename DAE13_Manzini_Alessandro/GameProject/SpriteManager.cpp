@@ -3,9 +3,9 @@
 #include "Texture.h"
 
 SpriteManager::SpriteManager( const std::string& spritePath, int rows, int cols, float frameDelay, bool boomerang, const Vector2f& offset )
-	: SpriteManager( nullptr, rows, cols, frameDelay, boomerang, offset )
+	: SpriteManager( new Texture( spritePath ), rows, cols, frameDelay, boomerang, offset )
 {
-	m_pTexture = new Texture( spritePath );	
+	m_IsOutsourced = false;
 }
 
 SpriteManager::SpriteManager( Texture* pTexture, int rows, int cols, float frameDelay, bool boomerang, const Vector2f& offset )
@@ -15,6 +15,8 @@ SpriteManager::SpriteManager( Texture* pTexture, int rows, int cols, float frame
 	, mk_FrameDelay{ frameDelay }
 	, mk_Boomerang{ boomerang }
 	, mk_TotalAnimationTime{ rows * cols * frameDelay }
+	, m_pTexture{ pTexture }
+	, m_IsOutsourced{ true }
 {
 	Reset( );
 	m_SourceRect = Rectf{ 0.f, 0.f,
@@ -68,7 +70,8 @@ void SpriteManager::Reset( )
 {
 	m_CurrentFrame = 0;
 	m_Increment = 1;
-	m_AccumulatedTime = 0;
+
+	m_AccumulatedTime = 0.f;
 	m_LastFrameReached = false;
 }
 

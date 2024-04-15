@@ -8,7 +8,8 @@ public:
 	explicit TextureManager( const Vector2f& offset = {} );
 	TextureManager( const TextureManager& other ) = delete;
 	virtual ~TextureManager( ) = default;
-	
+
+	void Draw( ) const;
 	virtual void Draw( const Point2f& pos, bool flipX = false, bool flipY = false ) const = 0;
 	virtual void Update( float elapsedSec ) = 0;
 

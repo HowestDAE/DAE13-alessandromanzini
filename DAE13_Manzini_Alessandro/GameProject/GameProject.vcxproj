@@ -170,6 +170,7 @@ xcopy "$(SolutionDir)Resources\*.*" "$(TargetDir)" /y /d /s</Command>
     <ClCompile Include="StageManagerInit.cpp" />
     <ClCompile Include="TexturedModel.cpp" />
     <ClCompile Include="TextureManager.cpp" />
+    <ClCompile Include="Toyduck.cpp" />
     <ClCompile Include="Weapon.cpp" />
     <ClCompile Include="WeaponsManager.cpp" />
   </ItemGroup>
@@ -195,6 +196,7 @@ xcopy "$(SolutionDir)Resources\*.*" "$(TargetDir)" /y /d /s</Command>
     <ClInclude Include="StageManager.h" />
     <ClInclude Include="TexturedModel.h" />
     <ClInclude Include="TextureManager.h" />
+    <ClInclude Include="Toyduck.h" />
     <ClInclude Include="Weapon.h" />
     <ClInclude Include="WeaponsManager.h" />
   </ItemGroup>

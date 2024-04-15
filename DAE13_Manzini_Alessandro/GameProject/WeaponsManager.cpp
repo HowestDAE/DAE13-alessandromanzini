@@ -3,7 +3,6 @@
 #include "StageManager.h"
 #include "Peashooter.h"
 #include "Spread.h"
-#include "utils.h"
 
 const float WeaponsManager::smk_ShotDelay{ .15f };
 
@@ -27,18 +26,30 @@ void WeaponsManager::SwapWeapons( )
 	m_EquippedWeaponIndex = (m_EquippedWeaponIndex + 1) % smk_WeaponsCount;
 }
 
-void WeaponsManager::Shoot( const Point2f& pos, float rotation )
+void WeaponsManager::Shoot( const Point2f& origin, float radius, float rotation )
 {
 	if ( m_ShotAccumulatedTime > smk_ShotDelay )
 	{
-		m_ShotAccumulatedTime -= smk_ShotDelay;
+		m_ShotAccumulatedTime = 0.f;
 
-		Projectile* pProjectile{ m_pWeapons[m_EquippedWeaponIndex]->GetProjectile( pos, rotation ) };
-		StageManager::PushProjectile( pProjectile );
+		m_pWeapons[m_EquippedWeaponIndex]->SpawnProjectile( origin, radius, rotation );
+	}
+}
+
+void WeaponsManager::Draw( ) const
+{
+	for ( int index{}; index < smk_WeaponsCount; ++index )
+	{
+		m_pWeapons[index]->Draw();
 	}
 }
 
 void WeaponsManager::Update( float elapsedSec )
 {
 	m_ShotAccumulatedTime += elapsedSec;
+
+	for ( int index{}; index < smk_WeaponsCount; ++index )
+	{
+		m_pWeapons[index]->Update( elapsedSec );
+	}
 }

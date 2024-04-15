@@ -6,6 +6,7 @@ class TextureManager;
 class SpriteManager;
 class CompositeSpriteManager;
 class Cuphead;
+class Toyduck;
 class NonInterractableProp;
 class Projectile;
 
@@ -17,6 +18,7 @@ public:
 	~ResourcesLinker( );
 
 	void LinkTexture( Cuphead* pPlayer ); // not const because of lazy loading
+	void LinkTexture( Toyduck* pToyduck ) const;
 	void LinkTexture( NonInterractableProp& nip, const std::string& uid ) const;
 	void LinkTexture( Projectile* pProjectile ); // not const because of lazy loading
 
@@ -54,9 +56,17 @@ private:
 	SpriteManager* m_pCupheadDashAirEnd;
 	CompositeSpriteManager* m_pCupheadDashAir;
 
+	SpriteManager* m_pCupheadShootStraight;
+	SpriteManager* m_pCupheadRunShootStraight;
+	SpriteManager* m_pCupheadRunShootDiagonalup;
+
+	SpriteManager* m_pToyDuckIdle;
+	SpriteManager* m_pToyDuckBacktire;
+
 #pragma endregion entities
 
 #pragma region weapons
+	Texture* m_pPeashooterTexture;
 	std::vector<SpriteManager*> m_pProjectileSprites;
 
 #pragma endregion weapons

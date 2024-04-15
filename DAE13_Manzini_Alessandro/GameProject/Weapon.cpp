@@ -16,14 +16,13 @@ Weapon::Weapon( int initialProjectilesCount, float projectileDamage, float proje
 	}
 }
 
-Projectile* Weapon::GetProjectile( const Point2f& pos, float rotation )
+Weapon::~Weapon( )
 {
-	Projectile* currentProjectile = m_pProjectiles.at( m_CurrentProjectileIndex );
-	currentProjectile->Reset( pos, rotation );
-
-	m_CurrentProjectileIndex = (m_CurrentProjectileIndex + 1) % m_pProjectiles.size( );
-
-	return currentProjectile;
+	for ( Projectile* pProjectile : m_pProjectiles )
+	{
+		delete pProjectile;
+		pProjectile = nullptr;
+	}
 }
 
 float Weapon::GetProjectileDamage( ) const
@@ -44,4 +43,28 @@ float Weapon::GetProjectileRange( ) const
 std::vector<Projectile*>& Weapon::GetProjectiles( )
 {
 	return m_pProjectiles;
+}
+
+void Weapon::SpawnProjectile( const Point2f& origin, float radius, float rotation )
+{
+	Projectile* currentProjectile = m_pProjectiles.at( m_CurrentProjectileIndex );
+	currentProjectile->Reset( origin, radius, rotation );
+
+	m_CurrentProjectileIndex = (m_CurrentProjectileIndex + 1) % m_pProjectiles.size( );
+}
+
+void Weapon::Draw( ) const
+{
+	for ( Projectile* pProjectile : m_pProjectiles )
+	{
+		pProjectile->Draw( );
+	}
+}
+
+void Weapon::Update( float elapsedSec )
+{
+	for ( Projectile* pProjectile : m_pProjectiles )
+	{
+		pProjectile->Update( elapsedSec );
+	}
 }

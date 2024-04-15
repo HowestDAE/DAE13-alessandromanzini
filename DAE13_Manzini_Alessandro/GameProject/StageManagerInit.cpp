@@ -5,6 +5,7 @@
 #include "TextureManager.h"
 #include "ResourcesLinker.h"
 #include "Cuphead.h"
+#include "Toyduck.h"
 #include "NonInterractableProp.h"
 
 void StageManager::Initialize( )
@@ -93,6 +94,9 @@ void StageManager::InitializeEntities( )
 {
 	m_pPlayer = new Cuphead( Constants::sk_CupheadStartingPosition );
 	m_pResourcesLinker->LinkTexture( m_pPlayer );
+
+	m_pToyduck = new Toyduck( Constants::sk_CupheadStartingPosition + Vector2f{ 1200.f, 0.f } );
+	m_pResourcesLinker->LinkTexture( m_pToyduck );
 }
 
 void StageManager::CreateNIP( BackgroundScope scope, const std::string& uid, const Point2f& position, float scale )

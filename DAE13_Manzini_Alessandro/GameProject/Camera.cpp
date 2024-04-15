@@ -2,6 +2,7 @@
 #include "Camera.h"
 #include "StageManager.h"
 #include "Cuphead.h"
+#include "Toyduck.h"
 #include "NonInterractableProp.h"
 #include "Projectile.h"
 #include <math.h>
@@ -82,17 +83,13 @@ void Camera::DrawBackground( const std::vector<NonInterractableProp>& props ) co
 
 void Camera::DrawEntities( ) const
 {
-	const Cuphead* pPlayer = m_pStageManager->GetPlayer( );
-	pPlayer->Draw( );
+	m_pStageManager->GetPlayer()->Draw( );
+	m_pStageManager->GetToyduck()->Draw( );
 }
 
 void Camera::DrawProjectiles( ) const
 {
-	const std::list<Projectile*> pProjectiles{ m_pStageManager->GetProjectiles( ) };
-	for ( const Projectile* pProjectile : pProjectiles )
-	{
-		pProjectile->Draw( );
-	}
+
 }
 
 float Camera::GetXParallaxRatio( int depth ) const

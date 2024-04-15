@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include <Vector2f.h>
 #include "Weapon.h"
 #include "ResourcesLinker.h"
 class Projectile;
@@ -10,9 +11,10 @@ public:
 	~WeaponsManager( );
 
 	void SwapWeapons( );
-	void Shoot( const Point2f& pos, float rotation );
-	void ShootEX( const Point2f& pos, float rotation );
+	void Shoot( const Point2f& origin, float radius, float rotation );
+	void ShootEX( const Point2f& origin, float radius, float rotation );
 
+	void Draw( ) const;
 	void Update( float elapsedSec );
 
 	friend void ResourcesLinker::LinkTexture( Cuphead* pCuphead );

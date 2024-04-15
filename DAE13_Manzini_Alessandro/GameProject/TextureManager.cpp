@@ -13,6 +13,11 @@ void TextureManager::Draw( const Texture* pTexture, const Point2f& pos, const Re
 	pTexture->Draw( pos + mk_Offset, srcRect, flipX, flipY );
 }
 
+void TextureManager::Draw( ) const
+{
+	Draw( Point2f{ 0.f, 0.f } );
+}
+
 Vector2f TextureManager::GetOffset( ) const
 {
 	return mk_Offset;

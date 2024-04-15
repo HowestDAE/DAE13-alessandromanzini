@@ -28,15 +28,7 @@ private:
 	{
 		AimDirection direction;
 		bool facingRight;
-
-		void Fix( MovementType movement, const DirectionData& previous );
 	};
-
-	static const float smk_CupheadRunSpeed;
-	static const float smk_CupheadJumpSpeed;
-	static const float smk_CupheadDashSpeed;
-	static const float smk_CupheadDashTime;
-	static const float smk_CupheadDashCooldownTime;
 
 	KeysState m_KeysStates;
 
@@ -55,8 +47,10 @@ private:
 	bool m_IsGravityReversed;
 	Vector2f m_VelocityModifiers;
 
-	DirectionData CalculateAimDirection( DirectionData previous );
-	MovementType CalculateMovementType( MovementType previous );
+	DirectionData CalculateAimDirection( ) const;
+	MovementType CalculateMovementType( ) const;
+	void SetMovementType( MovementType movement );
+	void SetDirectionData( DirectionData data, MovementType movement );
 };
 
 enum class MovementManager::AimDirection
@@ -64,12 +58,9 @@ enum class MovementManager::AimDirection
 	none,
 	up,
 	down,
-	right,
-	rightup,
-	rightdown,
-	left,
-	leftup,
-	leftdown
+	straight,
+	diagonalup,
+	diagonaldown
 };
 
 enum class MovementManager::MovementType

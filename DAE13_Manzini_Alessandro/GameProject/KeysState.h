@@ -2,6 +2,7 @@
 struct KeysState
 {
 	bool faceRightKeyPressed;
+	bool faceRightOverride;
 	bool faceLeftKeyPressed;
 	bool faceUpKeyPressed;
 	bool faceDownKeyPressed;
