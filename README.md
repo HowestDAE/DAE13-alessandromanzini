@@ -61,15 +61,15 @@ Here's why:
 This section gives a clear and detailed overview of which parts of the original game I planned to make.
 
 ### The minimum I will most certainly develop:
-* Level scrolling and camera stop
-* Weapons
+* Level scrolling and camera wave movement
+* Both weapons
 * Powers and resources
-* Fighting
+* Basic movement
 * Main menu
 
 ### What I will probably make as well:
 * Flawless animations
-* Good IA
+* Good AI
 * Good sound implementation
 
 ### What I plan to create if I have enough time left:
@@ -104,8 +104,11 @@ Use this space to show useful examples of how a game can be played.
 Additional screenshots and demos work well in this space. 
 
 ### Controls
-* keys, .. 
-* .. 
+* left/right arrows to move
+* down arrow to duck
+* space to jump
+* lshift to dash
+* 'a' to shoot
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -115,10 +118,18 @@ Additional screenshots and demos work well in this space.
 ## Class structure 
 
 ### Object composition 
-If you applied object composition (optional); explain where and how.
+The ResourcesLinker (class that initializes and links textures) is aggregated in the StageManager (class that initializes, updates and manages all entities).
+The Camera is associated with the StageManager.
+
+StageManager has a PlatformManager as part of the composition.
+
+Cuphead (player class) has a WeaponManager and a MovementManager as part of the composition.
 
 ### Inheritance 
-Explain where you applied inheritance (mandatory).
+The basic abstract TextureManager is the parent of SpriteManager, PatternManager and CompositeSpriteManager. These classes generate and make use of textures in the game.
+
+TexturedModel is the base class for all entities. It splits into NonInterractableProp and Entities. 
+Entities will have all gameplay characters as children.
 
 ### ..
 
@@ -129,15 +140,15 @@ Explain where you applied inheritance (mandatory).
 ## Checklist
 
 - [x] Accept / set up github project
-- [ ] week 01 topics applied
-    - [ ] const keyword applied proactively (variables, functions,..)
-    - [ ] static keyword applied proactively (class variables, static functions,..)
-    - [ ] object composition (optional)
-- [ ] week 02 topics applied
-- [ ] week 03 topics applied
-- [ ] week 04 topics applied
-- [ ] week 05 topics applied
-- [ ] week 06 topics applied
+- [x] week 01 topics applied
+    - [x] const keyword applied proactively (variables, functions,..)
+    - [x] static keyword applied proactively (class variables, static functions,..)
+    - [x] object composition (optional)
+- [x] week 02 topics applied
+- [x] week 03 topics applied
+- [x] week 04 topics applied
+- [x] week 05 topics applied
+- [x] week 06 topics applied
 - [ ] week 07 topics applied
 - [ ] week 08 topics applied
 - [ ] week 09 topics applied (optional)
