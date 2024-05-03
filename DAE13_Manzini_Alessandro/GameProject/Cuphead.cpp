@@ -30,8 +30,8 @@ Cuphead::Cuphead(const Point2f& position, HUDManager* pHUDManager )
 	, m_pRunShootStraightSprite{}
 	, m_pRunShootDiagonalupSprite{}
 	, m_pParrySprite{}
-	, m_StandingCollisionManager{ Constants::sk_CupheadDefaultCollisionCircles, &m_Location }
-	, m_DuckingCollisionManager { Constants::sk_CupheadDuckCollisionCircles, &m_Location }
+	, m_StandingCollisionManager{ std::vector<CollisionCircle>{ CollisionCircle{ 45.f, 30.f, 30.f }, CollisionCircle{ 45.f, 75.f, 30.f } }, &m_Location }
+	, m_DuckingCollisionManager{ std::vector<CollisionCircle>{ CollisionCircle{ 45.f, 30.f, 30.f } }, &m_Location }
 {
 	m_Velocity = Vector2f{ 0.f, 0.f };
 }

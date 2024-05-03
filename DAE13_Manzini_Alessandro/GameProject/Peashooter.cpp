@@ -10,8 +10,8 @@ Peashooter::Peashooter( )
 		Constants::sk_PeashooterDamage, 
 		Constants::sk_ProjectileSpeed, 
 		Constants::sk_PeashooterRange, 
-		Constants::sk_PeashooterCollisionCircle, 
-		Constants::sk_PeashooterExCollisionCircle )
+		CollisionCircle{ 130.f, 0.f, 10.f },
+		CollisionCircle{} )
 	, m_IsAlternatedShot{}
 {
 }

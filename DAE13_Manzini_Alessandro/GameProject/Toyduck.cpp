@@ -8,7 +8,7 @@ Toyduck::Toyduck( const Point2f& position )
 	: Entity( position, Constants::sk_ToyduckStartingHP )
 	, m_pIdleSprite{}
 	, m_pBacktireSprite{}
-	, m_CollisionManager{ Constants::sk_ToyduckCollisionCircles, &m_Location }
+	, m_CollisionManager{ std::vector<CollisionCircle>{ CollisionCircle{ 180.f, 130.f, 70.f, false }, CollisionCircle{ 130.f, 250.f, 60.f } }, &m_Location}
 {
 	m_Velocity.Set( -Constants::sk_ToyduckSpeed, 0.f );
 	SetCollisionManager( &m_CollisionManager );

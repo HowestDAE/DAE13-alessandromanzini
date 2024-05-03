@@ -10,8 +10,8 @@ Spread::Spread( )
 		Constants::sk_SpreadDamage, 
 		Constants::sk_ProjectileSpeed, 
 		Constants::sk_SpreadRange,
-		Constants::sk_SpreadCollisionCircle,
-		Constants::sk_SpreadExCollisionCircle )
+		CollisionCircle{},
+		CollisionCircle{} )
 {
 }
 
