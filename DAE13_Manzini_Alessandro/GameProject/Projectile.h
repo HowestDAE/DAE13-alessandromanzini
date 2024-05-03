@@ -1,12 +1,15 @@
 #pragma once
+#include "CollidableEntity.h"
 #include "Vector2f.h"
-#include "SpriteManager.h"
+#include "Sprite.h"
 #include "Weapon.h"
 #include "ResourcesLinker.h"
-class Projectile
+#include "CollisionManager.h"
+class Projectile final
+	: public CollidableEntity
 {
 public:
-	explicit Projectile( const Weapon* pWeapon );
+	explicit Projectile( const Weapon* pWeapon, const CollisionCircle& collisionCircle );
 
 	Weapon::WeaponType GetType( ) const;
 	bool GetIsOutOfBound( ) const;
@@ -14,23 +17,27 @@ public:
 	void Draw( ) const;
 	void Update( float elapsedSec );
 
+	virtual void Hit( int damage ) override;
+
 	void Reset( const Point2f& origin, float radius, float rotation );
 
-	friend void ResourcesLinker::LinkTexture( Projectile* pProjectile );
+	void SetSprite( Sprite* pSprite );
 
 private:
+	const Weapon* mk_pWeapon;
+
+	CollisionManager m_CollisionManager;
+
 	bool m_IsActive;
 
-	SpriteManager* m_pSpriteManager;
+	Sprite* m_pSprite;
+
+	Vector2f m_Location;
+	Vector2f m_CollisionLocation;
+	Vector2f m_Velocity;
 
 	float m_Radius;
 	float m_Rotation;
-
-	const Weapon* mk_pWeapon;
-
 	float m_TravelDistance;
-
-	Vector2f m_Location;
-	Vector2f m_Velocity;
 };
 

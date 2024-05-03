@@ -53,3 +53,11 @@ void WeaponsManager::Update( float elapsedSec )
 		m_pWeapons[index]->Update( elapsedSec );
 	}
 }
+
+void WeaponsManager::LinkTexture( ResourcesLinker* pResourcesLinker )
+{
+	for ( int index{}; index < smk_WeaponsCount; ++index )
+	{
+		m_pWeapons[index]->LinkTexture( pResourcesLinker );
+	}
+}

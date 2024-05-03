@@ -53,7 +53,7 @@
     <ClCompile Include="MovementManager.cpp">
       <Filter>Managers\Player</Filter>
     </ClCompile>
-    <ClCompile Include="TextureManager.cpp">
+    <ClCompile Include="Texture2D.cpp">
       <Filter>Managers\Texture</Filter>
     </ClCompile>
     <ClCompile Include="WeaponsManager.cpp">
@@ -62,7 +62,7 @@
     <ClCompile Include="StageManager.cpp">
       <Filter>Managers</Filter>
     </ClCompile>
-    <ClCompile Include="SpriteManager.cpp">
+    <ClCompile Include="Sprite.cpp">
       <Filter>Managers\Texture</Filter>
     </ClCompile>
     <ClCompile Include="Constants.cpp">
@@ -83,14 +83,11 @@
     <ClCompile Include="KeysState.cpp">
       <Filter>Models</Filter>
     </ClCompile>
-    <ClCompile Include="PatternManager.cpp">
+    <ClCompile Include="Pattern.cpp">
       <Filter>Managers\Texture</Filter>
     </ClCompile>
     <ClCompile Include="PlatformManager.cpp">
       <Filter>Managers</Filter>
-    </ClCompile>
-    <ClCompile Include="CompositeSpriteManager.cpp">
-      <Filter>Managers\Texture</Filter>
     </ClCompile>
     <ClCompile Include="AnimationQueue.cpp">
       <Filter>Managers\Texture</Filter>
@@ -109,6 +106,30 @@
     </ClCompile>
     <ClCompile Include="Toyduck.cpp">
       <Filter>Artifacts\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="SpriteSettings.cpp">
+      <Filter>Models</Filter>
+    </ClCompile>
+    <ClCompile Include="PatternSettings.cpp">
+      <Filter>Models</Filter>
+    </ClCompile>
+    <ClCompile Include="HUDManager.cpp">
+      <Filter>Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="SpriteManager.cpp">
+      <Filter>Managers\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="CollisionManager.cpp">
+      <Filter>Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="CollidableEntity.cpp">
+      <Filter>Artifacts</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureInfo.cpp">
+      <Filter>Models</Filter>
+    </ClCompile>
+    <ClCompile Include="CollisionCircle.cpp">
+      <Filter>Models</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -130,7 +151,7 @@
     <ClInclude Include="MovementManager.h">
       <Filter>Managers\Player</Filter>
     </ClInclude>
-    <ClInclude Include="TextureManager.h">
+    <ClInclude Include="Texture2D.h">
       <Filter>Managers\Texture</Filter>
     </ClInclude>
     <ClInclude Include="WeaponsManager.h">
@@ -142,7 +163,7 @@
     <ClInclude Include="PlatformManager.h">
       <Filter>Managers</Filter>
     </ClInclude>
-    <ClInclude Include="SpriteManager.h">
+    <ClInclude Include="Sprite.h">
       <Filter>Managers\Texture</Filter>
     </ClInclude>
     <ClInclude Include="Constants.h">
@@ -160,10 +181,7 @@
     <ClInclude Include="KeysState.h">
       <Filter>Models</Filter>
     </ClInclude>
-    <ClInclude Include="PatternManager.h">
-      <Filter>Managers\Texture</Filter>
-    </ClInclude>
-    <ClInclude Include="CompositeSpriteManager.h">
+    <ClInclude Include="Pattern.h">
       <Filter>Managers\Texture</Filter>
     </ClInclude>
     <ClInclude Include="AnimationQueue.h">
@@ -183,6 +201,30 @@
     </ClInclude>
     <ClInclude Include="Toyduck.h">
       <Filter>Artifacts\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="SpriteSettings.h">
+      <Filter>Models</Filter>
+    </ClInclude>
+    <ClInclude Include="PatternSettings.h">
+      <Filter>Models</Filter>
+    </ClInclude>
+    <ClInclude Include="HUDManager.h">
+      <Filter>Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="SpriteManager.h">
+      <Filter>Managers\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionManager.h">
+      <Filter>Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="CollidableEntity.h">
+      <Filter>Artifacts</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureInfo.h">
+      <Filter>Models</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionCircle.h">
+      <Filter>Models</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -1,14 +1,15 @@
 #pragma once
-#include "Vector2f.h"
 #include "ResourcesLinker.h"
-class TextureManager;
+#include "TextureInfo.h"
+#include "Vector2f.h"
+class Texture2D;
 
 class TexturedModel
 {
 public:
 	TexturedModel( const Point2f& position );
 
-	Point2f GetPosition( ) const;
+	Vector2f GetLocation( ) const;
 
 	float GetTextureWidth( ) const;
 	float GetTextureHeight( ) const;
@@ -16,11 +17,13 @@ public:
 	virtual void Draw( ) const;
 	virtual void Update( float elapsedSec ) = 0;
 
-protected:
-	TextureManager* m_pTextureManager;
+	void DrawTextureOutline( ) const;
 
+	virtual void LinkTexture( ResourcesLinker* pResourceLinker ) = 0;
+
+protected:
 	Vector2f m_Location;
-	bool m_FlipX;
-	bool m_FlipY;
+	TextureInfo m_TextureInfo;
+
 };
 

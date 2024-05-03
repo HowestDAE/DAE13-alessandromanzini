@@ -1,32 +1,35 @@
 #pragma once
 #include <vector>
-#include <Vector2f.h>
+#include "CollisionCircle.h"
+class ResourcesLinker;
 class Projectile;
 class Texture;
+
 class Weapon
 {
 public:
 	enum class WeaponType;
 
-	Weapon( int initialProjectilesCount, float projectileDamage, float projectileSpeed, float projectileRange );
+	Weapon( int initialProjectilesCount, int projectileDamage, float projectileSpeed, float projectileRange, const CollisionCircle& bulletCollisionCircle, const CollisionCircle& exCollisionCircle );
 	~Weapon( );
 
 	virtual WeaponType GetType( ) const = 0;
 
-	float GetProjectileDamage( ) const;
+	int GetProjectileDamage( ) const;
 	float GetProjectileSpeed( ) const;
 	float GetProjectileRange( ) const;
-	std::vector<Projectile*>& GetProjectiles( );
 
 	virtual void SpawnProjectile( const Point2f& origin, float radius, float rotation );
 
 	void Draw( ) const;
 	void Update( float elapsedSec );
 
+	virtual void LinkTexture( ResourcesLinker* pResourcesLinker ) = 0;
+
 protected:
 	const int mk_InitialProjectilesCount;
 
-	const float mk_ProjectileDamage;
+	const int mk_ProjectileDamage;
 	const float mk_ProjectileSpeed;
 	const float mk_ProjectileRange;
 

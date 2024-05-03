@@ -1,8 +1,9 @@
 #include "pch.h"
 #include "Weapon.h"
+#include "ResourcesLinker.h"
 #include "Projectile.h"
 
-Weapon::Weapon( int initialProjectilesCount, float projectileDamage, float projectileSpeed, float projectileRange )
+Weapon::Weapon( int initialProjectilesCount, int projectileDamage, float projectileSpeed, float projectileRange, const CollisionCircle& bulletCollisionCircle, const CollisionCircle& exCollisionCircle )
 	: mk_InitialProjectilesCount{ initialProjectilesCount }
 	, mk_ProjectileDamage{ projectileDamage }
 	, mk_ProjectileSpeed{ projectileSpeed }
@@ -12,7 +13,7 @@ Weapon::Weapon( int initialProjectilesCount, float projectileDamage, float proje
 {
 	for ( int index{}; index < mk_InitialProjectilesCount; ++index )
 	{
-		m_pProjectiles[index] = new Projectile( this );
+		m_pProjectiles[index] = new Projectile( this, bulletCollisionCircle );
 	}
 }
 
@@ -25,7 +26,7 @@ Weapon::~Weapon( )
 	}
 }
 
-float Weapon::GetProjectileDamage( ) const
+int Weapon::GetProjectileDamage( ) const
 {
 	return mk_ProjectileDamage;
 }
@@ -38,11 +39,6 @@ float Weapon::GetProjectileSpeed( ) const
 float Weapon::GetProjectileRange( ) const
 {
 	return mk_ProjectileRange;
-}
-
-std::vector<Projectile*>& Weapon::GetProjectiles( )
-{
-	return m_pProjectiles;
 }
 
 void Weapon::SpawnProjectile( const Point2f& origin, float radius, float rotation )

@@ -1,10 +1,12 @@
 #include "pch.h"
 #include "Camera.h"
 #include "StageManager.h"
+#include "Projectile.h"
+#include "NonInterractableProp.h"
+#include "ResourcesLinker.h"
+#include "HUDManager.h"
 #include "Cuphead.h"
 #include "Toyduck.h"
-#include "NonInterractableProp.h"
-#include "Projectile.h"
 #include <math.h>
 
 // We only want the first fourth of the wave. Thus M_PI_2 instead of 2*M_PI.
@@ -53,6 +55,8 @@ void Camera::Draw( ) const
 		DrawBackground( m_pStageManager->GetFrontgroundProps( ) ); // Draw frontground
 	}
 	glPopMatrix( );
+
+	DrawHUD( );
 }
 
 void Camera::Update( float elapsedSec )
@@ -72,6 +76,13 @@ void Camera::Update( float elapsedSec )
 	}
 }
 
+void Camera::DrawHUD( ) const
+{
+	const HUDManager* pHUDManager{ m_pStageManager->GetHUDManager( ) };
+
+	pHUDManager->Draw( );
+}
+
 void Camera::DrawBackground( const std::vector<NonInterractableProp>& props ) const
 {
 	for ( const NonInterractableProp& prop : props )
@@ -83,8 +94,8 @@ void Camera::DrawBackground( const std::vector<NonInterractableProp>& props ) co
 
 void Camera::DrawEntities( ) const
 {
+	m_pStageManager->GetToyduck()->Draw( ); 
 	m_pStageManager->GetPlayer()->Draw( );
-	m_pStageManager->GetToyduck()->Draw( );
 }
 
 void Camera::DrawProjectiles( ) const

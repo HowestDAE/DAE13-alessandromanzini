@@ -1,16 +1,18 @@
 #pragma once
+#include <deque>
+#include "TextureInfo.h"
 
-class TextureManager;
+class Texture2D;
 class AnimationQueue
 {
 public:
 	AnimationQueue( );
 
-	TextureManager* GetCurrentTexture( ) const;
+	void NextAnimation( TextureInfo& textureInfo );
 
-	// Queue the texture. Returns true if successful, false if not.
-	bool Queue( TextureManager* pTexture );
+	void Enqueue( const TextureInfo& textureInfo, bool priority = false );
+	void Clear( );
 
 private:
-	TextureManager* m_pCurrentTexture;
+	std::deque<TextureInfo> m_TexturesDeque;
 };

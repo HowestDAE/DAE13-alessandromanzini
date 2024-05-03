@@ -1,27 +1,42 @@
 #include "pch.h"
 #include "AnimationQueue.h"
-#include "TextureManager.h"
+#include "Texture2D.h"
+#include "iostream"
 
 AnimationQueue::AnimationQueue( )
-    : m_pCurrentTexture{ nullptr }
+    : m_TexturesDeque{}
 {
 }
 
-TextureManager* AnimationQueue::GetCurrentTexture( ) const
+void AnimationQueue::NextAnimation( TextureInfo& textureInfo )
 {
-    return m_pCurrentTexture;
-}
-
-bool AnimationQueue::Queue( TextureManager* pTexture )
-{
-    if ( m_pCurrentTexture == nullptr || m_pCurrentTexture->GetIsReady( ) )
+    // If the queue is not empty...
+    if ( !m_TexturesDeque.empty( ) && textureInfo.pTexture->GetIsReady( ) )
     {
-        pTexture->Reset( );
-        m_pCurrentTexture = pTexture;
-        return true;
+        // give the next step
+        textureInfo = m_TexturesDeque.front( );
+        m_TexturesDeque.pop_front( );
     }
+}
 
-    m_pCurrentTexture->ForceReady( );
+void AnimationQueue::Enqueue( const TextureInfo& textureInfo, bool priority )
+{
+    if ( priority )
+    {
+        Clear( );
+    }
+    else
+    {
+        // If the last animation on queue is optional, substitute
+        if ( !m_TexturesDeque.empty() && m_TexturesDeque.back( ).pTexture->GetIsReady( ) )
+        {
+            m_TexturesDeque.pop_back( );
+        }
+    }
+    m_TexturesDeque.push_back( textureInfo );
+}
 
-    return false;
+void AnimationQueue::Clear( )
+{
+    m_TexturesDeque.clear( );
 }

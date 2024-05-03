@@ -1,8 +1,7 @@
 #include "pch.h"
 #include "StageManager.h"
-
 #include "Constants.h"
-#include "TextureManager.h"
+#include "Texture2D.h"
 #include "ResourcesLinker.h"
 #include "Cuphead.h"
 #include "Toyduck.h"
@@ -12,6 +11,7 @@ void StageManager::Initialize( )
 {
 	InitializeProps( );
 	InitializeEntities( );
+	InitializeHUD( );
 }
 
 void StageManager::InitializeProps( )
@@ -22,7 +22,7 @@ void StageManager::InitializeProps( )
 
 	CreateNIP( BackgroundScope::background3, "bg3_startcurtains", Point2f{ 825.f, 430.f } );
 	CreateNIP( BackgroundScope::background3, "bg3_moon", Point2f{ 2150.f, 230.f } );
-	CreateNIP( BackgroundScope::background3, "bg3_rocks_loop", Point2f{ 280.f, 180.f } );
+	CreateNIP( BackgroundScope::background3, "bg3_rocks_loop", Point2f{ 280.f, 200.f } );
 	CreateNIP( BackgroundScope::background3, "bg3_cloud1", Point2f{ 2010.f, 480.f } );
 	CreateNIP( BackgroundScope::background3, "bg3_cloud2", Point2f{ 4020.f, 435.f } );
 
@@ -41,9 +41,9 @@ void StageManager::InitializeProps( )
 	CreateNIP( BackgroundScope::background1, "bg1_greyplant", Point2f{ 3590.f, 210.f } );
 	CreateNIP( BackgroundScope::background1, "bg1_blueplant", Point2f{ 3890.f, 170.f } );
 
-	CreateNIP( BackgroundScope::midground2, "mg2_mantis", Point2f{ 2035.f, 225.f } );
+	CreateNIP( BackgroundScope::midground2, "mg2_mantis", Point2f{ 2035.f, 215.f } );
 	CreateNIP( BackgroundScope::midground2, "mg2_craterstart", Point2f{ 780.f, 127.f } );
-	CreateNIP( BackgroundScope::midground2, "mg2_crater_loop", Point2f{ 1283.f, 90.f } );
+	CreateNIP( BackgroundScope::midground2, "mg2_crater_loop", Point2f{ 1283.f, 127.f } );
 	CreateNIP( BackgroundScope::midground2, "mg2_trunk", Point2f{ 977.f, 247.f } );
 	CreateNIP( BackgroundScope::midground2, "mg2_star1", Point2f{ 780.f, 385.f } );
 	CreateNIP( BackgroundScope::midground2, "mg2_star2", Point2f{ 1430.f, 335.f } );
@@ -92,17 +92,22 @@ void StageManager::InitializeProps( )
 
 void StageManager::InitializeEntities( )
 {
-	m_pPlayer = new Cuphead( Constants::sk_CupheadStartingPosition );
-	m_pResourcesLinker->LinkTexture( m_pPlayer );
+	m_pPlayer = new Cuphead( Constants::sk_CupheadStartingPosition, &m_HUDManager );
+	m_pPlayer->LinkTexture( m_pResourcesLinker );
 
 	m_pToyduck = new Toyduck( Constants::sk_CupheadStartingPosition + Vector2f{ 1200.f, 0.f } );
-	m_pResourcesLinker->LinkTexture( m_pToyduck );
+	m_pToyduck->LinkTexture( m_pResourcesLinker );
+}
+
+void StageManager::InitializeHUD( )
+{
+	m_HUDManager.LinkTexture( m_pResourcesLinker );
 }
 
 void StageManager::CreateNIP( BackgroundScope scope, const std::string& uid, const Point2f& position, float scale )
 {
-	NonInterractableProp temp{  int( scope ), (Vector2f( position ) / scale).ToPoint2f(), scale };
-	m_pResourcesLinker->LinkTexture( temp, uid );
+	NonInterractableProp temp{ int( scope ), (Vector2f( position ) / scale).ToPoint2f(), uid, scale };
+	temp.LinkTexture( m_pResourcesLinker );
 
 	if ( scope >= BackgroundScope::midground1 )
 	{

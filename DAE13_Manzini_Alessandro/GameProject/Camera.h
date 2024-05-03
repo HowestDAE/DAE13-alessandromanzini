@@ -30,6 +30,7 @@ private:
 	Vector2f m_CameraTranslationVector;
 	Vector2f m_AimLocationVector;
 
+	void DrawHUD( ) const;
 	void DrawBackground( const std::vector<NonInterractableProp>& props ) const;
 	void DrawEntities( ) const;
 	void DrawProjectiles( ) const;

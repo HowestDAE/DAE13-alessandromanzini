@@ -12,16 +12,19 @@ public:
 
 	AimDirection GetAimDirection( ) const;
 	MovementType GetMovementType( ) const;
-	bool IsFacingRight( ) const;
-	bool IsShooting( ) const;
+	bool GetIsFacingRight( ) const;
+
+	bool GetIsTransitioning( ) const;
+
+	bool GetIsShooting( ) const;
 
 	void SetGravity( bool isDefault );
 	void TouchingFloor( );
 
+	void Update( float elapsedSec );
 	void UpdateVelocity( Vector2f& velocity, float elapsedSec );
 
 	void KeyPressEvent( const SDL_KeyboardEvent& e );
-	void ProcessMovementData( );
 
 private:
 	struct DirectionData
@@ -35,6 +38,8 @@ private:
 	DirectionData m_DirectionData;
 	MovementType m_MovementType;
 
+	bool m_IsTransitioning;
+
 	bool m_IsShooting;
 
 	bool m_IsDashing;
@@ -44,13 +49,21 @@ private:
 	bool m_IsAirborne;
 	float m_AirborneAccumulatedTime;
 
+	bool m_IsParrying;
+
+	bool m_IsMoving;
+
 	bool m_IsGravityReversed;
 	Vector2f m_VelocityModifiers;
 
+	void DefineState( );
+	void UpdateState( float elapsedSec );
+
+	void ProcessMovementData( );
+
 	DirectionData CalculateAimDirection( ) const;
 	MovementType CalculateMovementType( ) const;
-	void SetMovementType( MovementType movement );
-	void SetDirectionData( DirectionData data, MovementType movement );
+	void AdjustMovementData( DirectionData& data, MovementType& movement );
 };
 
 enum class MovementManager::AimDirection

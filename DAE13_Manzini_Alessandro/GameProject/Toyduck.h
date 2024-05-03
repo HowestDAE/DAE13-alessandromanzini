@@ -1,6 +1,8 @@
 #pragma once
 #include "Entity.h"
-class SpriteManager;
+#include "CollisionManager.h"
+class Sprite;
+
 class Toyduck final :
     public Entity
 {
@@ -10,10 +12,12 @@ public:
     virtual void Draw( ) const override;
     virtual void Update( float elapsedSec ) override;
 
-    friend void ResourcesLinker::LinkTexture( Toyduck* pToyduck ) const;
+    virtual void LinkTexture( ResourcesLinker* pResourcesLinker ) override;
 
 private:
-    SpriteManager* m_pIdleSprite;
-    SpriteManager* m_pBacktireSprite;
+    Sprite* m_pIdleSprite;
+    Sprite* m_pBacktireSprite;
+
+    CollisionManager m_CollisionManager;
 };
 

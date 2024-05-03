@@ -2,14 +2,15 @@
 #include "TexturedModel.h"
 #include "vector"
 #include "Vector2f.h"
+class ResourcesLinker;
+class Texture2D;
 
-class TextureManager;
 class NonInterractableProp final
 	: public TexturedModel
 {
 #pragma once
 public:
-	explicit NonInterractableProp( int depth, const Point2f& position, float scale = 1.f );
+	explicit NonInterractableProp( int depth, const Point2f& position, const std::string& uid, float scale = 1.f, bool animated = false );
 
 	int GetDepth() const;
 
@@ -17,10 +18,13 @@ public:
 
 	virtual void Update( float elapsedSec ) override;
 
-	friend void ResourcesLinker::LinkTexture( NonInterractableProp& nip, const std::string& uid ) const;
+	virtual void LinkTexture( ResourcesLinker* pResourcesLinker ) override;
 
 private:
 	const int mk_Depth;
+	const std::string mk_Uid;
 	const float mk_Scale;
+
+	const bool mk_IsAnimated;
 };
 

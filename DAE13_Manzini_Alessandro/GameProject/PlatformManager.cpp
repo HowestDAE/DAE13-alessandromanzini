@@ -1,13 +1,17 @@
 #include "pch.h"
 #include "PlatformManager.h"
-#include "Cuphead.h"
+#include "Entity.h"
 #include "Constants.h"
 
-void PlatformManager::CheckCollision( Cuphead* pCuphead )
+Vector2f PlatformManager::GetDisplacementFromPlatform( Entity* pEntity ) const
 {
-	const Point2f position{ pCuphead->GetPosition( ) };
-	if ( position.y < Constants::sk_CupheadStartingPosition.y )
+	const Vector2f location{ pEntity->GetLocation( ) };
+	Vector2f displacement{};
+
+	if ( location.y < Constants::sk_CupheadStartingPosition.y )
 	{
-		pCuphead->ProcessPlatformCollision( Vector2f{ 0.f, Constants::sk_CupheadStartingPosition.y - position.y } );
+		displacement = Vector2f{ 0.f, Constants::sk_CupheadStartingPosition.y - location.y };
 	}
+
+	return displacement;
 }

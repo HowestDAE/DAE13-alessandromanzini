@@ -7,6 +7,7 @@ public:
     Spread( );
 
     virtual Weapon::WeaponType GetType( ) const override;
+    virtual void LinkTexture( ResourcesLinker* pResourcesLinker ) override;
 
 private:
 };

@@ -108,3 +108,6 @@ Point2f operator-(Point2f lhs, const Vector2f& rhs);
 // The difference vector between 2 points
 Vector2f operator-( const Point2f& lhs, const Point2f& rhs);
 
+// Translate a circle
+Circlef operator+( const Circlef& lhs, const Vector2f& rhs );
+

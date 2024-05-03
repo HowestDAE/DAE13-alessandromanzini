@@ -17,7 +17,7 @@ public:
 	void Draw( ) const;
 	void Update( float elapsedSec );
 
-	friend void ResourcesLinker::LinkTexture( Cuphead* pCuphead );
+	void LinkTexture( ResourcesLinker* pResourcesLinker );
 
 private:
 	static const int smk_WeaponsCount{ 2 };

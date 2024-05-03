@@ -11,6 +11,7 @@ StageManager::StageManager( Camera* pCamera, ResourcesLinker* pResourcesLinker )
 	: m_pCamera{ pCamera }
 	, m_pResourcesLinker{ pResourcesLinker }
 	, m_PlatformManager{}
+	, m_HUDManager{}
 	, m_IsHalted{ true }
 	, m_IsCameraFixed{ false }
 
@@ -46,10 +47,12 @@ void StageManager::Update( float elapsedSec )
 	
 	if ( !m_IsCameraFixed )
 	{
-		m_pCamera->Aim( m_pPlayer->GetPosition( ), m_pPlayer->GetTextureWidth() );
+		m_pCamera->Aim( m_pPlayer->GetLocation( ).ToPoint2f(), m_pPlayer->GetTextureWidth( ) );
 	}
 
 	CheckCollisions( );
+
+	m_HUDManager.Update( elapsedSec );
 }
 
 void StageManager::UpdateBackground( float elapsedSec )
@@ -77,8 +80,9 @@ void StageManager::UpdateProjectiles( float elapsedSec )
 
 void StageManager::CheckCollisions( )
 {
-	m_PlatformManager.CheckCollision( m_pPlayer );
+	m_pPlayer->CheckCollision( &m_PlatformManager );
 
+	m_pPlayer->CollidableEntity::CheckCollision( *m_pToyduck );
 }
 
 void StageManager::KeyPressEvent( const SDL_KeyboardEvent& e )
@@ -94,6 +98,11 @@ const std::vector<NonInterractableProp>& StageManager::GetBackgroundProps( ) con
 const std::vector<NonInterractableProp>& StageManager::GetFrontgroundProps( ) const
 {
 	return m_FrontgroundProps;
+}
+
+HUDManager const* StageManager::GetHUDManager( ) const
+{
+	return &m_HUDManager;
 }
 
 Cuphead const* StageManager::GetPlayer( ) const

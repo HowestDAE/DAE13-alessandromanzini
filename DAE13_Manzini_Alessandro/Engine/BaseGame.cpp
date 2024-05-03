@@ -30,7 +30,7 @@ void BaseGame::InitializeGameEngine()
 #endif
 
 	// Initialize SDL
-	if (SDL_Init(SDL_INIT_VIDEO /*| SDL_INIT_AUDIO*/) < 0)
+	if (SDL_Init(SDL_INIT_VIDEO /*| SDL_INIT_AUDIO*/ | SDL_INIT_GAMECONTROLLER ) < 0)
 	{
 		std::cerr << "BaseGame::Initialize( ), error when calling SDL_Init: " << SDL_GetError() << std::endl;
 		return;
@@ -154,9 +154,11 @@ void BaseGame::Run()
 				quit = true;
 				break;
 			case SDL_KEYDOWN:
+			case SDL_CONTROLLERBUTTONDOWN:
 				this->ProcessKeyDownEvent(e.key);
 				break;
 			case SDL_KEYUP:
+			case SDL_CONTROLLERBUTTONUP:
 				this->ProcessKeyUpEvent(e.key);
 				break;
 			case SDL_MOUSEMOTION:

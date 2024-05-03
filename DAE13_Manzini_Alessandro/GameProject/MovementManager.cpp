@@ -8,13 +8,16 @@ MovementManager::MovementManager( )
 	, m_DirectionData{ AimDirection::none, true }
 	, m_MovementType{}
 	, m_VelocityModifiers{}
+	, m_IsTransitioning{}
 	, m_IsShooting{}
 	, m_IsDashing{}
 	, m_DashingAccumulatedTime{}
 	, m_DashingCooldownAccumulatedTime{}
 	, m_IsAirborne{}
 	, m_AirborneAccumulatedTime{}
+	, m_IsParrying{}
 	, m_IsGravityReversed{}
+	, m_IsMoving{}
 {
 	m_KeysStates.stopKeyPressed = true;
 }
@@ -29,12 +32,17 @@ MovementManager::MovementType MovementManager::GetMovementType( ) const
 	return m_MovementType;
 }
 
-bool MovementManager::IsFacingRight( ) const
+bool MovementManager::GetIsFacingRight( ) const
 {
 	return m_DirectionData.facingRight;
 }
 
-bool MovementManager::IsShooting( ) const
+bool MovementManager::GetIsTransitioning( ) const
+{
+	return m_IsTransitioning;
+}
+
+bool MovementManager::GetIsShooting( ) const
 {
 	return m_IsShooting;
 }
@@ -47,28 +55,25 @@ void MovementManager::SetGravity( bool isReversed )
 void MovementManager::TouchingFloor( )
 {
 	m_IsAirborne = false;
+	m_IsParrying = false;
 	m_AirborneAccumulatedTime = 0.f;
+}
+
+void MovementManager::Update( float elapsedSec )
+{
+	DefineState( );
+	UpdateState( elapsedSec );
+
+	ProcessMovementData( );
 }
 
 void MovementManager::UpdateVelocity( Vector2f& velocity, float elapsedSec )
 {
 	velocity.x = 0;
-	m_DashingCooldownAccumulatedTime += elapsedSec;
 
 	// If cuphead is dashing, put dashing speed in the dashing direction ...
 	if ( m_IsDashing )
 	{
-		// end dash algorithm
-		m_DashingAccumulatedTime += elapsedSec;
-		if ( m_DashingAccumulatedTime > Constants::sk_CupheadDashTime )
-		{
-			m_IsDashing = false;
-			m_DashingAccumulatedTime = 0.f;
-			m_DashingCooldownAccumulatedTime = 0.f;
-			UpdateVelocity( velocity, elapsedSec );
-			return;
-		}
-
 		const int direction{ m_DirectionData.facingRight ? 1 : -1 };
 		velocity.x = direction * Constants::sk_CupheadDashSpeed;
 
@@ -82,12 +87,7 @@ void MovementManager::UpdateVelocity( Vector2f& velocity, float elapsedSec )
 	// ... else do other basic movements
 	else 
 	{
-		if ( m_IsAirborne )
-		{
-			m_AirborneAccumulatedTime += elapsedSec;
-		}
-		if ( m_MovementType == MovementType::run 
-			|| (!m_KeysStates.stopKeyPressed && m_MovementType == MovementType::jump) )
+		if ( m_IsMoving )
 		{
 			if ( m_DirectionData.facingRight )
 			{
@@ -128,6 +128,7 @@ void MovementManager::KeyPressEvent( const SDL_KeyboardEvent& e )
 		m_KeysStates.jumpKeyChanged = (m_KeysStates.jumpKeyPressed != pressed);
 		m_KeysStates.jumpKeyPressed = pressed;
 		break;
+	case SDLK_z:
 	case SDLK_LSHIFT:
 		m_KeysStates.dashKeyChanged = (m_KeysStates.dashKeyPressed != pressed);
 		m_KeysStates.dashKeyPressed = pressed;
@@ -150,15 +151,66 @@ void MovementManager::KeyPressEvent( const SDL_KeyboardEvent& e )
 	m_KeysStates.stopKeyPressed = (!m_KeysStates.faceRightKeyPressed && !m_KeysStates.faceLeftKeyPressed); // stop when neither or both are pressed
 }
 
+void MovementManager::DefineState( )
+{
+	if ( m_KeysStates.dashKeyPressed && m_KeysStates.dashKeyChanged
+		&& !m_IsParrying && m_DashingCooldownAccumulatedTime > Constants::sk_CupheadDashCooldownTime )
+	{
+		m_IsDashing = true;
+	}
+	if ( m_KeysStates.jumpKeyPressed && m_KeysStates.jumpKeyChanged )
+	{
+		m_KeysStates.jumpKeyChanged = false;
+
+		if ( !m_IsAirborne )
+		{
+			m_VelocityModifiers.y += Constants::sk_CupheadJumpSpeed;
+			m_IsAirborne = true;
+		}
+		else
+		{
+			m_IsParrying = true;
+		}
+	}
+
+	m_IsMoving = !m_KeysStates.stopKeyPressed;
+	m_IsShooting = m_KeysStates.shootKeyPressed;
+}
+
+void MovementManager::UpdateState( float elapsedSec )
+{
+	if ( m_IsDashing )
+	{
+		m_DashingAccumulatedTime += elapsedSec;
+		if ( m_DashingAccumulatedTime > Constants::sk_CupheadDashTime )
+		{
+			m_IsDashing = false;
+			m_DashingAccumulatedTime = 0.f;
+			m_DashingCooldownAccumulatedTime = 0.f;
+		}
+	}
+	else
+	{
+		m_DashingCooldownAccumulatedTime += elapsedSec;
+
+		if ( m_IsAirborne )
+		{
+			m_AirborneAccumulatedTime += elapsedSec;
+		}
+	}
+}
+
 void MovementManager::ProcessMovementData( )
 {
-	DirectionData directionData{ CalculateAimDirection() };
+	DirectionData directionData{ CalculateAimDirection( ) };
 	MovementType movement{ CalculateMovementType( ) };
 
-	m_IsShooting = m_KeysStates.shootKeyPressed;
+	AdjustMovementData( directionData, movement );
 
-	SetDirectionData( directionData, movement );
-	SetMovementType( movement );
+	m_IsTransitioning = (m_MovementType != movement);
+
+	m_DirectionData = directionData;
+	m_MovementType = movement;
 }
 
 MovementManager::DirectionData MovementManager::CalculateAimDirection( ) const
@@ -189,65 +241,57 @@ MovementManager::MovementType MovementManager::CalculateMovementType( ) const
 {
 	MovementType movement{ };
 
-	if ( m_IsDashing || 
-		(m_KeysStates.dashKeyPressed && m_DashingCooldownAccumulatedTime > Constants::sk_CupheadDashCooldownTime) )
+	if ( m_IsDashing )
 	{
 		movement = m_IsAirborne ? MovementType::dashAir : MovementType::dashGround;
 	}
-	else if ( m_IsAirborne || (m_KeysStates.jumpKeyPressed && m_KeysStates.jumpKeyChanged) )
+	else if ( m_IsParrying )
+	{
+		movement = MovementType::parry;
+	}
+	else if ( m_IsAirborne )
 	{
 		movement = MovementType::jump;
 	}
+	else if ( m_KeysStates.lockKeyPressed )
+	{
+		movement = MovementType::aim;
+	}
+	else if ( m_KeysStates.faceDownKeyPressed )
+	{
+		movement = MovementType::duck;
+	}
+	else if ( m_KeysStates.stopKeyPressed )
+	{
+		movement = MovementType::idle;
+	}
 	else
-	{	
-		if ( m_KeysStates.faceDownKeyPressed )
-		{
-			movement = MovementType::duck;
-		}
-		else if ( m_KeysStates.stopKeyPressed )
-		{
-			movement = MovementType::idle;
-		}
-		else
-		{
-			movement = MovementType::run;
-		}
+	{
+		movement = MovementType::run;
 	}
 
 	return movement;
 }
 
-void MovementManager::SetMovementType( MovementType movement )
+void MovementManager::AdjustMovementData( DirectionData& data, MovementType& movement ) 
 {
-	if ( movement == MovementType::jump && !m_IsAirborne )
+	if ( movement == MovementType::dashGround || movement == MovementType::dashAir )
 	{
-		m_IsAirborne = true;
-		m_VelocityModifiers.y += Constants::sk_CupheadJumpSpeed;
-	}
-	else if ( movement == MovementType::dashGround || movement == MovementType::dashAir )
-	{
-		m_IsDashing = true;
+		data = m_DirectionData;
 		m_IsShooting = false;
+		m_IsMoving = false;
 	}
 	else if ( movement == MovementType::idle && m_IsShooting )
 	{
 		movement = MovementType::aim;
+
+		// only up and straight are allowed and we default to straight
+		if ( data.direction != AimDirection::up )
+		{
+			data.direction = AimDirection::straight;
+		}
 	}
-
-	m_MovementType = movement;
-}
-
-void MovementManager::SetDirectionData( DirectionData data, MovementType movement )
-{
-	if ( data.direction == AimDirection::none || 
-		movement == MovementType::dashGround || 
-		movement == MovementType::dashAir )
-	{
-		// Quit the set
-		return;
-	}
-
-	if ( movement == MovementType::run )
+	else if ( movement == MovementType::run )
 	{
 		// While running, set everything that is not diagonalup to straight
 		if ( data.direction != AimDirection::diagonalup )
@@ -255,10 +299,21 @@ void MovementManager::SetDirectionData( DirectionData data, MovementType movemen
 			data.direction = AimDirection::straight;
 		}
 	}
-	else if ( movement == MovementType::jump || movement == MovementType::duck )
+	else if ( movement == MovementType::duck )
 	{
 		data.direction = AimDirection::straight;
+		m_IsMoving = false;
 	}
-
-	m_DirectionData = data;
+	else if ( movement == MovementType::parry )
+	{
+		m_IsShooting = false;
+	}
+	else if ( movement == MovementType::aim )
+	{
+		if ( data.direction == AimDirection::none )
+		{
+			data.direction = AimDirection::straight;
+		}
+		m_IsMoving = false;
+	}
 }

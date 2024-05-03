@@ -1,11 +1,13 @@
 #pragma once
-class Cuphead;
+#include "Vector2f.h"
+class Entity;
+
 class PlatformManager final
 {
 public:
 	PlatformManager( ) = default;
 
-	void CheckCollision( Cuphead* pCuphead );
+	Vector2f GetDisplacementFromPlatform( Entity* pEntity ) const;
 
 private:
 };

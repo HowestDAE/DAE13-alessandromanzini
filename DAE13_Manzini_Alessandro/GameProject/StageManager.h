@@ -1,5 +1,6 @@
 #pragma once
 #include "PlatformManager.h"
+#include "HUDManager.h"
 #include <vector>
 #include <list>
 #include "Camera.h"
@@ -14,6 +15,7 @@ class StageManager final
 public:
 	explicit StageManager( Camera* pCamera, ResourcesLinker* pResourcesLinker );
 	StageManager( const StageManager& other ) = delete;
+	StageManager& operator=( const StageManager& rhs ) = delete;
 	~StageManager();
 
 	void Start( );
@@ -26,10 +28,10 @@ public:
 	const std::vector<NonInterractableProp>& GetBackgroundProps( ) const;
 	const std::vector<NonInterractableProp>& GetFrontgroundProps( ) const;
 
+	HUDManager const* GetHUDManager( ) const;
+
 	Cuphead const* GetPlayer( ) const;
 	Toyduck const* GetToyduck( ) const;
-
-	StageManager& operator=( const StageManager& rhs ) = delete;
 
 private:
 	enum class BackgroundScope;
@@ -38,6 +40,7 @@ private:
 	ResourcesLinker* m_pResourcesLinker;
 
 	PlatformManager m_PlatformManager;
+	HUDManager m_HUDManager;
 
 	bool m_IsHalted;
 	bool m_IsCameraFixed;
@@ -53,6 +56,7 @@ private:
 	void Initialize( );
 	void InitializeProps( );
 	void InitializeEntities( );
+	void InitializeHUD( );
 	void CreateNIP( BackgroundScope scope, const std::string& uid, const Point2f& position, float scale = 1.f  );
 
 	void UpdateBackground( float elapsedSec );

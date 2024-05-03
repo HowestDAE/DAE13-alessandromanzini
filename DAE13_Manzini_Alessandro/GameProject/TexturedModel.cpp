@@ -1,31 +1,36 @@
 #include "pch.h"
 #include "TexturedModel.h"
-#include "TextureManager.h"
+#include "Texture2D.h"
+#include "utils.h"
 
 TexturedModel::TexturedModel( const Point2f& position )
-	: m_pTextureManager{ nullptr }
-	, m_FlipX{}
-	, m_FlipY{}
-	, m_Location{ position }
+	: m_Location{ position }
+	, m_TextureInfo{}
 {
 }
 
-Point2f TexturedModel::GetPosition( ) const
+Vector2f TexturedModel::GetLocation( ) const
 {
-	return m_Location.ToPoint2f();
+	return m_Location;
 }
 
 float TexturedModel::GetTextureWidth( ) const
 {
-	return m_pTextureManager->GetWidth();
+	return m_TextureInfo.pTexture->GetWidth();
 }
 
 float TexturedModel::GetTextureHeight( ) const
 {
-	return m_pTextureManager->GetHeight( );
+	return m_TextureInfo.pTexture->GetHeight( );
 }
 
 void TexturedModel::Draw( ) const
 {
-	m_pTextureManager->Draw( m_Location.ToPoint2f( ), m_FlipX, m_FlipY );
+	m_TextureInfo.pTexture->Draw( m_Location.ToPoint2f( ), m_TextureInfo.flipX, m_TextureInfo.flipY );
+}
+
+void TexturedModel::DrawTextureOutline( ) const
+{
+	utils::SetColor( Color4f{ 1.f, 1.f, 1.f, 1.f } );
+	utils::DrawRect( m_Location.ToPoint2f( ), GetTextureWidth( ), GetTextureHeight( ) );
 }
