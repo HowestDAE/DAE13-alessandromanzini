@@ -79,6 +79,12 @@ void Cuphead::CheckCollision( PlatformManager const* pPlatformManager )
 	m_Location += displacement;
 }
 
+void Cuphead::CheckCollision( CollidableEntity& other )
+{
+	CollidableEntity::CheckCollision( other );
+	m_WeaponManager.CheckCollision( other );
+}
+
 void Cuphead::Hit( int damage )
 {
 	if ( !m_IsInvincible )

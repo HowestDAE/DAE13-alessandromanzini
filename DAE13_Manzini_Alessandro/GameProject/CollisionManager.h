@@ -2,6 +2,7 @@
 #include "vector"
 #include "Vector2f.h"
 #include "CollisionCircle.h"
+#include "CollisionInfo.h"
 
 class CollisionManager
 {
@@ -12,7 +13,7 @@ public:
 
 	const std::vector<CollisionCircle>& GetCollisionCircles( ) const;
 	const Vector2f& GetDisplacementVector( ) const;
-	bool CheckCollision( const CollisionManager& other ) const;
+	virtual bool CheckCollision( const CollisionManager& other, CollisionInfo& collisionInfo ) const;
 
 	void Draw( ) const;
 

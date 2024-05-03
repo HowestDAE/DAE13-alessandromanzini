@@ -17,6 +17,7 @@ public:
 	void Draw( ) const;
 	void Update( float elapsedSec );
 
+	virtual void CheckCollision( CollidableEntity& other ) override;
 	virtual void Hit( int damage ) override;
 
 	void Reset( const Point2f& origin, float radius, float rotation );

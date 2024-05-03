@@ -26,7 +26,7 @@ void Entity::Hit( int damage )
 {
     m_HP -= damage;
 
-    m_IsAlive = (m_HP <= 0);
+    m_IsAlive = (m_HP > 0);
 }
 
 Vector2f Entity::GetVelocity( ) const

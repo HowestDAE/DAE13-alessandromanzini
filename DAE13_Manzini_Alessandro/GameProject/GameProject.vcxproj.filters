@@ -131,6 +131,9 @@
     <ClCompile Include="CollisionCircle.cpp">
       <Filter>Models</Filter>
     </ClCompile>
+    <ClCompile Include="CollisionInfo.cpp">
+      <Filter>Models</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Cuphead.h">
@@ -224,6 +227,9 @@
       <Filter>Models</Filter>
     </ClInclude>
     <ClInclude Include="CollisionCircle.h">
+      <Filter>Models</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionInfo.h">
       <Filter>Models</Filter>
     </ClInclude>
   </ItemGroup>

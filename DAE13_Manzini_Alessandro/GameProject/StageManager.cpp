@@ -82,7 +82,7 @@ void StageManager::CheckCollisions( )
 {
 	m_pPlayer->CheckCollision( &m_PlatformManager );
 
-	m_pPlayer->CollidableEntity::CheckCollision( *m_pToyduck );
+	m_pPlayer->CheckCollision( *m_pToyduck );
 }
 
 void StageManager::KeyPressEvent( const SDL_KeyboardEvent& e )

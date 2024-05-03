@@ -36,6 +36,14 @@ void WeaponsManager::Shoot( const Point2f& origin, float radius, float rotation 
 	}
 }
 
+void WeaponsManager::CheckCollision( CollidableEntity& other )
+{
+	for ( int index{}; index < smk_WeaponsCount; ++index )
+	{
+		m_pWeapons[index]->CheckCollision( other );
+	}
+}
+
 void WeaponsManager::Draw( ) const
 {
 	for ( int index{}; index < smk_WeaponsCount; ++index )

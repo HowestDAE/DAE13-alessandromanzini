@@ -30,7 +30,7 @@ const Vector2f& CollisionManager::GetDisplacementVector( ) const
 	return *m_pDisplacementVector;
 }
 
-bool CollisionManager::CheckCollision( const CollisionManager& other ) const
+bool CollisionManager::CheckCollision( const CollisionManager& other, CollisionInfo& collisionInfo ) const
 {
 	for ( CollisionCircle circle1 : m_CollisionCircles )
 	{
@@ -40,6 +40,8 @@ bool CollisionManager::CheckCollision( const CollisionManager& other ) const
 		{
 			if ( utils::IsOverlapping( circle1.circle, (circle2 + other.GetDisplacementVector()).circle ) )
 			{
+				collisionInfo.selfHit = circle1.canHit;
+				collisionInfo.otherHit = circle2.canHit;
 				return true;
 			}
 		}

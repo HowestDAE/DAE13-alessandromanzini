@@ -49,6 +49,14 @@ void Weapon::SpawnProjectile( const Point2f& origin, float radius, float rotatio
 	m_CurrentProjectileIndex = (m_CurrentProjectileIndex + 1) % m_pProjectiles.size( );
 }
 
+void Weapon::CheckCollision( CollidableEntity& other )
+{
+	for ( Projectile* pProjectile : m_pProjectiles )
+	{
+		pProjectile->CheckCollision( other );
+	}
+}
+
 void Weapon::Draw( ) const
 {
 	for ( Projectile* pProjectile : m_pProjectiles )

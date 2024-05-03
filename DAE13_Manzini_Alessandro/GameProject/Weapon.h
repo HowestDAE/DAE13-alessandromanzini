@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include "CollisionCircle.h"
+#include "CollidableEntity.h"
 class ResourcesLinker;
 class Projectile;
 class Texture;
@@ -20,6 +21,8 @@ public:
 	float GetProjectileRange( ) const;
 
 	virtual void SpawnProjectile( const Point2f& origin, float radius, float rotation );
+
+	void CheckCollision( CollidableEntity& other );
 
 	void Draw( ) const;
 	void Update( float elapsedSec );

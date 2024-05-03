@@ -22,7 +22,8 @@ public:
 
     void KeyPressEvent( const SDL_KeyboardEvent& e );
 
-    virtual void CheckCollision( PlatformManager const* pPlatformManager ) override final;
+    virtual void CheckCollision( PlatformManager const* pPlatformManager ) override;
+    virtual void CheckCollision( CollidableEntity& other ) override;
 
     virtual void Hit( int damage ) override;
 

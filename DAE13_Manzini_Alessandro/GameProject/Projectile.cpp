@@ -64,6 +64,14 @@ void Projectile::Update( float elapsedSec )
 	}
 }
 
+void Projectile::CheckCollision( CollidableEntity& other )
+{
+	if ( m_IsActive )
+	{
+		CollidableEntity::CheckCollision( other );
+	}
+}
+
 void Projectile::Hit( int damage )
 {
 	m_IsActive = false;

@@ -14,6 +14,8 @@ public:
 	void Shoot( const Point2f& origin, float radius, float rotation );
 	void ShootEX( const Point2f& origin, float radius, float rotation );
 
+	void CheckCollision( CollidableEntity& other );
+
 	void Draw( ) const;
 	void Update( float elapsedSec );
 
