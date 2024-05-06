@@ -9,8 +9,9 @@ public:
 	Texture2D( const Texture2D& other ) = delete;
 	virtual ~Texture2D( ) = default;
 
+	// public drawing methods
 	void Draw( ) const;
-	virtual void Draw( const Point2f& pos, bool flipX = false, bool flipY = false ) const = 0;
+	virtual void Draw( const Point2f& pos, bool flipX = false, bool flipY = false, bool flash = false ) const = 0;
 	virtual void Update( float elapsedSec ) = 0;
 
 	Vector2f GetOffset( ) const;
@@ -27,6 +28,8 @@ public:
 	Texture2D& operator=( const Texture2D& rhs ) = delete;
 
 protected:
+	// children drawing methods
+	void Draw( Texture const* pTexture, const Point2f& pos, const Rectf& srcRect, bool flipX = false, bool flipY = false ) const;
 	void Draw( const Point2f& pos, const Rectf& srcRect, bool flipX = false, bool flipY = false ) const;
 	
 private:

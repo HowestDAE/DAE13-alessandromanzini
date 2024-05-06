@@ -14,8 +14,9 @@ public:
 	Entity( const Point2f& position, int hp, int contactDamage = 1 );
 
 	virtual void Update( float elapsedSec ) override;
-	virtual void CheckCollision( PlatformManager const* pPlatformManager );
+	virtual void UpdateHitFlashing( float elapsedSec, float epsilonTime, bool toggle = false );
 
+	virtual void CheckCollision( PlatformManager const* pPlatformManager );
 	virtual void Hit( int damage ) override;
 
 	Vector2f GetVelocity( ) const;
@@ -29,6 +30,7 @@ protected:
 
 private:
 	bool m_IsAlive;
+	float m_FlashElapsedTime;
 
 };
 

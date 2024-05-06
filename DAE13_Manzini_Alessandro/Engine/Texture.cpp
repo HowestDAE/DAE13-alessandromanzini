@@ -4,11 +4,12 @@
 #include "Texture.h"
 
 
-Texture::Texture( const std::string& imagePath )
+Texture::Texture( const std::string& imagePath, bool flash )
 	:m_Id{ }
 	,m_Width{ 10.0f }
 	,m_Height{ 10.0f }
 	,m_CreationOk{ false }
+	,m_Flash{ flash }
 {
 	CreateFromImage( imagePath );
 }
@@ -18,6 +19,7 @@ Texture::Texture( const std::string& text, TTF_Font *pFont, const Color4f& textC
 	,m_Width{ 10.0f }
 	,m_Height{ 10.0f }
 	,m_CreationOk{ false }
+	, m_Flash{ false }
 {
 	CreateFromString( text, pFont, textColor );
 }
@@ -27,6 +29,7 @@ Texture::Texture( const std::string& text, const std::string& fontPath, int ptSi
 	,m_Width{ 10.0f }
 	,m_Height{ 10.0f }
 	,m_CreationOk{ false }
+	, m_Flash{ false }
 {
 	CreateFromString( text, fontPath, ptSize, textColor );
 }
@@ -35,6 +38,7 @@ Texture::Texture( Texture&& other ) noexcept
 	,m_Width{ other.m_Width }
 	,m_Height{ other.m_Height }
 	,m_CreationOk{ other.m_CreationOk }
+	, m_Flash{ false }
 {
 	other.m_Id = 0;
 	other.m_CreationOk = false;
@@ -203,6 +207,30 @@ void Texture::CreateFromSurface( SDL_Surface* pSurface )
 	//                         any value that fits in one byte (so 0 through 255).  These values are to be interpreted as
 	//                         *unsigned* values (since 0x00 should be dark and 0xFF should be bright).
 	//  surface->pixels:    The actual data.  As above, SDL's array of bytes.
+	if ( m_Flash )
+	{
+		const int alpha{ 0x30 };
+		struct Pixel
+		{
+			unsigned char R, G, B, A;
+		};
+
+		Pixel* pixelData{ reinterpret_cast<Pixel*>( pSurface->pixels ) };
+		for ( int i{}; i < pSurface->h; ++i )
+		{
+			for ( int j{}; j < pSurface->w; ++j )
+			{
+				const int index{ i * pSurface->w + j };
+				if ( pixelData[index].A )
+				{
+					pixelData[index].R = 0xFF;
+					pixelData[index].G = 0xFF;
+					pixelData[index].B = 0xFF;
+					pixelData[index].A = pixelData[index].A < 200 ? 0x00 : alpha;
+				}
+			}
+		}
+	}
 	glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, pSurface->w, pSurface->h, 0, pixelFormat, GL_UNSIGNED_BYTE, pSurface->pixels );
 
 	// Set the minification and magnification filters.  In this case, when the texture is minified (i.e., the texture's pixels (texels) are

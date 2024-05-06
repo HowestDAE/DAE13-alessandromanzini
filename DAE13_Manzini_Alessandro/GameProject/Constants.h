@@ -17,6 +17,7 @@ public:
 	static const float sk_CupheadDashSpeed;
 	static const float sk_CupheadDashTime;
 	static const float sk_CupheadDashCooldownTime;
+	static const float sk_CupheadGhostSpeed;
 
 	static const int sk_ToyduckStartingHP;
 	static const float sk_ToyduckSpeed;
@@ -33,5 +34,8 @@ public:
 	static const int sk_SpreadCount;
 	static const int sk_SpreadDamage;
 	static const float sk_SpreadRange;
+
+	static const float sk_CupheadFlashDuration;
+	static const float sk_DefaultFlashDuration;
 };
 

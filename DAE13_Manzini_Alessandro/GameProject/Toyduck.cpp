@@ -19,7 +19,7 @@ void Toyduck::Draw( ) const
 	m_pBacktireSprite->Draw( m_Location.ToPoint2f( ) );
 	Entity::Draw( );
 
-	DrawTextureOutline( );
+	//DrawTextureOutline( );
 	DrawCollision( );
 }
 
@@ -29,6 +29,8 @@ void Toyduck::Update( float elapsedSec )
 	m_pBacktireSprite->Update( elapsedSec );
 
 	m_Location += m_Velocity * elapsedSec;
+
+	Entity::UpdateHitFlashing( elapsedSec, Constants::sk_DefaultFlashDuration );
 }
 
 void Toyduck::LinkTexture( ResourcesLinker* pResourcesLinker )

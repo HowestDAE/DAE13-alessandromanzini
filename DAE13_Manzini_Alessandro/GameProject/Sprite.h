@@ -6,12 +6,12 @@ class Sprite final :
     public Texture2D
 {
 public:
-    explicit Sprite( Texture* pTexture, const SpriteSettings& spriteSettings );
-    explicit Sprite( Texture* pTexture, int rows, int cols, float frameDelay, bool boomerang = false, const Vector2f& offset = {}, bool mustComplete = false );
+    explicit Sprite( Texture const* pTexture, Texture const* pFlashTexture, const SpriteSettings& spriteSettings );
+    explicit Sprite( Texture const* pTexture, Texture const* pFlashTexture, int rows, int cols, float frameDelay, bool boomerang = false, const Vector2f& offset = {}, bool mustComplete = false );
     Sprite( const Sprite& other ) = delete;
     virtual ~Sprite( ) override = default;
 
-    virtual void Draw( const Point2f& pos, bool flipX = false, bool flipY = false ) const override;
+    virtual void Draw( const Point2f& pos, bool flipX = false, bool flipY = false, bool flash = false ) const override;
 
     virtual void Update( float elapsedSec ) override;
 
@@ -32,6 +32,8 @@ public:
     Sprite& operator=( const Sprite& rhs ) = delete;
 
 private:
+    const Texture* mk_pFlashTexture;
+
     const int mk_Rows;
     const int mk_Cols;
 

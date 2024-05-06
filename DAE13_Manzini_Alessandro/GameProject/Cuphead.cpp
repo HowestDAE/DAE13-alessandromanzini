@@ -39,7 +39,10 @@ Cuphead::Cuphead(const Point2f& position, HUDManager* pHUDManager )
 void Cuphead::Draw( ) const
 {
 	m_WeaponManager.Draw( );
-	Entity::Draw( );
+	if ( !m_TextureFlashing )
+	{
+		Entity::Draw( );
+	}
 	DrawCollision( );
 	/*{
 		const Point2f point{ (m_Location + m_MidTranslationVector).ToPoint2f( ) };
@@ -94,6 +97,12 @@ void Cuphead::Hit( int damage )
 		m_pHitSprite->Reset( );
 		QueueTexture( m_pHitSprite, true );
 
+		if ( !GetIsAlive( ) )
+		{
+			Kill( );
+			return;
+		}
+
 		m_IsInvincible = true;
 		m_IFramesElapsedTime = 0.f;
 	}
@@ -128,6 +137,7 @@ void Cuphead::LinkTexture( ResourcesLinker* pResourcesLinker )
 	m_pRunShootStraightSprite = pResourcesLinker->GetSprite( "cuphead_runshoot_straight" );
 	m_pRunShootDiagonalupSprite = pResourcesLinker->GetSprite( "cuphead_runshoot_diagonalup" );
 	m_pHitSprite = pResourcesLinker->GetSprite( "cuphead_hit" );
+	m_pGhostSprite = pResourcesLinker->GetSprite( "cuphead_ghost" );
 
 	m_TextureInfo.pTexture = m_pIdleSprite;
 	
@@ -136,11 +146,13 @@ void Cuphead::LinkTexture( ResourcesLinker* pResourcesLinker )
 
 void Cuphead::UpdateMovement( float elapsedSec )
 {
-	m_MovementManager.Update( elapsedSec );
-	m_MovementManager.UpdateVelocity( m_Velocity, elapsedSec );
+	if ( true || GetIsAlive( ) )
+	{
+		m_MovementManager.Update( elapsedSec );
+		m_MovementManager.UpdateVelocity( m_Velocity, elapsedSec );
+		SelectTexture( );
+	}
 	m_Location += m_Velocity * elapsedSec;
-
-	SelectTexture( );
 }
 
 void Cuphead::UpdateWeapons( float elapsedSec )
@@ -200,11 +212,13 @@ void Cuphead::UpdateIFrames( float elapsedSec )
 {
 	if ( m_IsInvincible )
 	{
+		Entity::UpdateHitFlashing( elapsedSec, Constants::sk_CupheadFlashDuration, true );
+		
 		m_IFramesElapsedTime += elapsedSec;
-
 		if ( m_IFramesElapsedTime >= Constants::sk_CupheadIFramesDuration )
 		{
 			m_IsInvincible = false;
+			m_TextureFlashing = false;
 		}
 	}
 }
@@ -354,4 +368,11 @@ void Cuphead::QueueTexture( Texture2D* pTexture, bool priority )
 {
 	const bool flipX{ !m_MovementManager.GetIsFacingRight( ) }, flipY{};
 	m_AnimationQueue.Enqueue( TextureInfo{ pTexture, flipX, flipY }, priority );
+}
+
+void Cuphead::Kill( )
+{
+	QueueTexture( m_pGhostSprite );
+	m_TextureFlashing = false;
+	m_Velocity.Set( 0.f, Constants::sk_CupheadGhostSpeed );
 }

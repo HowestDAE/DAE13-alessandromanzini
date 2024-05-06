@@ -12,7 +12,7 @@ public:
 	Pattern( const Pattern& other ) = delete;
 	virtual ~Pattern( ) override = default;
 
-	virtual void Draw( const Point2f& pos, bool flipX = false, bool flipY = false ) const override;
+	virtual void Draw( const Point2f& pos, bool flipX = false, bool flipY = false, bool flash = false ) const override;
 	virtual void Update( float elapsedSec ) override;
 
 	virtual void ForceReady( ) override;

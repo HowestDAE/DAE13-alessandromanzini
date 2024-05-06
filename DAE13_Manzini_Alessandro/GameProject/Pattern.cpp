@@ -18,7 +18,7 @@ Pattern::Pattern( Texture const* pTexture, Vector2f offset, int repetition )
 {
 }
 
-void Pattern::Draw( const Point2f& pos, bool flipX, bool flipY ) const
+void Pattern::Draw( const Point2f& pos, bool flipX, bool flipY, bool flash ) const
 {
 	for ( int i{}; i < mk_Repetition + 1; ++i ) // Draw at least once (if repetition = 0, i < 1)
 	{

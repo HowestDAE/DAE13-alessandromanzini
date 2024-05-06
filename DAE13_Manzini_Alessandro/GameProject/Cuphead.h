@@ -66,6 +66,7 @@ private:
     Sprite* m_pRunShootStraightSprite;
     Sprite* m_pRunShootDiagonalupSprite;
     Sprite* m_pHitSprite;
+    Sprite* m_pGhostSprite;
 
     void UpdateMovement( float elapsedSec );
     void UpdateWeapons( float elapsedSec );
@@ -85,4 +86,6 @@ private:
 	void SelectDashAir( );
 
     void QueueTexture( Texture2D* pTexture, bool priority = false );
+
+    void Kill( );
 };

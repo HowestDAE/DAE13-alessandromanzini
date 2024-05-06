@@ -9,14 +9,19 @@ Texture2D::Texture2D( Texture const* pTexture, const Vector2f& offset )
 {
 }
 
-void Texture2D::Draw( const Point2f& pos, const Rectf& srcRect, bool flipX, bool flipY ) const
+void Texture2D::Draw( Texture const* pTexture, const Point2f& pos, const Rectf& srcRect, bool flipX, bool flipY ) const
 {
-	mk_pTexture->Draw( pos + mk_Offset, srcRect, flipX, flipY );
+	pTexture->Draw( pos + mk_Offset, srcRect, flipX, flipY );
 }
 
 void Texture2D::Draw( ) const
 {
-	Draw( Point2f{ 0.f, 0.f } );
+	Texture2D::Draw( mk_pTexture, Point2f{ 0.f, 0.f }, Rectf{} );
+}
+
+void Texture2D::Draw( const Point2f& pos, const Rectf& srcRect, bool flipX, bool flipY ) const
+{
+	Texture2D::Draw( mk_pTexture, pos, srcRect, flipX, flipY );
 }
 
 Vector2f Texture2D::GetOffset( ) const

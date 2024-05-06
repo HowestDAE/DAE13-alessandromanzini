@@ -2,8 +2,9 @@
 #include "Sprite.h"
 #include "Texture.h"
 
-Sprite::Sprite( Texture* pTexture, const SpriteSettings& spriteSettings )
+Sprite::Sprite( Texture const* pTexture, Texture const* pFlashTexture, const SpriteSettings& spriteSettings )
 	: Sprite( pTexture, 
+		pFlashTexture,
 		spriteSettings.GetRows(), 
 		spriteSettings.GetCols( ), 
 		spriteSettings.GetFrameDelay( ), 
@@ -13,8 +14,9 @@ Sprite::Sprite( Texture* pTexture, const SpriteSettings& spriteSettings )
 {
 }
 
-Sprite::Sprite( Texture* pTexture, int rows, int cols, float frameDelay, bool boomerang, const Vector2f& offset, bool mustComplete )
+Sprite::Sprite( Texture const* pTexture, Texture const* pFlashTexture, int rows, int cols, float frameDelay, bool boomerang, const Vector2f& offset, bool mustComplete )
 	: Texture2D( pTexture, offset )
+	, mk_pFlashTexture{ pFlashTexture }
 	, mk_Rows{ rows }
 	, mk_Cols{ cols }
 	, mk_FrameDelay{ frameDelay }
@@ -29,9 +31,14 @@ Sprite::Sprite( Texture* pTexture, int rows, int cols, float frameDelay, bool bo
 	};
 }
 
-void Sprite::Draw( const Point2f& pos, bool flipX, bool flipY ) const
+void Sprite::Draw( const Point2f& pos, bool flipX, bool flipY, bool flash ) const
 {
 	Texture2D::Draw( pos, m_SourceRect, flipX, flipY );
+
+	if ( flash && mk_pFlashTexture )
+	{
+		Texture2D::Draw( mk_pFlashTexture, pos, m_SourceRect, flipX, flipY );
+	}
 }
 
 void Sprite::Update( float elapsedSec )

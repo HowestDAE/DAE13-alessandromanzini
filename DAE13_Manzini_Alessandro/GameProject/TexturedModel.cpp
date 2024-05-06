@@ -6,6 +6,7 @@
 TexturedModel::TexturedModel( const Point2f& position )
 	: m_Location{ position }
 	, m_TextureInfo{}
+	, m_TextureFlashing{}
 {
 }
 
@@ -26,7 +27,7 @@ float TexturedModel::GetTextureHeight( ) const
 
 void TexturedModel::Draw( ) const
 {
-	m_TextureInfo.pTexture->Draw( m_Location.ToPoint2f( ), m_TextureInfo.flipX, m_TextureInfo.flipY );
+	m_TextureInfo.pTexture->Draw( m_Location.ToPoint2f( ), m_TextureInfo.flipX, m_TextureInfo.flipY, m_TextureFlashing );
 }
 
 void TexturedModel::DrawTextureOutline( ) const

@@ -31,7 +31,7 @@ Texture2D* ResourcesLinker::GetTexture( const std::string& uid )
 		pTexture = new Pattern( m_pTextures[uid], m_PatternSettingsMap[uid] );
 		break;
 	case TextureType::sprite:
-		pTexture = new Sprite( m_pTextures[uid], m_SpriteSettingsMap[uid] );
+		pTexture = new Sprite( m_pTextures[uid], m_pTextures[uid + "_flash"], m_SpriteSettingsMap[uid] );
 		break;
 	default:
 		break;
@@ -82,6 +82,9 @@ void ResourcesLinker::InitializeEntities( )
 		const float hitFrameDelay{ .05f };
 		const Vector2f hitOffset{ -13.f, 0.f };
 
+		const float ghostFrameDelay{ .08f };
+		const Vector2f ghostOffset{ -10.f, -5.f };
+
 		PushSprite( "cuphead_idle", "player/character/AS_cuphead_idle_1x5.png", SpriteSettings( 1, 5, idleFrameDelay, true ) );
 
 		PushSprite( "cuphead_run", "player/character/AS_cuphead_run_2x8.png", SpriteSettings( 2, 8, runLoopFrameDelay, false, runLoopOffset ) );
@@ -121,6 +124,8 @@ void ResourcesLinker::InitializeEntities( )
 		PushSprite( "cuphead_runshoot_diagonalup", "player/character/AS_cuphead_runshoot_diagonalup_2x8.png", SpriteSettings( 2, 8, shootFrameDelay, false, shootOffset ) );
 		
 		PushSprite( "cuphead_hit", "player/character/AS_cuphead_hit_1x6.png", SpriteSettings( 1, 6, hitFrameDelay, false, hitOffset, true ) );
+		
+		PushSprite( "cuphead_ghost", "player/character/AS_cuphead_ghost_4x6.png", SpriteSettings( 4, 6, ghostFrameDelay, false, ghostOffset, true ) );
 	}
 
 	// HUD
@@ -253,6 +258,7 @@ void ResourcesLinker::PushPattern( const std::string& uid, const std::string& pa
 void ResourcesLinker::PushSprite( const std::string& uid, const std::string& path, const SpriteSettings& settings )
 {
 	m_pTextures[uid] = new Texture( path );
+	m_pTextures[uid + "_flash"] = new Texture( path, true );
 	m_SpriteSettingsMap[uid] = settings;
 	m_TextureTypeMap[uid] = TextureType::sprite;
 }

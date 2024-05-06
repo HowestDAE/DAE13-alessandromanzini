@@ -25,5 +25,6 @@ protected:
 	Vector2f m_Location;
 	TextureInfo m_TextureInfo;
 
+	bool m_TextureFlashing;
 };
 
