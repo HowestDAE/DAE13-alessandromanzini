@@ -151,6 +151,27 @@ void MovementManager::KeyPressEvent( const SDL_KeyboardEvent& e )
 	m_KeysStates.stopKeyPressed = (!m_KeysStates.faceRightKeyPressed && !m_KeysStates.faceLeftKeyPressed); // stop when neither or both are pressed
 }
 
+void MovementManager::Reset( )
+{
+	m_IsTransitioning = false;
+
+	m_IsShooting = false;
+
+	m_IsDashing = false;
+	m_DashingAccumulatedTime = 0.f;
+	m_DashingCooldownAccumulatedTime = 0.f;
+
+	m_IsAirborne = false;
+	m_AirborneAccumulatedTime = 0.f;
+
+	m_IsParrying = false;
+
+	m_IsMoving = false;
+
+	m_IsGravityReversed = false;
+	m_VelocityModifiers.Set(0.f, 0.f);
+}
+
 void MovementManager::DefineState( )
 {
 	if ( m_KeysStates.dashKeyPressed && m_KeysStates.dashKeyChanged

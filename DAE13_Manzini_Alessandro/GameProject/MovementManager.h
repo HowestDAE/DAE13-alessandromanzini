@@ -26,6 +26,8 @@ public:
 
 	void KeyPressEvent( const SDL_KeyboardEvent& e );
 
+	void Reset( );
+
 private:
 	struct DirectionData
 	{

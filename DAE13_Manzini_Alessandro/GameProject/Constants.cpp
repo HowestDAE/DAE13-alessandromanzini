@@ -13,7 +13,7 @@ const float Constants::sk_CupheadRunSpeed{ 370.f }; // 370
 const float Constants::sk_CupheadDashSpeed{ 800.f }; // 800
 const float Constants::sk_CupheadDashTime{ .3f };
 const float Constants::sk_CupheadDashCooldownTime{ .5f };
-const float Constants::sk_CupheadGhostSpeed{ 200.f };
+const float Constants::sk_CupheadGhostSpeed{ 140.f };
 
 const int Constants::sk_ToyduckStartingHP{ 200 };
 const float Constants::sk_ToyduckSpeed{ 100.f };

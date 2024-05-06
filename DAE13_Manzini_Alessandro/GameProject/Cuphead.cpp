@@ -90,7 +90,7 @@ void Cuphead::CheckCollision( CollidableEntity& other )
 
 void Cuphead::Hit( int damage )
 {
-	if ( !m_IsInvincible )
+	if ( !m_IsInvincible && GetIsAlive( ) )
 	{
 		Entity::Hit( damage );
 
@@ -100,11 +100,12 @@ void Cuphead::Hit( int damage )
 		if ( !GetIsAlive( ) )
 		{
 			Kill( );
-			return;
 		}
-
-		m_IsInvincible = true;
-		m_IFramesElapsedTime = 0.f;
+		else
+		{
+			m_IsInvincible = true;
+			m_IFramesElapsedTime = 0.f;
+		}
 	}
 }
 
@@ -146,7 +147,7 @@ void Cuphead::LinkTexture( ResourcesLinker* pResourcesLinker )
 
 void Cuphead::UpdateMovement( float elapsedSec )
 {
-	if ( true || GetIsAlive( ) )
+	if ( GetIsAlive( ) )
 	{
 		m_MovementManager.Update( elapsedSec );
 		m_MovementManager.UpdateVelocity( m_Velocity, elapsedSec );
@@ -374,5 +375,8 @@ void Cuphead::Kill( )
 {
 	QueueTexture( m_pGhostSprite );
 	m_TextureFlashing = false;
+
 	m_Velocity.Set( 0.f, Constants::sk_CupheadGhostSpeed );
+
+	m_MovementManager.Reset( );
 }
