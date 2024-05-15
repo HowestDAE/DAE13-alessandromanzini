@@ -28,20 +28,16 @@ void CollidableEntity::DrawCollision( ) const
 	m_pCollisionManager->Draw( );
 }
 
-void CollidableEntity::CheckCollision( CollidableEntity& other )
+bool CollidableEntity::CheckCollision( CollidableEntity& other )
 {
 	const CollisionManager* pOtherManager{ other.GetCollisionManager( ) };
-	CollisionInfo collisionInfo{};
 
-	if ( m_pCollisionManager->CheckCollision( *pOtherManager, collisionInfo ) )
+	if ( m_pCollisionManager->CheckCollision( *pOtherManager ) )
 	{
-		if ( collisionInfo.selfHit )
-		{
-			Hit( other.GetContactDamage( ) );
-		}
-		if ( collisionInfo.otherHit )
-		{
-			other.Hit( GetContactDamage( ) );
-		}
+		Hit( other.GetContactDamage( ) );
+		other.Hit( GetContactDamage( ) );
+
+		return true;
 	}
+	return false;
 }

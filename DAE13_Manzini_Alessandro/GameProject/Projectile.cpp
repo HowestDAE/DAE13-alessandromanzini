@@ -3,10 +3,10 @@
 #include <cmath>
 #include "utils.h"
 
-Projectile::Projectile( const Weapon* pWeapon, const CollisionCircle& collisionCircle )
-	: CollidableEntity( pWeapon->GetProjectileDamage() )
-	, mk_pWeapon{ pWeapon }
-	, m_CollisionManager{ collisionCircle, &m_CollisionLocation }
+Projectile::Projectile( const ProjectileSettings* pSettings )
+	: CollidableEntity( pSettings->damage )
+	, mk_pProjectileSettings{ pSettings }
+	, m_CollisionManager{ pSettings->collisionCircle, &m_CollisionLocation }
 	, m_Location{}
 	, m_CollisionLocation{}
 	, m_Radius{}
@@ -15,13 +15,9 @@ Projectile::Projectile( const Weapon* pWeapon, const CollisionCircle& collisionC
 	, m_Velocity{}
 	, m_pSprite{}
 	, m_IsActive{}
+	, m_HP{ pSettings->hp }
 {
 	SetCollisionManager( &m_CollisionManager );
-}
-
-Weapon::WeaponType Projectile::GetType( ) const
-{
-	return mk_pWeapon->GetType();
 }
 
 bool Projectile::GetIsOutOfBound( ) const
@@ -40,7 +36,7 @@ void Projectile::Draw( ) const
 			//m_pSpriteManager->Draw( Point2f{ m_Radius, 0.f } );
 			m_pSprite->Draw( Point2f{ m_Radius, -m_pSprite->GetHeight()/2.f } );
 			
-			//utils::DrawRect( Point2f{ m_Radius, 0.f }, m_pSpriteManager->GetWidth( ), m_pSpriteManager->GetHeight( ) );
+			utils::DrawRect( Point2f{ m_Radius, 0.f }, m_pSprite->GetWidth( ), m_pSprite->GetHeight( ) );
 			//utils::DrawLine( Point2f{ 0.f, 0.f }, Point2f{ m_Radius, 0.f } );
 		}
 		glPopMatrix( );
@@ -54,27 +50,29 @@ void Projectile::Update( float elapsedSec )
 	{
 		m_Location += m_Velocity * elapsedSec;
 		m_CollisionLocation += m_Velocity * elapsedSec;
-		m_TravelDistance += mk_pWeapon->GetProjectileSpeed() * elapsedSec;
+		m_TravelDistance += mk_pProjectileSettings->speed * elapsedSec;
 		m_pSprite->Update( elapsedSec );
 
-		if ( m_TravelDistance > mk_pWeapon->GetProjectileRange( ) )
+		if ( m_TravelDistance > mk_pProjectileSettings->range )
 		{
 			m_IsActive = false;
 		}
 	}
 }
 
-void Projectile::CheckCollision( CollidableEntity& other )
+bool Projectile::CheckCollision( CollidableEntity& other )
 {
 	if ( m_IsActive )
 	{
-		CollidableEntity::CheckCollision( other );
+		return CollidableEntity::CheckCollision( other );
 	}
+	return false;
 }
 
 void Projectile::Hit( int damage )
 {
-	m_IsActive = false;
+	--m_HP;
+	m_IsActive = (m_HP > 0);
 }
 
 void Projectile::Reset( const Point2f& origin, float radius, float rotation )
@@ -88,7 +86,7 @@ void Projectile::Reset( const Point2f& origin, float radius, float rotation )
 	m_IsActive = true;
 
 	const float radians{ rotation * float(M_PI) / 180.f };
-	const float speed{ mk_pWeapon->GetProjectileSpeed( ) };
+	const float speed{ mk_pProjectileSettings->speed };
 	const Vector2f directionVector{ cosf( radians ), sinf( radians ) };
 	m_Velocity = directionVector * speed;
 

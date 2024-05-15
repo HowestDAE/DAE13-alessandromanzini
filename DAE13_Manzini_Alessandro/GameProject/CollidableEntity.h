@@ -15,7 +15,7 @@ public:
 
 	void DrawCollision( ) const;
 
-	virtual void CheckCollision( CollidableEntity& other );
+	virtual bool CheckCollision( CollidableEntity& other );
 	virtual void Hit( int damage ) = 0;
 
 private:

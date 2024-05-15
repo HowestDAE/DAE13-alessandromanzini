@@ -45,6 +45,11 @@ Sprite* ResourcesLinker::GetSprite( const std::string& uid )
 	return static_cast<Sprite*>(GetTexture( uid ));
 }
 
+Pattern* ResourcesLinker::GetPattern( const std::string& uid )
+{
+	return static_cast<Pattern*>(GetTexture(uid));
+}
+
 void ResourcesLinker::InitializeTextures( )
 {
 	InitializeEntities( );
@@ -85,6 +90,9 @@ void ResourcesLinker::InitializeEntities( )
 		const float ghostFrameDelay{ .08f };
 		const Vector2f ghostOffset{ -10.f, -5.f };
 
+		const float exAirFrameDelay{ .08f };
+		const Vector2f exAirOffset{ 0.f, 0.f };
+
 		PushSprite( "cuphead_idle", "player/character/AS_cuphead_idle_1x5.png", SpriteSettings( 1, 5, idleFrameDelay, true ) );
 
 		PushSprite( "cuphead_run", "player/character/AS_cuphead_run_2x8.png", SpriteSettings( 2, 8, runLoopFrameDelay, false, runLoopOffset ) );
@@ -118,6 +126,12 @@ void ResourcesLinker::InitializeEntities( )
 		PushSprite( "cuphead_aim_diagonaldown", "player/character/AS_cuphead_aim_diagonaldown_1x5.png", SpriteSettings( 1, 5, idleFrameDelay, true, shootOffset ) );
 		PushSprite( "cuphead_aim_diagonalup", "player/character/AS_cuphead_aim_diagonalup_1x5.png", SpriteSettings( 1, 5, idleFrameDelay, true, shootOffset ) );
 		PushSprite( "cuphead_aim_down", "player/character/AS_cuphead_aim_down_1x5.png", SpriteSettings( 1, 5, idleFrameDelay, true, shootOffset ) );
+		
+		PushSprite( "cuphead_ex_air_up", "player/character/AS_cuphead_ex_air_up_1x6.png", SpriteSettings( 1, 6, exAirFrameDelay, true, exAirOffset, true ) );
+		PushSprite( "cuphead_ex_air_straight", "player/character/AS_cuphead_ex_air_straight_1x6.png", SpriteSettings( 1, 6, exAirFrameDelay, true, exAirOffset, true ) );
+		PushSprite( "cuphead_ex_air_diagonaldown", "player/character/AS_cuphead_ex_air_diagonaldown_1x6.png", SpriteSettings( 1, 6, exAirFrameDelay, true, exAirOffset, true ) );
+		PushSprite( "cuphead_ex_air_diagonalup", "player/character/AS_cuphead_ex_air_diagonalup_1x6.png", SpriteSettings( 1, 6, exAirFrameDelay, true, exAirOffset, true ) );
+		PushSprite( "cuphead_ex_air_down", "player/character/AS_cuphead_ex_air_down_1x6.png", SpriteSettings( 1, 6, exAirFrameDelay, true, exAirOffset, true ) );
 
 		PushSprite( "cuphead_runshoot_straight", "player/character/AS_cuphead_runshoot_straight_2x8.png", SpriteSettings( 2, 8, shootFrameDelay, false, shootOffset ) );
 
@@ -135,13 +149,17 @@ void ResourcesLinker::InitializeEntities( )
 		PushSprite( "hud_hp_1", "ui/hud/AS_hud_hp_1_1x2.png", SpriteSettings{ 1, 2, oneHpFlashDelay } );
 		PushPattern( "hud_hp_2", "ui/hud/ST_hud_hp_2.png" );
 		PushPattern( "hud_hp_3", "ui/hud/ST_hud_hp_3.png" );
+		PushPattern( "excard_faceup", "ui/hud/ST_hud_excard_faceup.png" );
+		PushPattern( "excard_facedown", "ui/hud/ST_hud_excard_facedown.png" );
 	}
 
 	// Weapons
 	{
 		const float peashooterFrameDelay{ .1f };
+		const Vector2f peashooterExOffset{ -90.f, 0.f };
 
 		PushSprite( "peashooter", "player/weapons/AS_peashooter_loop_1x6.png", SpriteSettings( 1, 6, peashooterFrameDelay ) );
+		PushSprite( "peashooter_ex", "player/weapons/AS_peashooter_ex_loop_2x4.png", SpriteSettings( 2, 4, peashooterFrameDelay, false, peashooterExOffset ) );
 	}
 
 	// Toyduck

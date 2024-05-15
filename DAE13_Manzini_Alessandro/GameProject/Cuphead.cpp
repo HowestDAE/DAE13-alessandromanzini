@@ -30,8 +30,8 @@ Cuphead::Cuphead(const Point2f& position, HUDManager* pHUDManager )
 	, m_pRunShootStraightSprite{}
 	, m_pRunShootDiagonalupSprite{}
 	, m_pParrySprite{}
-	, m_StandingCollisionManager{ std::vector<CollisionCircle>{ CollisionCircle{ 45.f, 30.f, 30.f }, CollisionCircle{ 45.f, 75.f, 30.f } }, &m_Location }
-	, m_DuckingCollisionManager{ std::vector<CollisionCircle>{ CollisionCircle{ 45.f, 30.f, 30.f } }, &m_Location }
+	, m_StandingCollisionManager{ std::vector<CollisionCircle>{ CollisionCircle{ 45.f, 30.f, 30.f, CollisionType::forceHit }, CollisionCircle{ 45.f, 75.f, 30.f, CollisionType::forceHit } }, &m_Location }
+	, m_DuckingCollisionManager{ std::vector<CollisionCircle>{ CollisionCircle{ 45.f, 30.f, 30.f, CollisionType::forceHit } }, &m_Location }
 {
 	m_Velocity = Vector2f{ 0.f, 0.f };
 }
@@ -76,16 +76,16 @@ void Cuphead::CheckCollision( PlatformManager const* pPlatformManager )
 	if ( displacement.y )
 	{
 		m_Velocity.y = 0;
-		m_MovementManager.TouchingFloor( );
+		m_MovementManager.PlatformCollisionFeedback( );
 	}
 
 	m_Location += displacement;
 }
 
-void Cuphead::CheckCollision( CollidableEntity& other )
+bool Cuphead::CheckCollision( CollidableEntity& other )
 {
-	CollidableEntity::CheckCollision( other );
 	m_WeaponManager.CheckCollision( other );
+	return CollidableEntity::CheckCollision( other );
 }
 
 void Cuphead::Hit( int damage )
@@ -135,6 +135,11 @@ void Cuphead::LinkTexture( ResourcesLinker* pResourcesLinker )
 	m_pAimStraightSprite = pResourcesLinker->GetSprite( "cuphead_aim_straight" );
 	m_pAimDiagonaldownSprite = pResourcesLinker->GetSprite( "cuphead_aim_diagonaldown" );
 	m_pAimDiagonalupSprite = pResourcesLinker->GetSprite( "cuphead_aim_diagonalup" );
+	m_pExAirUpSprite = pResourcesLinker->GetSprite( "cuphead_ex_air_up" );
+	m_pExAirStraightSprite = pResourcesLinker->GetSprite( "cuphead_ex_air_straight" );
+	m_pExAirDiagonaldownSprite = pResourcesLinker->GetSprite( "cuphead_ex_air_diagonaldown" );
+	m_pExAirDiagonalupSprite = pResourcesLinker->GetSprite( "cuphead_ex_air_diagonalup" );
+	m_pExAirDownSprite = pResourcesLinker->GetSprite( "cuphead_ex_air_down" );
 	m_pRunShootStraightSprite = pResourcesLinker->GetSprite( "cuphead_runshoot_straight" );
 	m_pRunShootDiagonalupSprite = pResourcesLinker->GetSprite( "cuphead_runshoot_diagonalup" );
 	m_pHitSprite = pResourcesLinker->GetSprite( "cuphead_hit" );
@@ -147,6 +152,7 @@ void Cuphead::LinkTexture( ResourcesLinker* pResourcesLinker )
 
 void Cuphead::UpdateMovement( float elapsedSec )
 {
+	m_MovementManager.SetExingState( m_WeaponManager.GetIsExMoveOngoing( ) );
 	if ( GetIsAlive( ) )
 	{
 		m_MovementManager.Update( elapsedSec );
@@ -159,54 +165,7 @@ void Cuphead::UpdateMovement( float elapsedSec )
 void Cuphead::UpdateWeapons( float elapsedSec )
 {
 	m_WeaponManager.Update( elapsedSec );
-	if ( m_MovementManager.GetIsShooting( ) )
-	{
-		const float textureWidthHalved{ GetTextureWidth() / 2.f };
-		const float radius{ textureWidthHalved / 2.f };
-
-		const Point2f relativeOrigin{ textureWidthHalved + m_TextureInfo.pTexture->GetOffset( ).x, GetTextureHeight( ) / 2.f };
-		Point2f origin{ relativeOrigin + m_Location };
-		float rotation{};
-
-		// Get "facing right" angle
-		switch ( m_MovementManager.GetAimDirection( ) )
-		{
-		case MovementManager::AimDirection::straight:
-			rotation = 0.f;
-			break;
-		case MovementManager::AimDirection::diagonalup:
-			rotation = 45.f;
-			break;
-		case MovementManager::AimDirection::up:
-			rotation = 90.f;
-			break;
-		case MovementManager::AimDirection::down:
-			rotation = -90.f;
-			break;
-		case MovementManager::AimDirection::diagonaldown:
-			rotation = -45.f;
-			break;
-		}
-
-		// Translate to "facing left" angle
-		if ( !m_MovementManager.GetIsFacingRight( ) )
-		{
-			rotation = 180 - rotation;
-		}
-		else
-		{
-			const float rightOffset{ 40.f };
-			origin.x += rightOffset;
-		}
-
-		if ( m_MovementManager.GetMovementType( ) == MovementManager::MovementType::duck )
-		{
-			const float heightOffset{ 18.f };
-			origin.y -= heightOffset;
-		}
-
-		m_WeaponManager.Shoot( origin, radius, rotation );
-	}
+	TryShoot( );
 }
 
 void Cuphead::UpdateIFrames( float elapsedSec )
@@ -224,9 +183,66 @@ void Cuphead::UpdateIFrames( float elapsedSec )
 	}
 }
 
-void Cuphead::UpdateHUDManager( )
+void Cuphead::UpdateHUDManager( ) const
 {
 	m_pHUDManager->SetHP( m_HP );
+	m_WeaponManager.UpdateHUDManager( m_pHUDManager );
+}
+
+void Cuphead::TryShoot( )
+{
+	const float textureWidthHalved{ GetTextureWidth( ) / 2.f };
+	const float radius{ textureWidthHalved / 2.f };
+
+	const Point2f relativeOrigin{ textureWidthHalved + m_TextureInfo.pTexture->GetOffset( ).x, GetTextureHeight( ) / 2.f };
+	Point2f origin{ relativeOrigin + m_Location };
+	float rotation{};
+
+	// Get "facing right" angle
+	switch ( m_MovementManager.GetAimDirection( ) )
+	{
+	case MovementManager::AimDirection::straight:
+		rotation = 0.f;
+		break;
+	case MovementManager::AimDirection::diagonalup:
+		rotation = 45.f;
+		break;
+	case MovementManager::AimDirection::up:
+		rotation = 90.f;
+		break;
+	case MovementManager::AimDirection::down:
+		rotation = -90.f;
+		break;
+	case MovementManager::AimDirection::diagonaldown:
+		rotation = -45.f;
+		break;
+	}
+
+	// Translate to "facing left" angle
+	if ( !m_MovementManager.GetIsFacingRight( ) )
+	{
+		rotation = 180 - rotation;
+	}
+	else
+	{
+		const float rightOffset{ 40.f };
+		origin.x += rightOffset;
+	}
+
+	if ( m_MovementManager.GetMovementType( ) == MovementManager::MovementType::duck )
+	{
+		const float heightOffset{ 18.f };
+		origin.y -= heightOffset;
+	}
+
+	if ( m_MovementManager.GetIsExMove( ) )
+	{
+		m_WeaponManager.ShootEX( origin, radius, rotation );
+	}
+	else if ( m_MovementManager.GetIsShooting( ) )
+	{
+		m_WeaponManager.Shoot( origin, radius, rotation );
+	}
 }
 
 void Cuphead::SelectTexture( )
@@ -234,38 +250,46 @@ void Cuphead::SelectTexture( )
 	Texture2D* pSelectedTexture{};
 	const MovementManager::AimDirection direction{ m_MovementManager.GetAimDirection() };
 	const MovementManager::MovementType movement{ m_MovementManager.GetMovementType() };
-	const bool flipX{ !m_MovementManager.GetIsFacingRight() }, flipY{};
+	const bool flipX{ !m_MovementManager.GetIsFacingRight( ) }, flipY{};
 	const bool isShooting{ m_MovementManager.GetIsShooting( ) };
+	const bool isExing{ m_WeaponManager.RequireExMoveQueue( ) };
 	const bool isTransitioning{ m_MovementManager.GetIsTransitioning( ) };
 
-	SetCollisionManager( &m_StandingCollisionManager );
-	switch ( movement )
+	if ( isExing )
 	{
-	case MovementManager::MovementType::idle:
-		SelectIdle( );
-		break;
-	case MovementManager::MovementType::duck:
-		SelectDuck( isShooting, isTransitioning );
-		SetCollisionManager( &m_DuckingCollisionManager );
-		break;
-	case MovementManager::MovementType::aim:
-		SelectAim( isShooting, direction );
-		break;
-	case MovementManager::MovementType::run:
-		SelectRun( isShooting, direction );
-		break;
-	case MovementManager::MovementType::jump:
-		SelectJump( );
-		break;
-	case MovementManager::MovementType::parry:
-		SelectParry( );
-		break;
-	case MovementManager::MovementType::dashGround:
-		SelectDashGround( );
-		break;
-	case MovementManager::MovementType::dashAir:
-		SelectDashAir( );
-		break;
+		SelectExMove( direction );
+	}
+	else
+	{
+		SetCollisionManager( &m_StandingCollisionManager );
+		switch ( movement )
+		{
+		case MovementManager::MovementType::idle:
+			SelectIdle( );
+			break;
+		case MovementManager::MovementType::duck:
+			SelectDuck( isShooting, isTransitioning );
+			SetCollisionManager( &m_DuckingCollisionManager );
+			break;
+		case MovementManager::MovementType::aim:
+			SelectAim( isShooting, direction );
+			break;
+		case MovementManager::MovementType::run:
+			SelectRun( isShooting, direction );
+			break;
+		case MovementManager::MovementType::jump:
+			SelectJump( );
+			break;
+		case MovementManager::MovementType::parry:
+			SelectParry( );
+			break;
+		case MovementManager::MovementType::dashGround:
+			SelectDashGround( );
+			break;
+		case MovementManager::MovementType::dashAir:
+			SelectDashAir( );
+			break;
+		}
 	}
 }
 
@@ -363,6 +387,33 @@ void Cuphead::SelectDashGround( )
 void Cuphead::SelectDashAir( )
 {
 	QueueTexture( m_pDashAirSprite );
+}
+
+void Cuphead::SelectExMove( MovementManager::AimDirection direction )
+{
+	Texture2D* pTexture{};
+	switch ( direction )
+	{
+	case MovementManager::AimDirection::up:
+		pTexture = m_pExAirUpSprite;
+		break;
+	case MovementManager::AimDirection::down:
+		pTexture = m_pExAirDownSprite;
+		break;
+	case MovementManager::AimDirection::straight:
+		pTexture = m_pExAirStraightSprite;
+		break;
+	case MovementManager::AimDirection::diagonalup:
+		pTexture = m_pExAirDiagonalupSprite;
+		break;
+	case MovementManager::AimDirection::diagonaldown:
+		pTexture = m_pExAirDiagonaldownSprite;
+		break;
+	default:
+		return;
+	}
+	pTexture->Reset( );
+	QueueTexture( pTexture, true );
 }
 
 void Cuphead::QueueTexture( Texture2D* pTexture, bool priority )

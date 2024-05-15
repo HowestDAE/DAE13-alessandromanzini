@@ -168,6 +168,7 @@ xcopy "$(SolutionDir)Resources\*.*" "$(TargetDir)" /y /d /s</Command>
     <ClCompile Include="Peashooter.cpp" />
     <ClCompile Include="PlatformManager.cpp" />
     <ClCompile Include="Projectile.cpp" />
+    <ClCompile Include="ProjectileSettings.cpp" />
     <ClCompile Include="ResourcesLinker.cpp" />
     <ClCompile Include="Spread.cpp" />
     <ClCompile Include="Sprite.cpp" />
@@ -203,6 +204,7 @@ xcopy "$(SolutionDir)Resources\*.*" "$(TargetDir)" /y /d /s</Command>
     <ClInclude Include="Peashooter.h" />
     <ClInclude Include="PlatformManager.h" />
     <ClInclude Include="Projectile.h" />
+    <ClInclude Include="ProjectileSettings.h" />
     <ClInclude Include="ResourcesLinker.h" />
     <ClInclude Include="Spread.h" />
     <ClInclude Include="Sprite.h" />

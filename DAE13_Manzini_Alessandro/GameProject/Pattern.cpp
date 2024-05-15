@@ -27,6 +27,16 @@ void Pattern::Draw( const Point2f& pos, bool flipX, bool flipY, bool flash ) con
 	}
 }
 
+void Pattern::Draw( const Point2f& pos, float percentage ) const
+{
+	const float epsilon{ .0001f };
+	if ( percentage <= epsilon )
+	{
+		return;
+	}
+	Texture2D::Draw( pos, Rectf{ 0.f, 0.f, GetWidth(), GetHeight() * percentage } );
+}
+
 void Pattern::Update( float elapsedSec )
 {
 	// No behaviour

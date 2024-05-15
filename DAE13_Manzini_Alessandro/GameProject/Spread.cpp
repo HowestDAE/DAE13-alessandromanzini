@@ -6,12 +6,26 @@
 #include "Projectile.h"
 
 Spread::Spread( )
-	: Weapon( Constants::sk_SpreadCount, 
-		Constants::sk_SpreadDamage, 
-		Constants::sk_ProjectileSpeed, 
-		Constants::sk_SpreadRange,
-		CollisionCircle{},
-		CollisionCircle{} )
+	:	Weapon(
+			ProjectileSettings
+			{
+				Constants::sk_SpreadCount,
+				1,
+				Constants::sk_SpreadDamage,
+				Constants::sk_ProjectileSpeed,
+				Constants::sk_SpreadRange,
+				CollisionCircle{ 130.f, 0.f, 10.f }
+			},
+			ProjectileSettings
+			{
+				Constants::sk_SpreadExCount,
+				Constants::sk_SpreadExHP,
+				Constants::sk_SpreadExDamage,
+				Constants::sk_ProjectileSpeed,
+				Constants::sk_SpreadExRange,
+				CollisionCircle{ }
+			}, 
+			Constants::sk_SpreadExProgressPerHit )
 {
 }
 

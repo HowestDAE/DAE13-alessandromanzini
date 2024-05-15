@@ -1,7 +1,7 @@
 #pragma once
 #include <vector>
-#include "CollisionCircle.h"
 #include "CollidableEntity.h"
+#include "ProjectileSettings.h"
 class ResourcesLinker;
 class Projectile;
 class Texture;
@@ -11,18 +11,16 @@ class Weapon
 public:
 	enum class WeaponType;
 
-	Weapon( int initialProjectilesCount, int projectileDamage, float projectileSpeed, float projectileRange, const CollisionCircle& bulletCollisionCircle, const CollisionCircle& exCollisionCircle );
+	explicit Weapon( const ProjectileSettings& projectileSettings, const ProjectileSettings& exMoveSettings, float exProgressPerHit );
 	~Weapon( );
 
 	virtual WeaponType GetType( ) const = 0;
 
-	int GetProjectileDamage( ) const;
-	float GetProjectileSpeed( ) const;
-	float GetProjectileRange( ) const;
-
 	virtual void SpawnProjectile( const Point2f& origin, float radius, float rotation );
+	virtual void SpawnEx( const Point2f& origin, float radius, float rotation );
 
-	void CheckCollision( CollidableEntity& other );
+	// returns the amount of ex progress per hit
+	float CheckCollision( CollidableEntity& other );
 
 	void Draw( ) const;
 	void Update( float elapsedSec );
@@ -30,15 +28,16 @@ public:
 	virtual void LinkTexture( ResourcesLinker* pResourcesLinker ) = 0;
 
 protected:
-	const int mk_InitialProjectilesCount;
+	const ProjectileSettings mk_ProjectileSettings;
+	const ProjectileSettings mk_ExMoveSettings;
 
-	const int mk_ProjectileDamage;
-	const float mk_ProjectileSpeed;
-	const float mk_ProjectileRange;
+	const float mk_ExProgressPerHit;
 
 	int m_CurrentProjectileIndex;
+	int m_CurrentExMoveIndex;
 
 	std::vector<Projectile*> m_pProjectiles;
+	std::vector<Projectile*> m_pExMoves;
 };
 
 enum class Weapon::WeaponType

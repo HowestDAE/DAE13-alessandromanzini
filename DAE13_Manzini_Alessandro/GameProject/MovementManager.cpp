@@ -10,6 +10,8 @@ MovementManager::MovementManager( )
 	, m_VelocityModifiers{}
 	, m_IsTransitioning{}
 	, m_IsShooting{}
+	, m_IsExMoveRequested{}
+	, m_IsExMoving{}
 	, m_IsDashing{}
 	, m_DashingAccumulatedTime{}
 	, m_DashingCooldownAccumulatedTime{}
@@ -47,12 +49,22 @@ bool MovementManager::GetIsShooting( ) const
 	return m_IsShooting;
 }
 
+bool MovementManager::GetIsExMove( ) const
+{
+	return m_IsExMoveRequested;
+}
+
+void MovementManager::SetExingState( bool isExing )
+{
+	m_IsExMoving = isExing;
+}
+
 void MovementManager::SetGravity( bool isReversed )
 {
 	m_IsGravityReversed = isReversed;
 }
 
-void MovementManager::TouchingFloor( )
+void MovementManager::PlatformCollisionFeedback( )
 {
 	m_IsAirborne = false;
 	m_IsParrying = false;
@@ -71,8 +83,13 @@ void MovementManager::UpdateVelocity( Vector2f& velocity, float elapsedSec )
 {
 	velocity.x = 0;
 
+	if ( m_IsExMoving )
+	{
+		velocity.y = 0.f;
+		velocity.x += Constants::sk_CupheadExPushBackSpeed * (m_DirectionData.facingRight ? -1 : 1);
+	}
 	// If cuphead is dashing, put dashing speed in the dashing direction ...
-	if ( m_IsDashing )
+	else if ( m_IsDashing )
 	{
 		const int direction{ m_DirectionData.facingRight ? 1 : -1 };
 		velocity.x = direction * Constants::sk_CupheadDashSpeed;
@@ -156,6 +173,8 @@ void MovementManager::Reset( )
 	m_IsTransitioning = false;
 
 	m_IsShooting = false;
+	m_IsExMoveRequested = false;
+	m_IsExMoving = false;
 
 	m_IsDashing = false;
 	m_DashingAccumulatedTime = 0.f;
@@ -169,16 +188,20 @@ void MovementManager::Reset( )
 	m_IsMoving = false;
 
 	m_IsGravityReversed = false;
-	m_VelocityModifiers.Set(0.f, 0.f);
+	m_VelocityModifiers.Set( 0.f, 0.f );
 }
 
 void MovementManager::DefineState( )
 {
-	if ( m_KeysStates.dashKeyPressed && m_KeysStates.dashKeyChanged
-		&& !m_IsParrying && m_DashingCooldownAccumulatedTime > Constants::sk_CupheadDashCooldownTime )
+	if ( !m_IsParrying )
 	{
-		m_IsDashing = true;
+		if ( m_KeysStates.dashKeyPressed && m_KeysStates.dashKeyChanged
+			&& m_DashingCooldownAccumulatedTime > Constants::sk_CupheadDashCooldownTime )
+		{
+			m_IsDashing = true;
+		}
 	}
+
 	if ( m_KeysStates.jumpKeyPressed && m_KeysStates.jumpKeyChanged )
 	{
 		m_KeysStates.jumpKeyChanged = false;
@@ -196,6 +219,7 @@ void MovementManager::DefineState( )
 
 	m_IsMoving = !m_KeysStates.stopKeyPressed;
 	m_IsShooting = m_KeysStates.shootKeyPressed;
+	m_IsExMoveRequested = m_KeysStates.exMoveKeyPressed;
 }
 
 void MovementManager::UpdateState( float elapsedSec )
@@ -300,6 +324,7 @@ void MovementManager::AdjustMovementData( DirectionData& data, MovementType& mov
 	{
 		data = m_DirectionData;
 		m_IsShooting = false;
+		m_IsExMoveRequested = false;
 		m_IsMoving = false;
 	}
 	else if ( movement == MovementType::idle && m_IsShooting )
@@ -328,13 +353,15 @@ void MovementManager::AdjustMovementData( DirectionData& data, MovementType& mov
 	else if ( movement == MovementType::parry )
 	{
 		m_IsShooting = false;
+		m_IsExMoveRequested = false;
 	}
 	else if ( movement == MovementType::aim )
 	{
-		if ( data.direction == AimDirection::none )
-		{
-			data.direction = AimDirection::straight;
-		}
 		m_IsMoving = false;
+	}
+
+	if ( data.direction == AimDirection::none )
+	{
+		data.direction = AimDirection::straight;
 	}
 }

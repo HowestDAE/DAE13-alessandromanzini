@@ -3,17 +3,24 @@
 #include "ResourcesLinker.h"
 #include "Projectile.h"
 
-Weapon::Weapon( int initialProjectilesCount, int projectileDamage, float projectileSpeed, float projectileRange, const CollisionCircle& bulletCollisionCircle, const CollisionCircle& exCollisionCircle )
-	: mk_InitialProjectilesCount{ initialProjectilesCount }
-	, mk_ProjectileDamage{ projectileDamage }
-	, mk_ProjectileSpeed{ projectileSpeed }
-	, mk_ProjectileRange{ projectileRange }
-	, m_pProjectiles{ static_cast<const unsigned int>(initialProjectilesCount) }
+Weapon::Weapon( const ProjectileSettings& projectileSettings, const ProjectileSettings& exMoveSettings, float exProgressPerHit )
+	: mk_ProjectileSettings{ projectileSettings }
+	, mk_ExMoveSettings{ exMoveSettings }
+	, mk_ExProgressPerHit{ exProgressPerHit }
+
+	, m_pProjectiles{ static_cast<const unsigned int>(projectileSettings.initialCount) }
+	, m_pExMoves{ static_cast<const unsigned int>(exMoveSettings.initialCount) }
 	, m_CurrentProjectileIndex{}
+	, m_CurrentExMoveIndex{}
 {
-	for ( int index{}; index < mk_InitialProjectilesCount; ++index )
+	for ( int index{}; index < mk_ProjectileSettings.initialCount; ++index )
 	{
-		m_pProjectiles[index] = new Projectile( this, bulletCollisionCircle );
+		m_pProjectiles[index] = new Projectile( &mk_ProjectileSettings );
+	}
+
+	for ( int index{}; index < mk_ExMoveSettings.initialCount; ++index )
+	{
+		m_pExMoves[index] = new Projectile( &mk_ExMoveSettings );
 	}
 }
 
@@ -24,44 +31,63 @@ Weapon::~Weapon( )
 		delete pProjectile;
 		pProjectile = nullptr;
 	}
-}
 
-int Weapon::GetProjectileDamage( ) const
-{
-	return mk_ProjectileDamage;
-}
-
-float Weapon::GetProjectileSpeed( ) const
-{
-	return mk_ProjectileSpeed;
-}
-
-float Weapon::GetProjectileRange( ) const
-{
-	return mk_ProjectileRange;
+	for ( Projectile* pExMove : m_pExMoves )
+	{
+		delete pExMove;
+		pExMove = nullptr;
+	}
 }
 
 void Weapon::SpawnProjectile( const Point2f& origin, float radius, float rotation )
 {
+	// Picks next available projectile
 	Projectile* currentProjectile = m_pProjectiles.at( m_CurrentProjectileIndex );
 	currentProjectile->Reset( origin, radius, rotation );
 
+	// Next available projectile is set with "modulo number of projectiles"
 	m_CurrentProjectileIndex = (m_CurrentProjectileIndex + 1) % m_pProjectiles.size( );
 }
 
-void Weapon::CheckCollision( CollidableEntity& other )
+void Weapon::SpawnEx( const Point2f& origin, float radius, float rotation )
 {
+	// Picks next available projectile
+	Projectile* currentMoves = m_pExMoves.at( m_CurrentExMoveIndex );
+	currentMoves->Reset( origin, radius, rotation );
+
+	// Next available projectile is set with "modulo number of projectiles"
+	m_CurrentExMoveIndex = (m_CurrentExMoveIndex + 1) % m_pExMoves.size( );
+}
+
+float Weapon::CheckCollision( CollidableEntity& other )
+{
+	float progress{};
 	for ( Projectile* pProjectile : m_pProjectiles )
 	{
-		pProjectile->CheckCollision( other );
+		if ( pProjectile->CheckCollision( other ) )
+		{
+			progress += mk_ExProgressPerHit;
+		}
 	}
+
+	for ( Projectile* pExMove : m_pExMoves )
+	{
+		pExMove->CheckCollision( other );
+	}
+
+	return progress;
 }
 
 void Weapon::Draw( ) const
 {
-	for ( Projectile* pProjectile : m_pProjectiles )
+	for ( const Projectile* pProjectile : m_pProjectiles )
 	{
 		pProjectile->Draw( );
+	}
+
+	for ( const Projectile* pExMove : m_pExMoves )
+	{
+		pExMove->Draw( );
 	}
 }
 
@@ -70,5 +96,10 @@ void Weapon::Update( float elapsedSec )
 	for ( Projectile* pProjectile : m_pProjectiles )
 	{
 		pProjectile->Update( elapsedSec );
+	}
+
+	for ( Projectile* pExMove : m_pExMoves )
+	{
+		pExMove->Update( elapsedSec );
 	}
 }

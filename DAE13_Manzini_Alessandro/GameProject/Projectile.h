@@ -1,6 +1,7 @@
 #pragma once
 #include "CollidableEntity.h"
 #include "Vector2f.h"
+#include "ProjectileSettings.h"
 #include "Sprite.h"
 #include "Weapon.h"
 #include "ResourcesLinker.h"
@@ -9,15 +10,14 @@ class Projectile final
 	: public CollidableEntity
 {
 public:
-	explicit Projectile( const Weapon* pWeapon, const CollisionCircle& collisionCircle );
+	explicit Projectile( const ProjectileSettings* settings );
 
-	Weapon::WeaponType GetType( ) const;
 	bool GetIsOutOfBound( ) const;
 
 	void Draw( ) const;
 	void Update( float elapsedSec );
 
-	virtual void CheckCollision( CollidableEntity& other ) override;
+	virtual bool CheckCollision( CollidableEntity& other ) override;
 	virtual void Hit( int damage ) override;
 
 	void Reset( const Point2f& origin, float radius, float rotation );
@@ -25,11 +25,11 @@ public:
 	void SetSprite( Sprite* pSprite );
 
 private:
-	const Weapon* mk_pWeapon;
-
+	const ProjectileSettings* mk_pProjectileSettings;
 	CollisionManager m_CollisionManager;
 
 	bool m_IsActive;
+	int m_HP;
 
 	Sprite* m_pSprite;
 

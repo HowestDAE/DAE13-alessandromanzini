@@ -17,9 +17,11 @@ public:
 	bool GetIsTransitioning( ) const;
 
 	bool GetIsShooting( ) const;
+	bool GetIsExMove( ) const;
 
+	void SetExingState( bool isExing );
 	void SetGravity( bool isDefault );
-	void TouchingFloor( );
+	void PlatformCollisionFeedback( );
 
 	void Update( float elapsedSec );
 	void UpdateVelocity( Vector2f& velocity, float elapsedSec );
@@ -43,6 +45,8 @@ private:
 	bool m_IsTransitioning;
 
 	bool m_IsShooting;
+	bool m_IsExMoveRequested;
+	bool m_IsExMoving;
 
 	bool m_IsDashing;
 	float m_DashingAccumulatedTime;
@@ -87,5 +91,7 @@ enum class MovementManager::MovementType
 	parry,
 	dashGround,
 	dashAir,
-	duck
+	duck,
+	exGround,
+	exAir
 };

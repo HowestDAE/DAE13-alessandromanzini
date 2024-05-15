@@ -6,6 +6,7 @@
 #include "SpriteSettings.h"
 class Texture2D;
 class Sprite;
+class Pattern;
 
 class ResourcesLinker final
 {
@@ -16,6 +17,7 @@ public:
 
 	Texture2D* GetTexture( const std::string& uid );
 	Sprite* GetSprite( const std::string& uid );
+	Pattern* GetPattern( const std::string& uid );
 
 	ResourcesLinker& operator=( const ResourcesLinker& rhs ) = delete;
 

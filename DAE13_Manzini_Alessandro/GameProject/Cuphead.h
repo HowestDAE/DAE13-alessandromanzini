@@ -23,7 +23,7 @@ public:
     void KeyPressEvent( const SDL_KeyboardEvent& e );
 
     virtual void CheckCollision( PlatformManager const* pPlatformManager ) override;
-    virtual void CheckCollision( CollidableEntity& other ) override;
+    virtual bool CheckCollision( CollidableEntity& other ) override;
 
     virtual void Hit( int damage ) override;
 
@@ -63,6 +63,11 @@ private:
     Sprite* m_pAimDiagonaldownSprite;
     Sprite* m_pAimDiagonalupSprite;
     Sprite* m_pAimDownSprite;
+    Sprite* m_pExAirUpSprite;
+    Sprite* m_pExAirStraightSprite;
+    Sprite* m_pExAirDiagonaldownSprite;
+    Sprite* m_pExAirDiagonalupSprite;
+    Sprite* m_pExAirDownSprite;
     Sprite* m_pRunShootStraightSprite;
     Sprite* m_pRunShootDiagonalupSprite;
     Sprite* m_pHitSprite;
@@ -72,8 +77,9 @@ private:
     void UpdateWeapons( float elapsedSec );
     void UpdateIFrames( float elapsedSec );
 
-    void UpdateHUDManager( );
+    void UpdateHUDManager( ) const;
 
+    void TryShoot( );
     void SelectTexture( );
 
     void SelectIdle( );
@@ -84,6 +90,7 @@ private:
 	void SelectParry( );
 	void SelectDashGround( );
 	void SelectDashAir( );
+    void SelectExMove( MovementManager::AimDirection direction );
 
     void QueueTexture( Texture2D* pTexture, bool priority = false );
 

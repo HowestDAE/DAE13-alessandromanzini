@@ -6,12 +6,26 @@
 #include "Projectile.h"
 
 Peashooter::Peashooter( )
-	: Weapon( Constants::sk_PeashooterCount, 
-		Constants::sk_PeashooterDamage, 
-		Constants::sk_ProjectileSpeed, 
-		Constants::sk_PeashooterRange, 
-		CollisionCircle{ 130.f, 0.f, 10.f },
-		CollisionCircle{} )
+	: Weapon( 
+		ProjectileSettings
+		{
+			Constants::sk_PeashooterCount,
+			1,
+			Constants::sk_PeashooterDamage,
+			Constants::sk_ProjectileSpeed,
+			Constants::sk_PeashooterRange,
+			CollisionCircle{ 130.f, 0.f, 10.f }
+		},
+		ProjectileSettings
+		{
+			Constants::sk_PeashooterExCount,
+			Constants::sk_PeashooterExHP,
+			Constants::sk_PeashooterExDamage,
+			Constants::sk_ProjectileSpeed,
+			Constants::sk_PeashooterExRange,
+			CollisionCircle{ }
+		},
+		Constants::sk_PeashooterExProgressPerHit )
 	, m_IsAlternatedShot{}
 {
 }
@@ -41,5 +55,11 @@ void Peashooter::LinkTexture( ResourcesLinker* pResourcesLinker )
 	{
 		Sprite* pSprite{ pResourcesLinker->GetSprite( "peashooter" ) };
 		pProjectile->SetSprite( pSprite );
+	}
+
+	for ( Projectile* pExMove : m_pExMoves )
+	{
+		Sprite* pSprite{ pResourcesLinker->GetSprite( "peashooter_ex" ) };
+		pExMove->SetSprite( pSprite );
 	}
 }
