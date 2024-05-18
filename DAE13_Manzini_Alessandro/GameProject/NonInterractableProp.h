@@ -8,14 +8,16 @@ class Texture2D;
 class NonInterractableProp final
 	: public TexturedModel
 {
-#pragma once
 public:
-	explicit NonInterractableProp( int depth, const Point2f& position, const std::string& uid, float scale = 1.f, bool animated = false );
+	explicit NonInterractableProp( int depth, const Point2f& position, const std::string& uid, float scale = 1.f );
 
 	int GetDepth() const;
 
-	virtual void Draw( float offsetX ) const;
+	virtual float GetTextureWidth( ) const override;
+	virtual float GetTextureHeight( ) const override;
 
+	virtual void Draw( ) const;
+	void Draw( float offsetX ) const;
 	virtual void Update( float elapsedSec ) override;
 
 	virtual void LinkTexture( ResourcesLinker* pResourcesLinker ) override;
@@ -25,6 +27,7 @@ private:
 	const std::string mk_Uid;
 	const float mk_Scale;
 
-	const bool mk_IsAnimated;
+	Texture2D* m_pTexture;
+
 };
 

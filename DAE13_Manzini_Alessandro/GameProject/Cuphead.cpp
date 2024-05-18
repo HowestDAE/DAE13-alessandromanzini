@@ -34,6 +34,8 @@ Cuphead::Cuphead(const Point2f& position, HUDManager* pHUDManager )
 	, m_DuckingCollisionManager{ std::vector<CollisionCircle>{ CollisionCircle{ 45.f, 30.f, 30.f, CollisionType::forceHit } }, &m_Location }
 {
 	m_Velocity = Vector2f{ 0.f, 0.f };
+	SetCollisionManager( &m_StandingCollisionManager );
+	InitializeQueues( );
 }
 
 void Cuphead::Draw( ) const
@@ -43,7 +45,6 @@ void Cuphead::Draw( ) const
 	{
 		Entity::Draw( );
 	}
-	DrawCollision( );
 	/*{
 		const Point2f point{ (m_Location + m_MidTranslationVector).ToPoint2f( ) };
 		const Point2f wallPos{ point + m_ShootingTranslationVector };
@@ -54,7 +55,6 @@ void Cuphead::Draw( ) const
 
 void Cuphead::Update( float elapsedSec )
 {
-	m_TextureInfo.pTexture->Update( elapsedSec );
 	Entity::Update( elapsedSec );
 
 	UpdateMovement( elapsedSec );
@@ -86,27 +86,6 @@ bool Cuphead::CheckCollision( CollidableEntity& other )
 {
 	m_WeaponManager.CheckCollision( other );
 	return CollidableEntity::CheckCollision( other );
-}
-
-void Cuphead::Hit( int damage )
-{
-	if ( !m_IsInvincible && GetIsAlive( ) )
-	{
-		Entity::Hit( damage );
-
-		m_pHitSprite->Reset( );
-		QueueTexture( m_pHitSprite, true );
-
-		if ( !GetIsAlive( ) )
-		{
-			Kill( );
-		}
-		else
-		{
-			m_IsInvincible = true;
-			m_IFramesElapsedTime = 0.f;
-		}
-	}
 }
 
 float Cuphead::GetTextureWidth( ) const
@@ -145,7 +124,7 @@ void Cuphead::LinkTexture( ResourcesLinker* pResourcesLinker )
 	m_pHitSprite = pResourcesLinker->GetSprite( "cuphead_hit" );
 	m_pGhostSprite = pResourcesLinker->GetSprite( "cuphead_ghost" );
 
-	m_TextureInfo.pTexture = m_pIdleSprite;
+	SelectIdle( );
 	
 	m_WeaponManager.LinkTexture( pResourcesLinker );
 }
@@ -172,8 +151,6 @@ void Cuphead::UpdateIFrames( float elapsedSec )
 {
 	if ( m_IsInvincible )
 	{
-		Entity::UpdateHitFlashing( elapsedSec, Constants::sk_CupheadFlashDuration, true );
-		
 		m_IFramesElapsedTime += elapsedSec;
 		if ( m_IFramesElapsedTime >= Constants::sk_CupheadIFramesDuration )
 		{
@@ -185,8 +162,36 @@ void Cuphead::UpdateIFrames( float elapsedSec )
 
 void Cuphead::UpdateHUDManager( ) const
 {
-	m_pHUDManager->SetHP( m_HP );
+	m_pHUDManager->SetHP( GetHP( ) );
 	m_WeaponManager.UpdateHUDManager( m_pHUDManager );
+}
+
+void Cuphead::UpdateHitFlashing( float elapsedSec, float epsilonTime, bool toggle )
+{
+	if ( m_IsInvincible )
+	{
+		Entity::UpdateHitFlashing( elapsedSec, Constants::sk_CupheadFlashDuration, true );
+	}
+}
+
+void Cuphead::Hit( int damage )
+{
+	if ( !m_IsInvincible && GetIsAlive( ) )
+	{
+		Entity::Hit( damage );
+
+		QueueTexture( m_pHitSprite, true );
+
+		if ( !GetIsAlive( ) )
+		{
+			Kill( );
+		}
+		else
+		{
+			m_IsInvincible = true;
+			m_IFramesElapsedTime = 0.f;
+		}
+	}
 }
 
 void Cuphead::TryShoot( )
@@ -194,7 +199,8 @@ void Cuphead::TryShoot( )
 	const float textureWidthHalved{ GetTextureWidth( ) / 2.f };
 	const float radius{ textureWidthHalved / 2.f };
 
-	const Point2f relativeOrigin{ textureWidthHalved + m_TextureInfo.pTexture->GetOffset( ).x, GetTextureHeight( ) / 2.f };
+	const Point2f relativeOrigin{ textureWidthHalved, GetTextureHeight( ) / 2.f };
+	//const Point2f relativeOrigin{ textureWidthHalved + m_TextureInfo.pTexture->GetOffset( ).x, GetTextureHeight( ) / 2.f };
 	Point2f origin{ relativeOrigin + m_Location };
 	float rotation{};
 
@@ -313,7 +319,7 @@ void Cuphead::SelectDuck( bool isShooting, bool isTransitioning )
 
 	if ( isTransitioning )
 	{
-		m_pDuckBeginSprite->Reset( );
+		//m_pDuckBeginSprite->Reset( );
 		QueueTexture( m_pDuckBeginSprite );
 	}
 	QueueTexture( pTexture );
@@ -412,18 +418,20 @@ void Cuphead::SelectExMove( MovementManager::AimDirection direction )
 	default:
 		return;
 	}
-	pTexture->Reset( );
+	//pTexture->Reset( );
 	QueueTexture( pTexture, true );
 }
 
 void Cuphead::QueueTexture( Texture2D* pTexture, bool priority )
 {
 	const bool flipX{ !m_MovementManager.GetIsFacingRight( ) }, flipY{};
-	m_AnimationQueue.Enqueue( TextureInfo{ pTexture, flipX, flipY }, priority );
+	Entity::QueueTexture( 0, pTexture, flipX, flipY, priority );
 }
 
 void Cuphead::Kill( )
 {
+	Entity::Kill( );
+
 	QueueTexture( m_pGhostSprite );
 	m_TextureFlashing = false;
 

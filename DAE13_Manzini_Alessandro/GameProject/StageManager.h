@@ -1,12 +1,14 @@
 #pragma once
 #include "PlatformManager.h"
 #include "HUDManager.h"
+#include "Camera.h"
 #include <vector>
 #include <list>
-#include "Camera.h"
 class ResourcesLinker;
 class Cuphead;
 class Toyduck;
+class Card;
+class Entity;
 class NonInterractableProp;
 class Projectile;
 
@@ -31,7 +33,7 @@ public:
 	HUDManager const* GetHUDManager( ) const;
 
 	Cuphead const* GetPlayer( ) const;
-	Toyduck const* GetToyduck( ) const;
+	const std::vector<Entity*>& GetEntities( ) const;
 
 private:
 	enum class BackgroundScope;
@@ -48,8 +50,11 @@ private:
 #pragma region gameUnits
 	Cuphead* m_pPlayer;
 	Toyduck* m_pToyduck;
+	std::vector<Card*> m_pCards;
 	std::vector<NonInterractableProp> m_BackgroundProps;
 	std::vector<NonInterractableProp> m_FrontgroundProps;
+
+	std::vector<Entity*> m_pEntities;
 
 #pragma endregion
 

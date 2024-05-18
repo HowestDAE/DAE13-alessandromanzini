@@ -25,6 +25,8 @@ public:
 
     int GetCurrentFrame( ) const;
     void SetCurrentFrame( int currentFrame );
+
+    bool GetMustComplete( ) const;
     
     // Resets animation data
     virtual void Reset( ) override;

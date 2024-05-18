@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "AnimationQueue.h"
 #include "Texture2D.h"
+#include "Sprite.h"
 #include "iostream"
 
 AnimationQueue::AnimationQueue( )
@@ -11,10 +12,16 @@ AnimationQueue::AnimationQueue( )
 void AnimationQueue::NextAnimation( TextureInfo& textureInfo )
 {
     // If the queue is not empty...
-    if ( !m_TexturesDeque.empty( ) && textureInfo.pTexture->GetIsReady( ) )
+    if ( !textureInfo.pTexture || !m_TexturesDeque.empty( ) && textureInfo.pTexture->GetIsReady( ) )
     {
         // give the next step
         textureInfo = m_TexturesDeque.front( );
+
+        if ( static_cast<Sprite*>( textureInfo.pTexture )->GetMustComplete( ) && textureInfo.pTexture->GetIsReady() )
+        {
+            textureInfo.pTexture->Reset( );
+        }
+
         m_TexturesDeque.pop_front( );
     }
 }

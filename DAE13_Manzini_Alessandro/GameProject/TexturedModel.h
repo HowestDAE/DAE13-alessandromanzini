@@ -11,10 +11,10 @@ public:
 
 	Vector2f GetLocation( ) const;
 
-	float GetTextureWidth( ) const;
-	float GetTextureHeight( ) const;
+	virtual float GetTextureWidth( ) const = 0;
+	virtual float GetTextureHeight( ) const = 0;
 
-	virtual void Draw( ) const;
+	virtual void Draw( ) const = 0;
 	virtual void Update( float elapsedSec ) = 0;
 
 	void DrawTextureOutline( ) const;
@@ -23,8 +23,10 @@ public:
 
 protected:
 	Vector2f m_Location;
-	TextureInfo m_TextureInfo;
-
 	bool m_TextureFlashing;
+
+	void Draw( const TextureInfo& textureInfo ) const;
+	void Draw( Texture2D const* pTexture ) const;
+
 };
 

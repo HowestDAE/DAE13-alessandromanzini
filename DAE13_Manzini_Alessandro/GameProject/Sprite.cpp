@@ -117,3 +117,8 @@ void Sprite::SetCurrentFrame( int currentFrame )
 {
 	m_CurrentFrame = currentFrame;
 }
+
+bool Sprite::GetMustComplete( ) const
+{
+	return mk_MustComplete;
+}

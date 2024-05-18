@@ -4,6 +4,7 @@
 #include "PlatformManager.h"
 #include "Cuphead.h"
 #include "Toyduck.h"
+#include "Card.h"
 #include "NonInterractableProp.h"
 #include "Projectile.h"
 
@@ -15,6 +16,8 @@ StageManager::StageManager( Camera* pCamera, ResourcesLinker* pResourcesLinker )
 	, m_IsHalted{ true }
 	, m_IsCameraFixed{ false }
 
+	, m_pCards{}
+	, m_pEntities{}
 	, m_BackgroundProps{}
 	, m_FrontgroundProps{}
 {
@@ -25,6 +28,12 @@ StageManager::~StageManager( )
 {
 	delete m_pPlayer;
 	delete m_pToyduck;
+
+	for ( Card* pCard : m_pCards )
+	{
+		delete pCard;
+		pCard = nullptr;
+	}
 }
 
 void StageManager::Start( )
@@ -71,6 +80,11 @@ void StageManager::UpdateEntities( float elapsedSec )
 {
 	m_pPlayer->Update( elapsedSec );
 	m_pToyduck->Update( elapsedSec );
+
+	for ( Card* pCard : m_pCards )
+	{
+		pCard->Update( elapsedSec );
+	}
 }
 
 void StageManager::UpdateProjectiles( float elapsedSec )
@@ -83,6 +97,8 @@ void StageManager::CheckCollisions( )
 	m_pPlayer->CheckCollision( &m_PlatformManager );
 
 	m_pPlayer->CheckCollision( *m_pToyduck );
+
+	//m_pPlayer->CheckCollision( m_Cards[0] );
 }
 
 void StageManager::KeyPressEvent( const SDL_KeyboardEvent& e )
@@ -110,9 +126,9 @@ Cuphead const* StageManager::GetPlayer( ) const
 	return m_pPlayer;
 }
 
-Toyduck const* StageManager::GetToyduck( ) const
+const std::vector<Entity*>& StageManager::GetEntities( ) const
 {
-	return m_pToyduck;
+	return m_pEntities;
 }
 
 void StageManager::LockCamera( const Point2f& centerPoint )

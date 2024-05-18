@@ -94,7 +94,11 @@ void Camera::DrawBackground( const std::vector<NonInterractableProp>& props ) co
 
 void Camera::DrawEntities( ) const
 {
-	m_pStageManager->GetToyduck()->Draw( ); 
+	for ( Entity const* pEntity : m_pStageManager->GetEntities( ) )
+	{
+		pEntity->Draw( );
+	}
+
 	m_pStageManager->GetPlayer()->Draw( );
 }
 

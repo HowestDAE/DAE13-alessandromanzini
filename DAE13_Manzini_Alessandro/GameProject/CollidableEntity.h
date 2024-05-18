@@ -11,7 +11,7 @@ public:
 	int GetContactDamage( ) const;
 
 	CollisionManager const* GetCollisionManager( ) const;
-	void SetCollisionManager( CollisionManager* pCollisionManager );
+	void SetCollisionManager( CollisionManager const* pCollisionManager );
 
 	void DrawCollision( ) const;
 
@@ -21,6 +21,6 @@ public:
 private:
 	const int mk_ContactDamage;
 
-	CollisionManager* m_pCollisionManager;
+	CollisionManager const* mk_pCollisionManager;
 };
 

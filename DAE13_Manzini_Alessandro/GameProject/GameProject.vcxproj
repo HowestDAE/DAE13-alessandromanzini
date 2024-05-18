@@ -149,6 +149,7 @@ xcopy "$(SolutionDir)Resources\*.*" "$(TargetDir)" /y /d /s</Command>
   <ItemGroup>
     <ClCompile Include="AnimationQueue.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Card.cpp" />
     <ClCompile Include="CollidableEntity.cpp" />
     <ClCompile Include="CollisionCircle.cpp" />
     <ClCompile Include="CollisionInfo.cpp" />
@@ -186,6 +187,7 @@ xcopy "$(SolutionDir)Resources\*.*" "$(TargetDir)" /y /d /s</Command>
   <ItemGroup>
     <ClInclude Include="AnimationQueue.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="Card.h" />
     <ClInclude Include="CollidableEntity.h" />
     <ClInclude Include="CollisionCircle.h" />
     <ClInclude Include="CollisionInfo.h" />

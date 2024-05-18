@@ -25,8 +25,6 @@ public:
     virtual void CheckCollision( PlatformManager const* pPlatformManager ) override;
     virtual bool CheckCollision( CollidableEntity& other ) override;
 
-    virtual void Hit( int damage ) override;
-
     // Gets the width of the idle instead of the current texture
     float GetTextureWidth( ) const;
 
@@ -76,8 +74,11 @@ private:
     void UpdateMovement( float elapsedSec );
     void UpdateWeapons( float elapsedSec );
     void UpdateIFrames( float elapsedSec );
+    virtual void UpdateHitFlashing( float elapsedSec, float epsilonTime, bool toggle = false ) override;
 
     void UpdateHUDManager( ) const;
+
+    virtual void Hit( int damage ) override;
 
     void TryShoot( );
     void SelectTexture( );
@@ -94,5 +95,5 @@ private:
 
     void QueueTexture( Texture2D* pTexture, bool priority = false );
 
-    void Kill( );
+    virtual void Kill( ) override;
 };

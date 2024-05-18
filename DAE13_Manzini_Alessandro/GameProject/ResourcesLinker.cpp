@@ -162,6 +162,16 @@ void ResourcesLinker::InitializeEntities( )
 		PushSprite( "peashooter_ex", "player/weapons/AS_peashooter_ex_loop_2x4.png", SpriteSettings( 2, 4, peashooterFrameDelay, false, peashooterExOffset ) );
 	}
 
+	// Card
+	{
+		const float idleFrameDelay{ .1f };
+		const float starsFrameDelay{ .08f };
+
+		PushSprite( "card_idle", "enemy/card/AS_card_idle_1x13.png", SpriteSettings( 1, 13, idleFrameDelay, true ) );
+		PushSprite( "card_spin", "enemy/card/AS_card_spin_2x9.png", SpriteSettings( 2, 9, idleFrameDelay, false, Vector2f{}, true ) );
+		PushSprite( "card_stars", "enemy/card/AS_card_stars_2x8.png", SpriteSettings( 2, 8, starsFrameDelay ) );
+	}
+
 	// Toyduck
 	{
 		const float idleFrameDelay{ .07f };

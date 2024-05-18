@@ -17,7 +17,7 @@ Toyduck::Toyduck( const Point2f& position )
 void Toyduck::Draw( ) const
 {
 	m_pBacktireSprite->Draw( m_Location.ToPoint2f( ) );
-	Entity::Draw( );
+	m_pIdleSprite->Draw( m_Location.ToPoint2f( ) );
 
 	//DrawTextureOutline( );
 	DrawCollision( );
@@ -37,6 +37,4 @@ void Toyduck::LinkTexture( ResourcesLinker* pResourcesLinker )
 {
 	m_pIdleSprite = pResourcesLinker->GetSprite( "toyduck_idle" );
 	m_pBacktireSprite = pResourcesLinker->GetSprite( "toyduck_backtire" );
-
-	m_TextureInfo.pTexture = m_pIdleSprite;
 }

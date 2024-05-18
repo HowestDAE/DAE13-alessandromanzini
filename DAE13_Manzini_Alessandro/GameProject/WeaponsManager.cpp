@@ -15,7 +15,7 @@ WeaponsManager::WeaponsManager( )
 	, m_ShotAccumulatedTime{}
 	, m_ExAccumulatedTime{ smk_ExDelay }
 	, m_ExNeedsQueue{}
-	, m_ExMoves{20}
+	, m_ExMoves{}
 	, m_ExProgress{}
 {
 }

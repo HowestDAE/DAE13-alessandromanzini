@@ -4,18 +4,33 @@
 #include "Sprite.h"
 #include "ResourcesLinker.h"
 
-NonInterractableProp::NonInterractableProp( int depth, const Point2f& position, const std::string& uid, float scale, bool animated )
+NonInterractableProp::NonInterractableProp( int depth, const Point2f& position, const std::string& uid, float scale )
 	: TexturedModel( position )
 	, mk_Depth{ depth }
 	, mk_Uid{ uid }
 	, mk_Scale{ scale }
-	, mk_IsAnimated{ animated }
+	, m_pTexture{}
 {
 }
 
 int NonInterractableProp::GetDepth( ) const
 {
 	return mk_Depth;
+}
+
+float NonInterractableProp::GetTextureWidth( ) const
+{
+	return m_pTexture->GetWidth( );
+}
+
+float NonInterractableProp::GetTextureHeight( ) const
+{
+	return m_pTexture->GetHeight( );
+}
+
+void NonInterractableProp::Draw( ) const
+{
+	TexturedModel::Draw( m_pTexture );
 }
 
 void NonInterractableProp::Draw( float offsetX ) const
@@ -26,28 +41,17 @@ void NonInterractableProp::Draw( float offsetX ) const
 
 		glTranslated( offsetX, 0, 0 );
 
-		TexturedModel::Draw( );
+		Draw( );
 	}
 	glPopMatrix( );
 }
 
 void NonInterractableProp::Update( float elapsedSec )
 {
-	m_TextureInfo.pTexture->Update( elapsedSec );
+	m_pTexture->Update( elapsedSec );
 }
 
 void NonInterractableProp::LinkTexture( ResourcesLinker* pResourcesLinker )
 {
-	Texture2D* pTexture{};
-
-	if ( mk_IsAnimated )
-	{
-		pTexture = pResourcesLinker->GetSprite( mk_Uid );
-	}
-	else
-	{
-		pTexture = pResourcesLinker->GetTexture( mk_Uid );
-	}
-
-	m_TextureInfo.pTexture = pTexture;
+	m_pTexture = pResourcesLinker->GetTexture( mk_Uid );
 }

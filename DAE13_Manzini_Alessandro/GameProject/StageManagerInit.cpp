@@ -5,6 +5,7 @@
 #include "ResourcesLinker.h"
 #include "Cuphead.h"
 #include "Toyduck.h"
+#include "Card.h"
 #include "NonInterractableProp.h"
 
 void StageManager::Initialize( )
@@ -97,6 +98,13 @@ void StageManager::InitializeEntities( )
 
 	m_pToyduck = new Toyduck( Constants::sk_CupheadStartingPosition + Vector2f{ 1200.f, 0.f } );
 	m_pToyduck->LinkTexture( m_pResourcesLinker );
+	m_pEntities.push_back( m_pToyduck );
+
+
+	Card* currentCard{ new Card( Point2f{ 1000.f, 200.f } ) };
+	currentCard->LinkTexture( m_pResourcesLinker );
+	m_pCards.push_back( currentCard );
+	m_pEntities.push_back( currentCard );
 }
 
 void StageManager::InitializeHUD( )

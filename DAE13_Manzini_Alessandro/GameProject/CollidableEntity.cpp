@@ -4,7 +4,7 @@
 
 CollidableEntity::CollidableEntity( int contactDamage )
 	: mk_ContactDamage( contactDamage )
-	, m_pCollisionManager{}
+	, mk_pCollisionManager{}
 {
 }
 
@@ -15,24 +15,24 @@ int CollidableEntity::GetContactDamage( ) const
 
 CollisionManager const* CollidableEntity::GetCollisionManager( ) const
 {
-	return m_pCollisionManager;
+	return mk_pCollisionManager;
 }
 
-void CollidableEntity::SetCollisionManager( CollisionManager* pCollisionManager )
+void CollidableEntity::SetCollisionManager( CollisionManager const* pCollisionManager )
 {
-	m_pCollisionManager = pCollisionManager;
+	mk_pCollisionManager = pCollisionManager;
 }
 
 void CollidableEntity::DrawCollision( ) const
 {
-	m_pCollisionManager->Draw( );
+	mk_pCollisionManager->Draw( );
 }
 
 bool CollidableEntity::CheckCollision( CollidableEntity& other )
 {
 	const CollisionManager* pOtherManager{ other.GetCollisionManager( ) };
 
-	if ( m_pCollisionManager->CheckCollision( *pOtherManager ) )
+	if ( mk_pCollisionManager->CheckCollision( *pOtherManager ) )
 	{
 		Hit( other.GetContactDamage( ) );
 		other.Hit( GetContactDamage( ) );

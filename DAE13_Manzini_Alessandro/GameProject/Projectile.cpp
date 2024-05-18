@@ -4,30 +4,22 @@
 #include "utils.h"
 
 Projectile::Projectile( const ProjectileSettings* pSettings )
-	: CollidableEntity( pSettings->damage )
+	: Entity( Point2f{}, pSettings->hp, pSettings->damage )
 	, mk_pProjectileSettings{ pSettings }
+	, m_pSprite{}
 	, m_CollisionManager{ pSettings->collisionCircle, &m_CollisionLocation }
-	, m_Location{}
 	, m_CollisionLocation{}
 	, m_Radius{}
 	, m_Rotation{}
 	, m_TravelDistance{}
-	, m_Velocity{}
-	, m_pSprite{}
-	, m_IsActive{}
-	, m_HP{ pSettings->hp }
 {
 	SetCollisionManager( &m_CollisionManager );
-}
-
-bool Projectile::GetIsOutOfBound( ) const
-{
-	return m_IsActive;
+	Kill( );
 }
 
 void Projectile::Draw( ) const
 {
-	if ( m_IsActive )
+	if ( GetIsAlive( ) )
 	{
 		glPushMatrix( );
 		{
@@ -36,7 +28,7 @@ void Projectile::Draw( ) const
 			//m_pSpriteManager->Draw( Point2f{ m_Radius, 0.f } );
 			m_pSprite->Draw( Point2f{ m_Radius, -m_pSprite->GetHeight()/2.f } );
 			
-			utils::DrawRect( Point2f{ m_Radius, 0.f }, m_pSprite->GetWidth( ), m_pSprite->GetHeight( ) );
+			//utils::DrawRect( Point2f{ m_Radius, 0.f }, m_pSprite->GetWidth( ), m_pSprite->GetHeight( ) );
 			//utils::DrawLine( Point2f{ 0.f, 0.f }, Point2f{ m_Radius, 0.f } );
 		}
 		glPopMatrix( );
@@ -46,7 +38,7 @@ void Projectile::Draw( ) const
 
 void Projectile::Update( float elapsedSec )
 {
-	if ( m_IsActive )
+	if ( GetIsAlive( ) )
 	{
 		m_Location += m_Velocity * elapsedSec;
 		m_CollisionLocation += m_Velocity * elapsedSec;
@@ -55,35 +47,29 @@ void Projectile::Update( float elapsedSec )
 
 		if ( m_TravelDistance > mk_pProjectileSettings->range )
 		{
-			m_IsActive = false;
+			Kill( );
 		}
 	}
 }
 
 bool Projectile::CheckCollision( CollidableEntity& other )
 {
-	if ( m_IsActive )
+	if ( GetIsAlive( ) )
 	{
 		return CollidableEntity::CheckCollision( other );
 	}
 	return false;
 }
 
-void Projectile::Hit( int damage )
-{
-	--m_HP;
-	m_IsActive = (m_HP > 0);
-}
-
 void Projectile::Reset( const Point2f& origin, float radius, float rotation )
 {
 	m_pSprite->Reset( );
 
-	m_TravelDistance = 0.f;
+	Revive( mk_pProjectileSettings->hp );
 
 	m_Radius = radius;
 	m_Rotation = rotation;
-	m_IsActive = true;
+	m_TravelDistance = 0.f;
 
 	const float radians{ rotation * float(M_PI) / 180.f };
 	const float speed{ mk_pProjectileSettings->speed };
@@ -102,4 +88,9 @@ void Projectile::Reset( const Point2f& origin, float radius, float rotation )
 void Projectile::SetSprite( Sprite* pSprite )
 {
 	m_pSprite = pSprite;
+}
+
+void Projectile::LinkTexture( ResourcesLinker* pResourceLinker )
+{
+	// Not needed
 }

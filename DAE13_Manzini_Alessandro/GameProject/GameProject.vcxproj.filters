@@ -95,9 +95,6 @@
     <ClCompile Include="Weapon.cpp">
       <Filter>Artifacts\Weapons</Filter>
     </ClCompile>
-    <ClCompile Include="Projectile.cpp">
-      <Filter>Artifacts\Weapons</Filter>
-    </ClCompile>
     <ClCompile Include="Peashooter.cpp">
       <Filter>Artifacts\Weapons</Filter>
     </ClCompile>
@@ -136,6 +133,12 @@
     </ClCompile>
     <ClCompile Include="ProjectileSettings.cpp">
       <Filter>Models</Filter>
+    </ClCompile>
+    <ClCompile Include="Card.cpp">
+      <Filter>Artifacts\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Projectile.cpp">
+      <Filter>Artifacts\Entities</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -196,9 +199,6 @@
     <ClInclude Include="Weapon.h">
       <Filter>Artifacts\Weapons</Filter>
     </ClInclude>
-    <ClInclude Include="Projectile.h">
-      <Filter>Artifacts\Weapons</Filter>
-    </ClInclude>
     <ClInclude Include="Peashooter.h">
       <Filter>Artifacts\Weapons</Filter>
     </ClInclude>
@@ -237,6 +237,12 @@
     </ClInclude>
     <ClInclude Include="ProjectileSettings.h">
       <Filter>Models</Filter>
+    </ClInclude>
+    <ClInclude Include="Card.h">
+      <Filter>Artifacts\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Projectile.h">
+      <Filter>Artifacts\Entities</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
