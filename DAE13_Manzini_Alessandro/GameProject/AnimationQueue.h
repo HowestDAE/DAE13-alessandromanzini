@@ -8,6 +8,8 @@ class AnimationQueue
 public:
 	AnimationQueue( );
 
+	bool GetReady( ) const;
+
 	void NextAnimation( TextureInfo& textureInfo );
 
 	void Enqueue( const TextureInfo& textureInfo, bool priority = false );

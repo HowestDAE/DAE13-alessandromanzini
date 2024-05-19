@@ -7,29 +7,15 @@
 #include "PlatformManager.h"
 #include "HUDManager.h"
 #include "utils.h"
-#include "iostream"
+#include <iostream>
 
 Cuphead::Cuphead(const Point2f& position, HUDManager* pHUDManager )
 	: Entity( position, Constants::sk_CupheadStartingHP, 0 ) 
 	, m_pHUDManager{ pHUDManager }
+	, m_WeaponManager{}
+	, m_MovementManager{}
 	, m_IsInvincible{ false }
 	, m_IFramesElapsedTime{}
-	, m_pIdleSprite{}
-	, m_pRunSprite{}
-	, m_pDuckSprite{}
-	, m_pDuckShootSprite{}
-	, m_pJumpSprite{}
-	, m_pDashGroundSprite{}
-	, m_pDashAirSprite{}
-	, m_pShootStraightSprite{}
-	, m_pShootDiagonalupSprite{}
-	, m_pShootDownSprite{}
-	, m_pAimUpSprite{}
-	, m_pAimStraightSprite{}
-	, m_pAimDiagonaldownSprite{}
-	, m_pRunShootStraightSprite{}
-	, m_pRunShootDiagonalupSprite{}
-	, m_pParrySprite{}
 	, m_StandingCollisionManager{ std::vector<CollisionCircle>{ CollisionCircle{ 45.f, 30.f, 30.f, CollisionType::forceHit }, CollisionCircle{ 45.f, 75.f, 30.f, CollisionType::forceHit } }, &m_Location }
 	, m_DuckingCollisionManager{ std::vector<CollisionCircle>{ CollisionCircle{ 45.f, 30.f, 30.f, CollisionType::forceHit } }, &m_Location }
 {
@@ -41,20 +27,17 @@ Cuphead::Cuphead(const Point2f& position, HUDManager* pHUDManager )
 void Cuphead::Draw( ) const
 {
 	m_WeaponManager.Draw( );
+
+	// Player should be drawn on top of projectiles
 	if ( !m_TextureFlashing )
 	{
 		Entity::Draw( );
 	}
-	/*{
-		const Point2f point{ (m_Location + m_MidTranslationVector).ToPoint2f( ) };
-		const Point2f wallPos{ point + m_ShootingTranslationVector };
-		utils::DrawRect( point.x - 5.f, point.y - 5.f, 10.f, 10.f );
-		utils::DrawRect( wallPos.x, wallPos.y - 7.f, 5.f, 14.f );
-	}*/
 }
 
 void Cuphead::Update( float elapsedSec )
 {
+	// Entity updates loads textures, so it must be first
 	Entity::Update( elapsedSec );
 
 	UpdateMovement( elapsedSec );
@@ -69,23 +52,35 @@ void Cuphead::KeyPressEvent( const SDL_KeyboardEvent& e )
 	m_MovementManager.KeyPressEvent( e );
 }
 
-void Cuphead::CheckCollision( PlatformManager const* pPlatformManager )
+bool Cuphead::CheckCollision( PlatformManager const* pPlatformManager )
 {
 	const Vector2f displacement{ pPlatformManager->GetDisplacementFromPlatform( this ) };
+	bool collision{};
 
 	if ( displacement.y )
 	{
 		m_Velocity.y = 0;
 		m_MovementManager.PlatformCollisionFeedback( );
+
+		collision = true;
 	}
 
 	m_Location += displacement;
+	return collision;
 }
 
 bool Cuphead::CheckCollision( CollidableEntity& other )
 {
 	m_WeaponManager.CheckCollision( other );
 	return CollidableEntity::CheckCollision( other );
+}
+
+void Cuphead::CardCollision( )
+{
+	if ( m_MovementManager.GetIsParrying( ) )
+	{
+		m_MovementManager.ToggleGravity( );
+	}
 }
 
 float Cuphead::GetTextureWidth( ) const
@@ -138,7 +133,7 @@ void Cuphead::UpdateMovement( float elapsedSec )
 		m_MovementManager.UpdateVelocity( m_Velocity, elapsedSec );
 		SelectTexture( );
 	}
-	m_Location += m_Velocity * elapsedSec;
+	UpdateLocation( elapsedSec );
 }
 
 void Cuphead::UpdateWeapons( float elapsedSec )
@@ -199,42 +194,18 @@ void Cuphead::TryShoot( )
 	const float textureWidthHalved{ GetTextureWidth( ) / 2.f };
 	const float radius{ textureWidthHalved / 2.f };
 
-	const Point2f relativeOrigin{ textureWidthHalved, GetTextureHeight( ) / 2.f };
-	//const Point2f relativeOrigin{ textureWidthHalved + m_TextureInfo.pTexture->GetOffset( ).x, GetTextureHeight( ) / 2.f };
+	const Point2f relativeOrigin{ textureWidthHalved + GetTextureOffset( ).x, GetTextureHeight( ) / 2.f };
 	Point2f origin{ relativeOrigin + m_Location };
-	float rotation{};
+	float rotation{ m_MovementManager.GetAimAngle( ) };
 
-	// Get "facing right" angle
-	switch ( m_MovementManager.GetAimDirection( ) )
+	if( m_MovementManager.GetIsFacingRight( ) )
 	{
-	case MovementManager::AimDirection::straight:
-		rotation = 0.f;
-		break;
-	case MovementManager::AimDirection::diagonalup:
-		rotation = 45.f;
-		break;
-	case MovementManager::AimDirection::up:
-		rotation = 90.f;
-		break;
-	case MovementManager::AimDirection::down:
-		rotation = -90.f;
-		break;
-	case MovementManager::AimDirection::diagonaldown:
-		rotation = -45.f;
-		break;
-	}
-
-	// Translate to "facing left" angle
-	if ( !m_MovementManager.GetIsFacingRight( ) )
-	{
-		rotation = 180 - rotation;
-	}
-	else
-	{
+		// amount of offset to position the projectiles on the hand
 		const float rightOffset{ 40.f };
 		origin.x += rightOffset;
 	}
 
+	// if cuphead is ducking, lower the projectile height
 	if ( m_MovementManager.GetMovementType( ) == MovementManager::MovementType::duck )
 	{
 		const float heightOffset{ 18.f };
@@ -424,7 +395,7 @@ void Cuphead::SelectExMove( MovementManager::AimDirection direction )
 
 void Cuphead::QueueTexture( Texture2D* pTexture, bool priority )
 {
-	const bool flipX{ !m_MovementManager.GetIsFacingRight( ) }, flipY{};
+	const bool flipX{ !m_MovementManager.GetIsFacingRight( ) }, flipY{ m_MovementManager.GetIsGravityReversed() };
 	Entity::QueueTexture( 0, pTexture, flipX, flipY, priority );
 }
 

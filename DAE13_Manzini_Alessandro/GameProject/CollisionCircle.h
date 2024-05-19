@@ -5,7 +5,8 @@ enum class CollisionType
 {
 	defaultHit,
 	noHit,
-	forceHit
+	forceHit,
+	hollow
 };
 
 struct CollisionCircle

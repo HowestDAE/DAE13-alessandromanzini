@@ -9,7 +9,6 @@ class Toyduck final :
 public:
     explicit Toyduck( const Point2f& position );
 
-    virtual void Draw( ) const override;
     virtual void Update( float elapsedSec ) override;
 
     virtual void LinkTexture( ResourcesLinker* pResourcesLinker ) override;

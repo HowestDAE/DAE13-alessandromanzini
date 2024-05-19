@@ -31,12 +31,15 @@ void CollidableEntity::DrawCollision( ) const
 bool CollidableEntity::CheckCollision( CollidableEntity& other )
 {
 	const CollisionManager* pOtherManager{ other.GetCollisionManager( ) };
+	CollisionInfo collisionInfo{};
 
-	if ( mk_pCollisionManager->CheckCollision( *pOtherManager ) )
+	if ( mk_pCollisionManager->CheckCollision( *pOtherManager, collisionInfo ) )
 	{
-		Hit( other.GetContactDamage( ) );
-		other.Hit( GetContactDamage( ) );
-
+		if ( !collisionInfo.hollow )
+		{
+			Hit( other.GetContactDamage( ) );
+			other.Hit( GetContactDamage( ) );
+		}
 		return true;
 	}
 	return false;

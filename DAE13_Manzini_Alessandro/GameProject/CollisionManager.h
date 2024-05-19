@@ -13,7 +13,7 @@ public:
 
 	const std::vector<CollisionCircle>& GetCollisionCircles( ) const;
 	const Vector2f& GetDisplacementVector( ) const;
-	virtual bool CheckCollision( const CollisionManager& other ) const;
+	virtual bool CheckCollision( const CollisionManager& other, CollisionInfo& collisionInfo ) const;
 
 	void Draw( ) const;
 

@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Sprite.h"
 #include "Texture.h"
+#include <iostream>
 
 Sprite::Sprite( Texture const* pTexture, Texture const* pFlashTexture, const SpriteSettings& spriteSettings )
 	: Sprite( pTexture, 
@@ -61,6 +62,7 @@ void Sprite::Update( float elapsedSec )
 			{
 				m_CurrentFrame = 0;
 			}
+
 			m_LastFrameReached = true;
 		}
 

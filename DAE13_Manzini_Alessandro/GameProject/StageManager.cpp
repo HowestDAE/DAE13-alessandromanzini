@@ -98,6 +98,14 @@ void StageManager::CheckCollisions( )
 
 	m_pPlayer->CheckCollision( *m_pToyduck );
 
+	for ( Card* pCard : m_pCards )
+	{
+		if ( pCard->CollidableEntity::CheckCollision( *m_pPlayer ) )
+		{
+			m_pPlayer->CardCollision( );
+			break;
+		}
+	}
 	//m_pPlayer->CheckCollision( m_Cards[0] );
 }
 

@@ -12,29 +12,20 @@ Toyduck::Toyduck( const Point2f& position )
 {
 	m_Velocity.Set( -Constants::sk_ToyduckSpeed, 0.f );
 	SetCollisionManager( &m_CollisionManager );
-}
-
-void Toyduck::Draw( ) const
-{
-	m_pBacktireSprite->Draw( m_Location.ToPoint2f( ) );
-	m_pIdleSprite->Draw( m_Location.ToPoint2f( ) );
-
-	//DrawTextureOutline( );
-	DrawCollision( );
+	InitializeQueues( 2, 1 );
 }
 
 void Toyduck::Update( float elapsedSec )
 {
-	m_pIdleSprite->Update( elapsedSec );
-	m_pBacktireSprite->Update( elapsedSec );
-
-	m_Location += m_Velocity * elapsedSec;
-
-	Entity::UpdateHitFlashing( elapsedSec, Constants::sk_DefaultFlashDuration );
+	Entity::Update( elapsedSec );
+	UpdateLocation( elapsedSec );
 }
 
 void Toyduck::LinkTexture( ResourcesLinker* pResourcesLinker )
 {
 	m_pIdleSprite = pResourcesLinker->GetSprite( "toyduck_idle" );
 	m_pBacktireSprite = pResourcesLinker->GetSprite( "toyduck_backtire" );
+
+	QueueTexture( 0, m_pBacktireSprite );
+	QueueTexture( 1, m_pIdleSprite );
 }

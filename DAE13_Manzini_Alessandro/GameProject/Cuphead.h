@@ -22,8 +22,10 @@ public:
 
     void KeyPressEvent( const SDL_KeyboardEvent& e );
 
-    virtual void CheckCollision( PlatformManager const* pPlatformManager ) override;
+    virtual bool CheckCollision( PlatformManager const* pPlatformManager ) override;
     virtual bool CheckCollision( CollidableEntity& other ) override;
+
+    void CardCollision( );
 
     // Gets the width of the idle instead of the current texture
     float GetTextureWidth( ) const;

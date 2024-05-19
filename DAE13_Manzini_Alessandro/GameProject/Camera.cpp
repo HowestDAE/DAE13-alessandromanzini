@@ -51,7 +51,6 @@ void Camera::Draw( ) const
 
 		DrawBackground( m_pStageManager->GetBackgroundProps() ); // Draw background, midground
 		DrawEntities( );
-		DrawProjectiles( );
 		DrawBackground( m_pStageManager->GetFrontgroundProps( ) ); // Draw frontground
 	}
 	glPopMatrix( );
@@ -94,17 +93,18 @@ void Camera::DrawBackground( const std::vector<NonInterractableProp>& props ) co
 
 void Camera::DrawEntities( ) const
 {
-	for ( Entity const* pEntity : m_pStageManager->GetEntities( ) )
+	const std::vector<Entity*>& entitites{ m_pStageManager->GetEntities( ) };
+	for ( Entity const* pEntity : entitites )
 	{
-		pEntity->Draw( );
+		pEntity->DrawBackside( );
 	}
 
 	m_pStageManager->GetPlayer()->Draw( );
-}
 
-void Camera::DrawProjectiles( ) const
-{
-
+	for ( Entity const* pEntity : entitites )
+	{
+		pEntity->Draw( );
+	}
 }
 
 float Camera::GetXParallaxRatio( int depth ) const

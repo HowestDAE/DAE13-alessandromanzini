@@ -9,15 +9,23 @@ AnimationQueue::AnimationQueue( )
 {
 }
 
+bool AnimationQueue::GetReady( ) const
+{
+    return m_TexturesDeque.empty( );
+}
+
 void AnimationQueue::NextAnimation( TextureInfo& textureInfo )
 {
+    const bool canGetNext{ textureInfo.pTexture == nullptr || textureInfo.pTexture->GetIsReady( ) };
     // If the queue is not empty...
-    if ( !textureInfo.pTexture || !m_TexturesDeque.empty( ) && textureInfo.pTexture->GetIsReady( ) )
+    if ( !m_TexturesDeque.empty( ) && canGetNext )
     {
         // give the next step
         textureInfo = m_TexturesDeque.front( );
 
-        if ( static_cast<Sprite*>( textureInfo.pTexture )->GetMustComplete( ) && textureInfo.pTexture->GetIsReady() )
+        // Reset texture if it is not a loop
+        if ( static_cast<Sprite*>( textureInfo.pTexture )->GetMustComplete( ) 
+            && textureInfo.pTexture->GetIsReady( ) )
         {
             textureInfo.pTexture->Reset( );
         }
@@ -28,14 +36,20 @@ void AnimationQueue::NextAnimation( TextureInfo& textureInfo )
 
 void AnimationQueue::Enqueue( const TextureInfo& textureInfo, bool priority )
 {
+    if ( textureInfo.pTexture == nullptr )
+    {
+        throw std::invalid_argument( "Cannot enqueue a NULL texture pointer." );
+    }
+
     if ( priority )
     {
         Clear( );
     }
     else
     {
-        // If the last animation on queue is optional, substitute
-        if ( !m_TexturesDeque.empty() && m_TexturesDeque.back( ).pTexture->GetIsReady( ) )
+        // If the last animation on queue is optional, pop
+        if ( !m_TexturesDeque.empty() && 
+            !static_cast<Sprite*>(m_TexturesDeque.back( ).pTexture)->GetMustComplete( ) )
         {
             m_TexturesDeque.pop_back( );
         }

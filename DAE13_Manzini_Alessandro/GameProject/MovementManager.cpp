@@ -12,6 +12,7 @@ MovementManager::MovementManager( )
 	, m_IsShooting{}
 	, m_IsExMoveRequested{}
 	, m_IsExMoving{}
+	, m_AimAngle{}
 	, m_IsDashing{}
 	, m_DashingAccumulatedTime{}
 	, m_DashingCooldownAccumulatedTime{}
@@ -39,6 +40,11 @@ bool MovementManager::GetIsFacingRight( ) const
 	return m_DirectionData.facingRight;
 }
 
+bool MovementManager::GetIsGravityReversed( ) const
+{
+	return m_IsGravityReversed;
+}
+
 bool MovementManager::GetIsTransitioning( ) const
 {
 	return m_IsTransitioning;
@@ -54,14 +60,24 @@ bool MovementManager::GetIsExMove( ) const
 	return m_IsExMoveRequested;
 }
 
+float MovementManager::GetAimAngle( ) const
+{
+	return m_AimAngle;
+}
+
+bool MovementManager::GetIsParrying( ) const
+{
+	return m_IsParrying;
+}
+
 void MovementManager::SetExingState( bool isExing )
 {
 	m_IsExMoving = isExing;
 }
 
-void MovementManager::SetGravity( bool isReversed )
+void MovementManager::ToggleGravity( )
 {
-	m_IsGravityReversed = isReversed;
+	m_IsGravityReversed = !m_IsGravityReversed;
 }
 
 void MovementManager::PlatformCollisionFeedback( )
@@ -175,6 +191,7 @@ void MovementManager::Reset( )
 	m_IsShooting = false;
 	m_IsExMoveRequested = false;
 	m_IsExMoving = false;
+	m_AimAngle = 0.f;
 
 	m_IsDashing = false;
 	m_DashingAccumulatedTime = 0.f;
@@ -256,6 +273,7 @@ void MovementManager::ProcessMovementData( )
 
 	m_DirectionData = directionData;
 	m_MovementType = movement;
+	m_AimAngle = CalculateAimAngle( );
 }
 
 MovementManager::DirectionData MovementManager::CalculateAimDirection( ) const
@@ -278,7 +296,7 @@ MovementManager::DirectionData MovementManager::CalculateAimDirection( ) const
 		directionData.facingRight = m_KeysStates.faceRightOverride;
 	}
 
-	directionData.direction = static_cast<AimDirection>(int( directionData.direction ) + mod); // Direction is casted as offset + variation
+	directionData.direction = static_cast<AimDirection>( int( directionData.direction ) + mod ); // Direction is casted as offset + variation
 	return directionData;
 }
 
@@ -316,6 +334,45 @@ MovementManager::MovementType MovementManager::CalculateMovementType( ) const
 	}
 
 	return movement;
+}
+
+float MovementManager::CalculateAimAngle( ) const
+{
+	float rotation{};
+
+	// Get "facing right" angle
+	switch ( m_DirectionData.direction )
+	{
+	case MovementManager::AimDirection::straight:
+		rotation = 0.f;
+		break;
+	case MovementManager::AimDirection::diagonalup:
+		rotation = 45.f;
+		break;
+	case MovementManager::AimDirection::up:
+		rotation = 90.f;
+		break;
+	case MovementManager::AimDirection::down:
+		rotation = -90.f;
+		break;
+	case MovementManager::AimDirection::diagonaldown:
+		rotation = -45.f;
+		break;
+	}
+
+	// Translate to "facing left" angle
+	if ( !m_DirectionData.facingRight )
+	{
+		rotation = 180 - rotation;
+	}
+
+	// Translate to gravity change
+	if ( m_IsGravityReversed )
+	{
+		rotation = -rotation;
+	}
+
+	return rotation;
 }
 
 void MovementManager::AdjustMovementData( DirectionData& data, MovementType& movement ) 

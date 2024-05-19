@@ -3,6 +3,7 @@
 #include "Constants.h"
 #include "PlatformManager.h"
 #include "Texture2D.h"
+#include <stdexcept>
 
 Entity::Entity( const Point2f& position, int hp, int contactDamage )
     : TexturedModel( position )
@@ -13,27 +14,45 @@ Entity::Entity( const Point2f& position, int hp, int contactDamage )
     , m_FlashElapsedTime{}
     , m_AnimationQueues{}
     , m_TextureInfos{}
+    , m_BacksideLimitIndex{}
 {
 }
 
 void Entity::Draw( ) const
 {
-    for ( const TextureInfo& textureInfo : m_TextureInfos )
+    for ( int i{ m_BacksideLimitIndex }; i < m_TextureInfos.size(); ++i )
     {
-        TexturedModel::Draw( textureInfo );
+        TexturedModel::Draw( m_TextureInfos[i] );
     }
     DrawCollision( );
+}
+
+void Entity::DrawBackside( ) const
+{
+    for ( int i{}; i < m_BacksideLimitIndex; ++i )
+    {
+        TexturedModel::Draw( m_TextureInfos[i] );
+    }
 }
 
 void Entity::Update( float elapsedSec )
 {
     for ( int i{}; i < m_AnimationQueues.size( ); ++i )
     {
+        if ( m_TextureInfos[i].pTexture )
+        {
+            m_TextureInfos[i].pTexture->Update( elapsedSec );
+        }
+
         m_AnimationQueues[i].NextAnimation( m_TextureInfos[i] );
-        m_TextureInfos[i].pTexture->Update( elapsedSec );
     }
 
     UpdateHitFlashing( elapsedSec, Constants::sk_DefaultFlashDuration );
+}
+
+void Entity::UpdateLocation( float elapsedSec )
+{
+    m_Location += m_Velocity * elapsedSec;
 }
 
 void Entity::UpdateHitFlashing( float elapsedSec, float epsilonTime, bool toggle )
@@ -51,10 +70,12 @@ void Entity::UpdateHitFlashing( float elapsedSec, float epsilonTime, bool toggle
     }
 }
 
-void Entity::CheckCollision( PlatformManager const* pPlatformManager )
+bool Entity::CheckCollision( PlatformManager const* pPlatformManager )
 {
     const Vector2f displacement{ pPlatformManager->GetDisplacementFromPlatform( this ) };
     m_Location += displacement;
+
+    return displacement.x || displacement.y;
 }
 
 Vector2f Entity::GetVelocity( ) const
@@ -82,6 +103,11 @@ float Entity::GetTextureHeight( ) const
     return m_TextureInfos[0].pTexture->GetHeight( );
 }
 
+Vector2f Entity::GetTextureOffset( ) const
+{
+    return m_TextureInfos[0].pTexture->GetOffset( );
+}
+
 void Entity::Hit( int damage )
 {
     m_HP -= damage;
@@ -92,14 +118,24 @@ void Entity::Hit( int damage )
     m_IsAlive = (m_HP > 0);
 }
 
-void Entity::InitializeQueues( int count )
+void Entity::InitializeQueues( unsigned int count, unsigned int backsideIndex )
 {
+    if ( backsideIndex > count )
+    {
+        throw std::invalid_argument( "Tried to set the backside index to " + std::to_string( backsideIndex ) + " while count is " + std::to_string( count ) + ". Backside index must be lower/equal than count." );
+    }
     m_AnimationQueues = std::vector<AnimationQueue>( count );
     m_TextureInfos = std::vector<TextureInfo>( count );
+    m_BacksideLimitIndex = backsideIndex;
 }
 
-void Entity::QueueTexture( int index, Texture2D* pTexture, bool flipX, bool flipY, bool priority )
+void Entity::QueueTexture( unsigned int index, Texture2D* pTexture, bool flipX, bool flipY, bool priority )
 {
+    if ( index > m_AnimationQueues.size( ) )
+    {
+        throw std::invalid_argument( "Trying to queue texture at index " + std::to_string( index ) + " but max index is " + std::to_string( m_AnimationQueues.size() - 1 ) + "." );
+    }
+
     m_AnimationQueues[index].Enqueue( TextureInfo{ pTexture, flipX, flipY }, priority );
 }
 

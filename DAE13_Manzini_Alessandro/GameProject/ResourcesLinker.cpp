@@ -42,12 +42,12 @@ Texture2D* ResourcesLinker::GetTexture( const std::string& uid )
 
 Sprite* ResourcesLinker::GetSprite( const std::string& uid )
 {
-	return static_cast<Sprite*>(GetTexture( uid ));
+	return static_cast<Sprite*>( GetTexture( uid ) );
 }
 
 Pattern* ResourcesLinker::GetPattern( const std::string& uid )
 {
-	return static_cast<Pattern*>(GetTexture(uid));
+	return static_cast<Pattern*>( GetTexture( uid ) );
 }
 
 void ResourcesLinker::InitializeTextures( )

@@ -13,14 +13,19 @@ public:
 	AimDirection GetAimDirection( ) const;
 	MovementType GetMovementType( ) const;
 	bool GetIsFacingRight( ) const;
+	bool GetIsGravityReversed( ) const;
 
 	bool GetIsTransitioning( ) const;
 
 	bool GetIsShooting( ) const;
 	bool GetIsExMove( ) const;
 
+	float GetAimAngle( ) const;
+
+	bool GetIsParrying( ) const;
+
 	void SetExingState( bool isExing );
-	void SetGravity( bool isDefault );
+	void ToggleGravity( );
 	void PlatformCollisionFeedback( );
 
 	void Update( float elapsedSec );
@@ -47,6 +52,7 @@ private:
 	bool m_IsShooting;
 	bool m_IsExMoveRequested;
 	bool m_IsExMoving;
+	float m_AimAngle;
 
 	bool m_IsDashing;
 	float m_DashingAccumulatedTime;
@@ -69,6 +75,7 @@ private:
 
 	DirectionData CalculateAimDirection( ) const;
 	MovementType CalculateMovementType( ) const;
+	float CalculateAimAngle( ) const;
 	void AdjustMovementData( DirectionData& data, MovementType& movement );
 };
 

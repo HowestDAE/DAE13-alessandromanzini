@@ -8,10 +8,10 @@ Card::Card( const Point2f& position )
 	, m_pIdleSprite{}
 	, m_pSpinSprite{}
 	, m_pStarsSprite{}
-	, m_CollisionManager{ CollisionCircle{ 55.f, 60.f, 35.f, CollisionType::noHit }, &m_Location }
+	, m_CollisionManager{ CollisionCircle{ 55.f, 60.f, 35.f, CollisionType::hollow }, &m_Location }
 {
 	SetCollisionManager( &m_CollisionManager );
-	InitializeQueues( 2 );
+	InitializeQueues( 2, 2 );
 }
 
 void Card::Draw( ) const
