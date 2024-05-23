@@ -113,9 +113,6 @@
     <ClCompile Include="HUDManager.cpp">
       <Filter>Managers</Filter>
     </ClCompile>
-    <ClCompile Include="SpriteManager.cpp">
-      <Filter>Managers\Texture</Filter>
-    </ClCompile>
     <ClCompile Include="CollisionManager.cpp">
       <Filter>Managers</Filter>
     </ClCompile>
@@ -139,6 +136,15 @@
     </ClCompile>
     <ClCompile Include="Projectile.cpp">
       <Filter>Artifacts\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="CSVReader.cpp">
+      <Filter>Helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="string_manip.cpp">
+      <Filter>Helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="VectorSprite.cpp">
+      <Filter>Managers\Texture</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -217,9 +223,6 @@
     <ClInclude Include="HUDManager.h">
       <Filter>Managers</Filter>
     </ClInclude>
-    <ClInclude Include="SpriteManager.h">
-      <Filter>Managers\Texture</Filter>
-    </ClInclude>
     <ClInclude Include="CollisionManager.h">
       <Filter>Managers</Filter>
     </ClInclude>
@@ -243,6 +246,12 @@
     </ClInclude>
     <ClInclude Include="Projectile.h">
       <Filter>Artifacts\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="CSVReader.h">
+      <Filter>Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="VectorSprite.h">
+      <Filter>Managers\Texture</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

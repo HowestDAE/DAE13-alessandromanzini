@@ -11,7 +11,7 @@ class Entity
 	, public CollidableEntity
 {
 public:
-	explicit Entity( const Point2f& position, int hp, int contactDamage = 1 );
+	explicit Entity( const Point2f& position, int hp, int contactDamage = 1, bool isPink = false );
 
 	virtual void Draw( ) const override;
 	void DrawBackside( ) const;
@@ -39,6 +39,7 @@ protected:
 
 	void InitializeQueues( unsigned int count = 1, unsigned int backsideIndex = 0 );
 	void QueueTexture( unsigned int index, Texture2D* pTexture, bool flipX = false, bool flipY = false, bool priority = false );
+	bool IsQueueReady( unsigned int index ) const;
 
 private:
 	bool m_IsAlive;

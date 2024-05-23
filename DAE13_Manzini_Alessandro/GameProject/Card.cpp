@@ -4,11 +4,11 @@
 #include "Sprite.h"
 
 Card::Card( const Point2f& position )
-	: Entity( position, 1, 0 )
+	: Entity( position, 1, 0, true )
 	, m_pIdleSprite{}
 	, m_pSpinSprite{}
 	, m_pStarsSprite{}
-	, m_CollisionManager{ CollisionCircle{ 55.f, 60.f, 35.f, CollisionType::hollow }, &m_Location }
+	, m_CollisionManager{ CollisionCircle{ 55.f, 60.f, 50.f, CollisionType::hollow }, &m_Location }
 {
 	SetCollisionManager( &m_CollisionManager );
 	InitializeQueues( 2, 2 );
@@ -22,6 +22,12 @@ void Card::Draw( ) const
 void Card::Update( float elapsedSec )
 {
 	Entity::Update( elapsedSec );
+}
+
+void Card::ParryCollisionFeedback( )
+{
+	QueueTexture( 0, m_pSpinSprite );
+	QueueTexture( 0, m_pIdleSprite );
 }
 
 void Card::LinkTexture( ResourcesLinker* pResourcesLinker )

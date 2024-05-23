@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "Constants.h"
 
+const float Constants::sk_ScreenFXFrameDelay{ .3f };
+
 const Point2f Constants::sk_HUD_HP_Position{ 20.f, 20.f };
 const Point2f Constants::sk_HUD_Excards_Position{ 115.f, 20.f };
 

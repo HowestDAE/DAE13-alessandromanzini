@@ -3,6 +3,7 @@
 #include "WeaponsManager.h"
 #include "MovementManager.h"
 #include "CollisionManager.h"
+#include "Card.h"
 class Sprite;
 class HUDManager;
 
@@ -18,14 +19,14 @@ public:
     ~Cuphead( );*/
 
     virtual void Draw( ) const override;
+    void DrawProjectiles( ) const;
     virtual void Update( float elapsedSec ) override;
 
     void KeyPressEvent( const SDL_KeyboardEvent& e );
 
     virtual bool CheckCollision( PlatformManager const* pPlatformManager ) override;
     virtual bool CheckCollision( CollidableEntity& other ) override;
-
-    void CardCollision( );
+    bool CheckCollision( Card& card );
 
     // Gets the width of the idle instead of the current texture
     float GetTextureWidth( ) const;
@@ -40,6 +41,9 @@ private:
 
     CollisionManager m_StandingCollisionManager;
     CollisionManager m_DuckingCollisionManager;
+    
+    CollisionManager m_ReversedStandingCollisionManager;
+    CollisionManager m_ReversedDuckingCollisionManager;
 
     bool m_IsInvincible;
     float m_IFramesElapsedTime;

@@ -4,7 +4,7 @@
 class Texture final
 {
 public:
-	explicit Texture( const std::string& imagePath, bool flash = false );
+	explicit Texture( const std::string& imagePath, bool flash = false, bool opacityMap = false );
 	explicit Texture( const std::string& text, TTF_Font *pFont, const Color4f& textColor );
 	explicit Texture( const std::string& text, const std::string& fontPath, int ptSize, const Color4f& textColor );
 	Texture( const Texture& other ) = delete;
@@ -27,6 +27,7 @@ private:
 	float m_Height;
 	bool m_CreationOk;
 	bool m_Flash;
+	bool m_OpacityMap;
 
 	// FUNCTIONS
 	void CreateFromImage( const std::string& path );

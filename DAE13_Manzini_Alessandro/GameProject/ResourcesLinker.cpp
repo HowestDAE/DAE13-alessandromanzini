@@ -4,11 +4,14 @@
 #include "Texture2D.h"
 #include "Pattern.h"
 #include "Sprite.h"
+#include "VectorSprite.h"
 #include <cassert>
+#include "Constants.h"
 
 ResourcesLinker::ResourcesLinker( )
 	: m_pTextures{}
 	, m_pInstantiatedTextures{}
+	, m_pScreenFXTextures{}
 	, m_TextureTypeMap{}
 	, m_SpriteSettingsMap{}
 	, m_PatternSettingsMap{}
@@ -50,10 +53,29 @@ Pattern* ResourcesLinker::GetPattern( const std::string& uid )
 	return static_cast<Pattern*>( GetTexture( uid ) );
 }
 
+VectorSprite* ResourcesLinker::GetScreenFXTexture( )
+{
+	VectorSprite* pTexture{ new VectorSprite( m_pScreenFXTextures, Constants::sk_ScreenFXFrameDelay ) };
+
+	m_pInstantiatedTextures.push_back( pTexture );
+
+	return pTexture;
+}
+
+void ResourcesLinker::ClearInstantiated( )
+{
+	for ( Texture2D* pTexture : m_pInstantiatedTextures )
+	{
+		delete pTexture;
+	}
+	m_pInstantiatedTextures.clear( );
+}
+
 void ResourcesLinker::InitializeTextures( )
 {
 	InitializeEntities( );
 	InitializeBackgroundProps( );
+	InitializeScreens( );
 }
 
 void ResourcesLinker::InitializeEntities( )
@@ -165,10 +187,11 @@ void ResourcesLinker::InitializeEntities( )
 	// Card
 	{
 		const float idleFrameDelay{ .1f };
+		const float spinFrameDelay{ .07f };
 		const float starsFrameDelay{ .08f };
 
 		PushSprite( "card_idle", "enemy/card/AS_card_idle_1x13.png", SpriteSettings( 1, 13, idleFrameDelay, true ) );
-		PushSprite( "card_spin", "enemy/card/AS_card_spin_2x9.png", SpriteSettings( 2, 9, idleFrameDelay, false, Vector2f{}, true ) );
+		PushSprite( "card_spin", "enemy/card/AS_card_spin_2x9.png", SpriteSettings( 2, 9, spinFrameDelay, false, Vector2f{}, true ) );
 		PushSprite( "card_stars", "enemy/card/AS_card_stars_2x8.png", SpriteSettings( 2, 8, starsFrameDelay ) );
 	}
 
@@ -261,19 +284,39 @@ void ResourcesLinker::InitializeBackgroundProps( )
 	}
 }
 
+void ResourcesLinker::InitializeScreens( )
+{
+	// Screen FX
+	{
+		const int screenFxCount{ 127 };
+		const std::string basePath{ "screen/ST_screen_fx/cuphead_screen_fx_" };
+		
+		m_pScreenFXTextures = std::vector<Texture*>( screenFxCount );
+
+		for ( int i{}; i < screenFxCount; ++i )
+		{
+			const std::string path{ basePath + (i < 100 ? (i < 10 ? "000" : "00") : "0")};
+			m_pScreenFXTextures[i] = new Texture( path + std::to_string( i ) + ".png", false, true );
+
+		}
+	}
+}
+
 void ResourcesLinker::ReleaseTextures( )
 {
-	for ( Texture2D* pTexture : m_pInstantiatedTextures )
-	{
-		delete pTexture;
-	}
-	m_pInstantiatedTextures.clear( );
+	ClearInstantiated( );
 
 	for ( std::pair<const std::string, Texture*>& pair : m_pTextures )
 	{
 		delete pair.second;
 	}
 	m_pTextures.clear( );
+
+	for ( Texture* pTexture : m_pScreenFXTextures )
+	{
+		delete pTexture;
+	}
+	m_pScreenFXTextures.clear( );
 }
 
 void ResourcesLinker::PushPattern( const std::string& uid, const std::string& path, const PatternSettings& settings )

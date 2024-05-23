@@ -11,7 +11,7 @@
 StageManager::StageManager( Camera* pCamera, ResourcesLinker* pResourcesLinker )
 	: m_pCamera{ pCamera }
 	, m_pResourcesLinker{ pResourcesLinker }
-	, m_PlatformManager{}
+	, m_PlatformManager{ "csv/platform_layout.csv" }
 	, m_HUDManager{}
 	, m_IsHalted{ true }
 	, m_IsCameraFixed{ false }
@@ -100,11 +100,7 @@ void StageManager::CheckCollisions( )
 
 	for ( Card* pCard : m_pCards )
 	{
-		if ( pCard->CollidableEntity::CheckCollision( *m_pPlayer ) )
-		{
-			m_pPlayer->CardCollision( );
-			break;
-		}
+		m_pPlayer->CheckCollision( *pCard );
 	}
 	//m_pPlayer->CheckCollision( m_Cards[0] );
 }
@@ -122,6 +118,11 @@ const std::vector<NonInterractableProp>& StageManager::GetBackgroundProps( ) con
 const std::vector<NonInterractableProp>& StageManager::GetFrontgroundProps( ) const
 {
 	return m_FrontgroundProps;
+}
+
+PlatformManager const* StageManager::GetPlatformManager( ) const
+{
+	return &m_PlatformManager;
 }
 
 HUDManager const* StageManager::GetHUDManager( ) const

@@ -3,6 +3,11 @@
 #include "Texture.h"
 #include "Vector2f.h"
 
+Texture2D::Texture2D( )
+	: Texture2D( nullptr )
+{
+}
+
 Texture2D::Texture2D( Texture const* pTexture, const Vector2f& offset )
 	: mk_pTexture{ pTexture }
 	, mk_Offset{ offset }
@@ -11,7 +16,21 @@ Texture2D::Texture2D( Texture const* pTexture, const Vector2f& offset )
 
 void Texture2D::Draw( Texture const* pTexture, const Point2f& pos, const Rectf& srcRect, bool flipX, bool flipY ) const
 {
-	pTexture->Draw( pos + mk_Offset, srcRect, flipX, flipY );
+	Point2f position{ pos };
+	position.x += mk_Offset.x;
+
+	if ( flipY )
+	{
+		const float height{ 131.f };
+		position.y -= GetHeight() - height;
+		position.y -= mk_Offset.y;
+	}
+	else
+	{
+		position.y += mk_Offset.y;
+	}
+
+	pTexture->Draw( position , srcRect, flipX, flipY );
 }
 
 void Texture2D::Draw( ) const

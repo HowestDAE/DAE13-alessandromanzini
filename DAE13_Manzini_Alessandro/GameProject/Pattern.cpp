@@ -29,6 +29,7 @@ void Pattern::Draw( const Point2f& pos, bool flipX, bool flipY, bool flash ) con
 
 void Pattern::Draw( const Point2f& pos, float percentage ) const
 {
+	// giving a height of 0.f draws the entire image, therefore we must return
 	const float epsilon{ .0001f };
 	if ( percentage <= epsilon )
 	{

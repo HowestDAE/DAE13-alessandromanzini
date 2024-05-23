@@ -552,12 +552,12 @@ bool utils::Raycast( const Point2f* vertices, const size_t nrVertices, const Poi
 	r1.height = std::max( rayP1.y, rayP2.y ) - r1.bottom;
 
 	// Line-line intersections.
-	for ( size_t idx{ 0 }; idx <= nrVertices; ++idx )
+	for ( size_t idx{ 0 }; idx <= nrVertices - 1; ++idx )
 	{
 		// Consider line segment between 2 consecutive vertices
 		// (modulo to allow closed polygon, last - first vertice)
-		Point2f q1 = vertices[( idx + 0 ) % nrVertices];
-		Point2f q2 = vertices[( idx + 1 ) % nrVertices];
+		Point2f q1 = vertices[( idx + 0 )];
+		Point2f q2 = vertices[( idx + 1 )];
 
 		// r2: minimal AABB rect enclosing the 2 vertices
 		r2.left = std::min( q1.x, q2.x );

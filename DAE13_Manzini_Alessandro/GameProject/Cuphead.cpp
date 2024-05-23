@@ -18,6 +18,8 @@ Cuphead::Cuphead(const Point2f& position, HUDManager* pHUDManager )
 	, m_IFramesElapsedTime{}
 	, m_StandingCollisionManager{ std::vector<CollisionCircle>{ CollisionCircle{ 45.f, 30.f, 30.f, CollisionType::forceHit }, CollisionCircle{ 45.f, 75.f, 30.f, CollisionType::forceHit } }, &m_Location }
 	, m_DuckingCollisionManager{ std::vector<CollisionCircle>{ CollisionCircle{ 45.f, 30.f, 30.f, CollisionType::forceHit } }, &m_Location }
+	, m_ReversedStandingCollisionManager{ std::vector<CollisionCircle>{ CollisionCircle{ 45.f, 60.f, 30.f, CollisionType::forceHit }, CollisionCircle{ 45.f, 105.f, 30.f, CollisionType::forceHit } }, &m_Location }
+	, m_ReversedDuckingCollisionManager{ std::vector<CollisionCircle>{ CollisionCircle{ 45.f, 105.f, 30.f, CollisionType::forceHit } }, &m_Location }
 {
 	m_Velocity = Vector2f{ 0.f, 0.f };
 	SetCollisionManager( &m_StandingCollisionManager );
@@ -26,13 +28,16 @@ Cuphead::Cuphead(const Point2f& position, HUDManager* pHUDManager )
 
 void Cuphead::Draw( ) const
 {
-	m_WeaponManager.Draw( );
-
 	// Player should be drawn on top of projectiles
 	if ( !m_TextureFlashing )
 	{
 		Entity::Draw( );
 	}
+}
+
+void Cuphead::DrawProjectiles( ) const
+{
+	m_WeaponManager.Draw( );
 }
 
 void Cuphead::Update( float elapsedSec )
@@ -54,15 +59,15 @@ void Cuphead::KeyPressEvent( const SDL_KeyboardEvent& e )
 
 bool Cuphead::CheckCollision( PlatformManager const* pPlatformManager )
 {
-	const Vector2f displacement{ pPlatformManager->GetDisplacementFromPlatform( this ) };
-	bool collision{};
+	if ( !GetIsAlive( ) ) return false;
 
+	Vector2f displacement{};
+	const bool collision{ pPlatformManager->CheckCollision( this, displacement ) };
+	
 	if ( displacement.y )
 	{
 		m_Velocity.y = 0;
 		m_MovementManager.PlatformCollisionFeedback( );
-
-		collision = true;
 	}
 
 	m_Location += displacement;
@@ -71,16 +76,37 @@ bool Cuphead::CheckCollision( PlatformManager const* pPlatformManager )
 
 bool Cuphead::CheckCollision( CollidableEntity& other )
 {
-	m_WeaponManager.CheckCollision( other );
-	return CollidableEntity::CheckCollision( other );
+	if ( !GetIsAlive( ) ) return false;
+
+	const bool playerCollision{ CollidableEntity::CheckCollision( other ) };
+
+	if ( other.GetIsPink( ) )
+	{
+		if ( playerCollision && m_MovementManager.GetIsParrying( ) )
+		{
+			m_MovementManager.ParryCollisionFeedback( );
+			// other.die()
+			// weaponManager.increaseEx
+		}
+	}
+	else
+	{
+		m_WeaponManager.CheckCollision( other );
+	}
+	
+	return playerCollision;
 }
 
-void Cuphead::CardCollision( )
+bool Cuphead::CheckCollision( Card& card )
 {
-	if ( m_MovementManager.GetIsParrying( ) )
+	if ( CollidableEntity::CheckCollision( card ) && m_MovementManager.GetIsParrying( ) )
 	{
+		m_MovementManager.ParryCollisionFeedback( );
 		m_MovementManager.ToggleGravity( );
+
+		card.ParryCollisionFeedback( );
 	}
+	return false;
 }
 
 float Cuphead::GetTextureWidth( ) const
@@ -208,8 +234,15 @@ void Cuphead::TryShoot( )
 	// if cuphead is ducking, lower the projectile height
 	if ( m_MovementManager.GetMovementType( ) == MovementManager::MovementType::duck )
 	{
-		const float heightOffset{ 18.f };
+		const float heightOffset{ m_MovementManager.GetIsGravityReversed( ) ? -24.f : 18.f };
 		origin.y -= heightOffset;
+	}
+
+	if ( m_MovementManager.GetIsGravityReversed( ) 
+		&& rotation == 0.f )
+	{
+		const float heightOffset{ 14.f };
+		origin.y += heightOffset;
 	}
 
 	if ( m_MovementManager.GetIsExMove( ) )
@@ -225,12 +258,15 @@ void Cuphead::TryShoot( )
 void Cuphead::SelectTexture( )
 {
 	Texture2D* pSelectedTexture{};
+	CollisionManager* pCollisionManager{};
+
 	const MovementManager::AimDirection direction{ m_MovementManager.GetAimDirection() };
 	const MovementManager::MovementType movement{ m_MovementManager.GetMovementType() };
 	const bool flipX{ !m_MovementManager.GetIsFacingRight( ) }, flipY{};
 	const bool isShooting{ m_MovementManager.GetIsShooting( ) };
 	const bool isExing{ m_WeaponManager.RequireExMoveQueue( ) };
 	const bool isTransitioning{ m_MovementManager.GetIsTransitioning( ) };
+	const bool isReversed{ m_MovementManager.GetIsGravityReversed( ) };
 
 	if ( isExing )
 	{
@@ -238,7 +274,8 @@ void Cuphead::SelectTexture( )
 	}
 	else
 	{
-		SetCollisionManager( &m_StandingCollisionManager );
+		pCollisionManager = isReversed ? &m_ReversedStandingCollisionManager : &m_StandingCollisionManager;
+
 		switch ( movement )
 		{
 		case MovementManager::MovementType::idle:
@@ -246,7 +283,7 @@ void Cuphead::SelectTexture( )
 			break;
 		case MovementManager::MovementType::duck:
 			SelectDuck( isShooting, isTransitioning );
-			SetCollisionManager( &m_DuckingCollisionManager );
+			pCollisionManager = isReversed ? &m_ReversedDuckingCollisionManager : &m_DuckingCollisionManager;
 			break;
 		case MovementManager::MovementType::aim:
 			SelectAim( isShooting, direction );
@@ -267,6 +304,8 @@ void Cuphead::SelectTexture( )
 			SelectDashAir( );
 			break;
 		}
+
+		SetCollisionManager( pCollisionManager );
 	}
 }
 
@@ -403,10 +442,9 @@ void Cuphead::Kill( )
 {
 	Entity::Kill( );
 
-	QueueTexture( m_pGhostSprite );
 	m_TextureFlashing = false;
-
 	m_Velocity.Set( 0.f, Constants::sk_CupheadGhostSpeed );
 
 	m_MovementManager.Reset( );
+	QueueTexture( m_pGhostSprite );
 }

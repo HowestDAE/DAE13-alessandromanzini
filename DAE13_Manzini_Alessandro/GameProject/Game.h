@@ -30,6 +30,8 @@ private:
 	Camera* m_pCamera;
 	StageManager* m_pStageManager;
 
+	VectorSprite* m_pScreenFXTexture;
+
 	// FUNCTIONS
 	void Initialize();
 	void Cleanup( );

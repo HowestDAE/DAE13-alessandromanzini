@@ -100,11 +100,17 @@ void StageManager::InitializeEntities( )
 	m_pToyduck->LinkTexture( m_pResourcesLinker );
 	m_pEntities.push_back( m_pToyduck );
 
-
-	Card* currentCard{ new Card( Point2f{ 1000.f, 200.f } ) };
+	Card* currentCard{ new Card( Point2f{ 570.f, 300.f } ) };
 	currentCard->LinkTexture( m_pResourcesLinker );
 	m_pCards.push_back( currentCard );
 	m_pEntities.push_back( currentCard );
+
+	currentCard = new Card( Point2f{ 1210.f, 325.f } );
+	currentCard->LinkTexture( m_pResourcesLinker );
+	m_pCards.push_back( currentCard );
+	m_pEntities.push_back( currentCard );
+	
+	
 }
 
 void StageManager::InitializeHUD( )

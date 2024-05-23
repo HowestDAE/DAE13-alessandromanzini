@@ -1,6 +1,7 @@
 #pragma once
 struct CollisionInfo
 {
-	bool hollow;
+	bool selfHit;
+	bool otherHit;
 };
 

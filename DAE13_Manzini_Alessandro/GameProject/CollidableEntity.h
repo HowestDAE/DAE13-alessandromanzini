@@ -6,9 +6,10 @@ class CollisionManager;
 class CollidableEntity
 {
 public:
-	CollidableEntity( int contactDamage );
+	CollidableEntity( int contactDamage, bool isPink = false );
 
 	int GetContactDamage( ) const;
+	int GetIsPink( ) const;
 
 	CollisionManager const* GetCollisionManager( ) const;
 	void SetCollisionManager( CollisionManager const* pCollisionManager );
@@ -20,6 +21,7 @@ public:
 
 private:
 	const int mk_ContactDamage;
+	const bool mk_IsPink;
 
 	CollisionManager const* mk_pCollisionManager;
 };

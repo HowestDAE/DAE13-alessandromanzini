@@ -26,7 +26,9 @@ public:
 
 	void SetExingState( bool isExing );
 	void ToggleGravity( );
+
 	void PlatformCollisionFeedback( );
+	void ParryCollisionFeedback( );
 
 	void Update( float elapsedSec );
 	void UpdateVelocity( Vector2f& velocity, float elapsedSec );
@@ -62,11 +64,13 @@ private:
 	float m_AirborneAccumulatedTime;
 
 	bool m_IsParrying;
+	bool m_IsParried;
 
 	bool m_IsMoving;
 
 	bool m_IsGravityReversed;
 	Vector2f m_VelocityModifiers;
+	int m_GravityNormal;
 
 	void DefineState( );
 	void UpdateState( float elapsedSec );
@@ -77,6 +81,7 @@ private:
 	MovementType CalculateMovementType( ) const;
 	float CalculateAimAngle( ) const;
 	void AdjustMovementData( DirectionData& data, MovementType& movement );
+
 };
 
 enum class MovementManager::AimDirection

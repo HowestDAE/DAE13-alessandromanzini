@@ -30,6 +30,7 @@ public:
 	const std::vector<NonInterractableProp>& GetBackgroundProps( ) const;
 	const std::vector<NonInterractableProp>& GetFrontgroundProps( ) const;
 
+	PlatformManager const* GetPlatformManager( ) const;
 	HUDManager const* GetHUDManager( ) const;
 
 	Cuphead const* GetPlayer( ) const;

@@ -1,14 +1,21 @@
 #pragma once
-#include "Vector2f.h"
+#include "vector"
+#include "CollisionCircle.h"
 class Entity;
 
 class PlatformManager final
 {
 public:
-	PlatformManager( ) = default;
+	explicit PlatformManager( const std::string& mapLayoutCsvPath );
 
-	Vector2f GetDisplacementFromPlatform( Entity* pEntity ) const;
+	void Draw( ) const;
+	void Draw( Entity const* pEntity ) const;
+	bool CheckCollision( Entity* pEntity, Vector2f& displacement ) const;
 
 private:
+	std::vector<Point2f> m_MapVertices;
+
+	void Raycast( const CollisionCircle& circle, const Vector2f& location, Vector2f& displacement ) const;
+
 };
 

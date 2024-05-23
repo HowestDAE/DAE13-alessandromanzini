@@ -19,6 +19,7 @@ public:
 
 private:
 	std::vector<CollisionCircle> m_CollisionCircles;
-	Vector2f const* m_pDisplacementVector;
+	Vector2f const* mk_pDisplacementVector;
+
 };
 

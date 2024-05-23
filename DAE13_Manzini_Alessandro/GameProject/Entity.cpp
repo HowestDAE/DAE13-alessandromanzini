@@ -5,9 +5,9 @@
 #include "Texture2D.h"
 #include <stdexcept>
 
-Entity::Entity( const Point2f& position, int hp, int contactDamage )
+Entity::Entity( const Point2f& position, int hp, int contactDamage, bool isPink )
     : TexturedModel( position )
-    , CollidableEntity( contactDamage )
+    , CollidableEntity( contactDamage, isPink )
     , m_IsAlive{ true }
     , m_HP{ hp }
     , m_Velocity{}
@@ -72,10 +72,11 @@ void Entity::UpdateHitFlashing( float elapsedSec, float epsilonTime, bool toggle
 
 bool Entity::CheckCollision( PlatformManager const* pPlatformManager )
 {
-    const Vector2f displacement{ pPlatformManager->GetDisplacementFromPlatform( this ) };
+    Vector2f displacement{};
+    const bool collision{ pPlatformManager->CheckCollision( this, displacement ) };
+    
     m_Location += displacement;
-
-    return displacement.x || displacement.y;
+    return collision;
 }
 
 Vector2f Entity::GetVelocity( ) const
@@ -137,6 +138,11 @@ void Entity::QueueTexture( unsigned int index, Texture2D* pTexture, bool flipX, 
     }
 
     m_AnimationQueues[index].Enqueue( TextureInfo{ pTexture, flipX, flipY }, priority );
+}
+
+bool Entity::IsQueueReady( unsigned int index ) const
+{
+    return m_AnimationQueues[index].GetReady( );
 }
 
 void Entity::Kill( )

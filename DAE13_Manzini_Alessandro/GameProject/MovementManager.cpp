@@ -19,7 +19,9 @@ MovementManager::MovementManager( )
 	, m_IsAirborne{}
 	, m_AirborneAccumulatedTime{}
 	, m_IsParrying{}
+	, m_IsParried{}
 	, m_IsGravityReversed{}
+	, m_GravityNormal{ -1 } // default Gravity goes down
 	, m_IsMoving{}
 {
 	m_KeysStates.stopKeyPressed = true;
@@ -78,13 +80,22 @@ void MovementManager::SetExingState( bool isExing )
 void MovementManager::ToggleGravity( )
 {
 	m_IsGravityReversed = !m_IsGravityReversed;
+	m_GravityNormal *= -1;
+
+	m_AirborneAccumulatedTime = 0.f;
 }
 
 void MovementManager::PlatformCollisionFeedback( )
 {
 	m_IsAirborne = false;
 	m_IsParrying = false;
+	m_IsParried = false;
 	m_AirborneAccumulatedTime = 0.f;
+}
+
+void MovementManager::ParryCollisionFeedback( )
+{
+	m_IsParrying = false;
 }
 
 void MovementManager::Update( float elapsedSec )
@@ -111,7 +122,7 @@ void MovementManager::UpdateVelocity( Vector2f& velocity, float elapsedSec )
 		velocity.x = direction * Constants::sk_CupheadDashSpeed;
 
 		// store current y velocity when accelerating downwards in modifiers to apply it after dash
-		if ( velocity.y < 0.f )
+		if ( velocity.y * (-m_GravityNormal) < 0.f )
 		{
 			m_VelocityModifiers.y += velocity.y;
 		}
@@ -132,7 +143,8 @@ void MovementManager::UpdateVelocity( Vector2f& velocity, float elapsedSec )
 			}
 		}
 
-		velocity.y -= (Constants::sk_GravityPullSpeed * elapsedSec + Constants::sk_GravityPullAcceleration * m_AirborneAccumulatedTime);
+		const float gravityPull{ (Constants::sk_GravityPullSpeed * elapsedSec + Constants::sk_GravityPullAcceleration * m_AirborneAccumulatedTime) };
+		velocity.y += ( gravityPull * m_GravityNormal );
 		velocity += m_VelocityModifiers;
 		m_VelocityModifiers.Set( 0.f, 0.f );
 	}
@@ -201,10 +213,12 @@ void MovementManager::Reset( )
 	m_AirborneAccumulatedTime = 0.f;
 
 	m_IsParrying = false;
+	m_IsParried = false;
 
 	m_IsMoving = false;
 
 	m_IsGravityReversed = false;
+	m_GravityNormal = -1;
 	m_VelocityModifiers.Set( 0.f, 0.f );
 }
 
@@ -225,12 +239,13 @@ void MovementManager::DefineState( )
 
 		if ( !m_IsAirborne )
 		{
-			m_VelocityModifiers.y += Constants::sk_CupheadJumpSpeed;
+			m_VelocityModifiers.y += Constants::sk_CupheadJumpSpeed * ( -m_GravityNormal );
 			m_IsAirborne = true;
 		}
-		else
+		else if ( !m_IsParried )
 		{
-			m_IsParrying = true;
+ 			m_IsParrying = true;
+			m_IsParried = true;
 		}
 	}
 

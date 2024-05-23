@@ -11,6 +11,8 @@ public:
     virtual void Draw( ) const override;
     virtual void Update( float elapsedSec ) override;
 
+    void ParryCollisionFeedback( );
+
     virtual void LinkTexture( ResourcesLinker* pResourcesLinker ) override;
 
 private:
@@ -19,5 +21,6 @@ private:
     Sprite* m_pStarsSprite;
 
     CollisionManager m_CollisionManager;
+
 };
 

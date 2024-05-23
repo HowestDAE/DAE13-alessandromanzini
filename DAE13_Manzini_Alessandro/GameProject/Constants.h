@@ -5,6 +5,8 @@
 class Constants
 {
 public:
+	static const float sk_ScreenFXFrameDelay;
+
 	static const Point2f sk_HUD_HP_Position;
 	static const Point2f sk_HUD_Excards_Position;
 

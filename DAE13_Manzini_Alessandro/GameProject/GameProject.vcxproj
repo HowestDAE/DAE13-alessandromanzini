@@ -155,6 +155,7 @@ xcopy "$(SolutionDir)Resources\*.*" "$(TargetDir)" /y /d /s</Command>
     <ClCompile Include="CollisionInfo.cpp" />
     <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="Constants.cpp" />
+    <ClCompile Include="CSVReader.cpp" />
     <ClCompile Include="Cuphead.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="Game.cpp" />
@@ -173,14 +174,15 @@ xcopy "$(SolutionDir)Resources\*.*" "$(TargetDir)" /y /d /s</Command>
     <ClCompile Include="ResourcesLinker.cpp" />
     <ClCompile Include="Spread.cpp" />
     <ClCompile Include="Sprite.cpp" />
-    <ClCompile Include="SpriteManager.cpp" />
     <ClCompile Include="SpriteSettings.cpp" />
     <ClCompile Include="StageManager.cpp" />
     <ClCompile Include="StageManagerInit.cpp" />
+    <ClCompile Include="string_manip.cpp" />
     <ClCompile Include="TexturedModel.cpp" />
     <ClCompile Include="Texture2D.cpp" />
     <ClCompile Include="TextureInfo.cpp" />
     <ClCompile Include="Toyduck.cpp" />
+    <ClCompile Include="VectorSprite.cpp" />
     <ClCompile Include="Weapon.cpp" />
     <ClCompile Include="WeaponsManager.cpp" />
   </ItemGroup>
@@ -193,6 +195,7 @@ xcopy "$(SolutionDir)Resources\*.*" "$(TargetDir)" /y /d /s</Command>
     <ClInclude Include="CollisionInfo.h" />
     <ClInclude Include="CollisionManager.h" />
     <ClInclude Include="Constants.h" />
+    <ClInclude Include="CSVReader.h" />
     <ClInclude Include="Cuphead.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="Game.h" />
@@ -210,13 +213,13 @@ xcopy "$(SolutionDir)Resources\*.*" "$(TargetDir)" /y /d /s</Command>
     <ClInclude Include="ResourcesLinker.h" />
     <ClInclude Include="Spread.h" />
     <ClInclude Include="Sprite.h" />
-    <ClInclude Include="SpriteManager.h" />
     <ClInclude Include="SpriteSettings.h" />
     <ClInclude Include="StageManager.h" />
     <ClInclude Include="TexturedModel.h" />
     <ClInclude Include="Texture2D.h" />
     <ClInclude Include="TextureInfo.h" />
     <ClInclude Include="Toyduck.h" />
+    <ClInclude Include="VectorSprite.h" />
     <ClInclude Include="Weapon.h" />
     <ClInclude Include="WeaponsManager.h" />
   </ItemGroup>

@@ -2,8 +2,9 @@
 #include "CollidableEntity.h"
 #include "CollisionManager.h"
 
-CollidableEntity::CollidableEntity( int contactDamage )
+CollidableEntity::CollidableEntity( int contactDamage, bool isPink )
 	: mk_ContactDamage( contactDamage )
+	, mk_IsPink{ isPink }
 	, mk_pCollisionManager{}
 {
 }
@@ -11,6 +12,11 @@ CollidableEntity::CollidableEntity( int contactDamage )
 int CollidableEntity::GetContactDamage( ) const
 {
 	return mk_ContactDamage;
+}
+
+int CollidableEntity::GetIsPink( ) const
+{
+	return mk_IsPink;
 }
 
 CollisionManager const* CollidableEntity::GetCollisionManager( ) const
@@ -35,11 +41,8 @@ bool CollidableEntity::CheckCollision( CollidableEntity& other )
 
 	if ( mk_pCollisionManager->CheckCollision( *pOtherManager, collisionInfo ) )
 	{
-		if ( !collisionInfo.hollow )
-		{
-			Hit( other.GetContactDamage( ) );
-			other.Hit( GetContactDamage( ) );
-		}
+		if ( collisionInfo.selfHit ) Hit( other.GetContactDamage( ) );
+		if ( collisionInfo.otherHit ) other.Hit( GetContactDamage( ) );
 		return true;
 	}
 	return false;

@@ -4,12 +4,13 @@
 #include "Texture.h"
 
 
-Texture::Texture( const std::string& imagePath, bool flash )
+Texture::Texture( const std::string& imagePath, bool flash, bool opacityMap )
 	:m_Id{ }
 	,m_Width{ 10.0f }
 	,m_Height{ 10.0f }
 	,m_CreationOk{ false }
 	,m_Flash{ flash }
+	,m_OpacityMap{ opacityMap }
 {
 	CreateFromImage( imagePath );
 }
@@ -228,6 +229,28 @@ void Texture::CreateFromSurface( SDL_Surface* pSurface )
 					pixelData[index].B = 0xFF;
 					pixelData[index].A = pixelData[index].A < 200 ? 0x00 : alpha;
 				}
+			}
+		}
+	}
+	else if ( m_OpacityMap )
+	{
+		const int alpha{ 0x30 };
+		struct Pixel
+		{
+			unsigned char R, G, B, A;
+		};
+
+		Pixel* pixelData{ reinterpret_cast<Pixel*>(pSurface->pixels) };
+		for ( int i{}; i < pSurface->h; ++i )
+		{
+			for ( int j{}; j < pSurface->w; ++j )
+			{
+				const int index{ i * pSurface->w + j };
+				pixelData[index].A = (pixelData[index].R + pixelData[index].G + pixelData[index].B) / 3.f;
+				pixelData[index].R = 0xFF;
+				pixelData[index].G = 0xFF;
+				pixelData[index].B = 0xFF;
+
 			}
 		}
 	}

@@ -52,6 +52,7 @@ void Camera::Draw( ) const
 		DrawBackground( m_pStageManager->GetBackgroundProps() ); // Draw background, midground
 		DrawEntities( );
 		DrawBackground( m_pStageManager->GetFrontgroundProps( ) ); // Draw frontground
+		DrawPlatform( );
 	}
 	glPopMatrix( );
 
@@ -73,6 +74,15 @@ void Camera::Update( float elapsedSec )
 		const float relativeSpeed{ waveCoefficient * smk_CameraMaxSpeed * elapsedSec };
 		m_CameraLocationVector += m_CameraTranslationVector.Normalized( ) * relativeSpeed;
 	}
+}
+
+void Camera::DrawPlatform( ) const
+{
+	PlatformManager const* pPlatformManager{ m_pStageManager->GetPlatformManager( ) };
+	Cuphead const* pCuphead{ m_pStageManager->GetPlayer( ) };
+
+	pPlatformManager->Draw( );
+	pPlatformManager->Draw( pCuphead );
 }
 
 void Camera::DrawHUD( ) const
@@ -105,6 +115,8 @@ void Camera::DrawEntities( ) const
 	{
 		pEntity->Draw( );
 	}
+
+	m_pStageManager->GetPlayer( )->DrawProjectiles( );
 }
 
 float Camera::GetXParallaxRatio( int depth ) const
