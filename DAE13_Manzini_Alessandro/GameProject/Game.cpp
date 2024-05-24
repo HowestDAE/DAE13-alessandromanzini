@@ -23,7 +23,7 @@ void Game::Initialize( )
 
 	m_pStageManager->Start( );
 
-	m_pScreenFXTexture = m_pResourcesLinker->GetScreenFXTexture( );
+	//m_pScreenFXTexture = m_pResourcesLinker->GetScreenFXTexture( );
 }
 
 void Game::Cleanup( )
@@ -42,7 +42,7 @@ void Game::Update( float elapsedSec )
 	m_pStageManager->Update( elapsedSec );
 	m_pCamera->Update( elapsedSec );
 
-	m_pScreenFXTexture->Update( elapsedSec );
+	//m_pScreenFXTexture->Update( elapsedSec );
 }
 
 void Game::Draw( ) const
@@ -51,7 +51,7 @@ void Game::Draw( ) const
 
 	m_pCamera->Draw( );
 
-	m_pScreenFXTexture->Draw( GetViewPort() );
+	//m_pScreenFXTexture->Draw( GetViewPort() );
 }
 
 void Game::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )

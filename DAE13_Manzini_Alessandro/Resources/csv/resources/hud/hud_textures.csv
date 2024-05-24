@@ -1,0 +1,7 @@
+label; path;
+hud_hp_dead;ui/hud/ST_hud_hp_dead.png;
+hud_hp_1;ui/hud/AS_hud_hp_1_1x2.png;
+hud_hp_2;ui/hud/ST_hud_hp_2.png;
+hud_hp_3;ui/hud/ST_hud_hp_3.png;
+excard_faceup;ui/hud/ST_hud_excard_faceup.png;
+excard_facedown;ui/hud/ST_hud_excard_facedown.png;

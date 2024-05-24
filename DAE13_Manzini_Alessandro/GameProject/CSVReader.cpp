@@ -45,6 +45,16 @@ float CSVReader::GetFloat( int index ) const
 	return std::stof( Get( index ) );
 }
 
+bool CSVReader::GetBoolean( const std::string& label ) const
+{
+	return GetInt( label );
+}
+
+bool CSVReader::GetBoolean( int index ) const
+{
+	return GetInt( index );
+}
+
 int CSVReader::size( ) const
 {
 	return m_DataLines.size( );
@@ -70,8 +80,16 @@ void CSVReader::LoadDataFromFile( const std::string& csvPath )
 	int separatorCount{};
 
 	csv.open( csvPath );
+	if ( !csv )
+	{
+		throw std::invalid_argument( "Couldn't open file at '" + csvPath + "'" );
+	}
+
 	while ( std::getline( csv, line ) ) // while there are lines, keep reading
 	{
+		trim( line );
+		if ( line.empty( ) ) continue; // avoid blank lines
+
 		int readerPos{};
 		int separatorPos;
 

@@ -45,8 +45,14 @@ private:
 
 	void ReleaseTextures( );
 
+	void LoadTexturesFromFile( const std::string& csvPath, bool flash = false );
+	void LoadSpriteSettingsFromFile( const std::string& csvPath );
+	void LoadPatternSettingsFromFile( const std::string& csvPath );
+
 	void PushPattern( const std::string& uid, const std::string& path, const PatternSettings& settings = {} );
 	void PushSprite( const std::string& uid, const std::string& path, const SpriteSettings& settings );
+
+	void FillSettingsMap( );
 };
 
 enum class ResourcesLinker::TextureType

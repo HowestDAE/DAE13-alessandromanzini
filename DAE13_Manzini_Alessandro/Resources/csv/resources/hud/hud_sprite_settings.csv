@@ -1,0 +1,2 @@
+label; rows; cols; delay; boomerang; x; y; mustcomplete;
+hud_hp_1; 1; 2; 0.2f; 0; 0.f; 0.f; 0;

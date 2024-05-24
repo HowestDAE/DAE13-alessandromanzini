@@ -1,0 +1,57 @@
+label; path; 
+bg5_bg_loop; background/STL_bg5_bg.png; 
+
+bg4_curtain_loop; background/part1/bg4/STL_bg4_curtain_16.png; 
+
+bg3_moon; background/part1/bg3/ST_bg3_moon_11.png; 
+bg3_rocks_loop; background/part1/bg3/STL_bg3_rocks_12.png; 
+bg3_cloud1; background/part1/bg3/ST_bg3_cloud1_13.png; 
+bg3_cloud2; background/part1/bg3/ST_bg3_cloud2_14.png; 
+bg3_startcurtains; background/part1/bg3/ST_bg3_start_curtains_15.png; 
+
+bg2_entrance; background/part1/bg2/ST_bg2_entrance_04.png; 
+bg2_blueplant; background/part1/bg2/ST_bg2_blue_plant_05.png; 
+bg2_startrock; background/part1/bg2/ST_bg2_start_rock_06.png; 
+bg2_rocks_loop; background/part1/bg2/STL_bg2_rocks_07.png; 
+bg2_star1; background/part1/bg2/ST_bg2_star1_08.png; 
+bg2_star2; background/part1/bg2/ST_bg2_star2_09.png; 
+bg2_star3; background/part1/bg2/ST_bg2_star3_10.png; 
+
+bg1_cloud1; background/part1/bg1/ST_bg1_cloud1_01.png; 
+bg1_blueplant; background/part1/bg1/ST_bg1_blue_plant_02.png; 
+bg1_greyplant; background/part1/bg1/ST_bg1_grey_plant_03.png; 
+
+mg2_blueplant; background/part1/mg2/ST_mg2_blue_plant_23.png; 
+mg2_craterstart; background/part1/mg2/ST_mg2_crater_start_24.png; 
+mg2_frogbot; background/part1/mg2/ST_mg2_frogbot_25.png; 
+mg2_mantis; background/part1/mg2/ST_mg2_mantis_26.png; 
+mg2_trunk; background/part1/mg2/ST_mg2_trunk_27.png; 
+mg2_crater_loop; background/part1/mg2/STL_mg2_crater_28.png; 
+mg2_star1; background/part1/mg2/AS_mg2_star1_29.png; 
+mg2_star2; background/part1/mg2/AS_mg2_star2_30.png; 
+
+mg1_greyplant; background/part1/mg1/ST_mg1_grey_plant_17.png; 
+mg1_rock1; background/part1/mg1/ST_mg1_rock1_18.png; 
+mg1_rock2; background/part1/mg1/ST_mg1_rock2_19.png; 
+mg1_startfloor; background/part1/mg1/ST_mg1_start_floor_20.png; 
+mg1_floor_loop; background/part1/mg1/STL_mg1_floor_21.png; 
+mg1_topfloor_loop; background/part1/mg1/STL_mg1_top_floor_22.png; 
+
+fg3_blueplant; background/part1/fg3/ST_fg3_blue_plant_35.png; 
+fg3_topgreyplant; background/part1/fg3/ST_fg3_grey_plant_roof_36.png;
+fg3_greyplant; background/part1/fg3/ST_fg3_grey_plant_37.png; 
+fg3_rock1; background/part1/fg3/ST_fg3_rock1_38.png; 
+fg3_startcurtain; background/part1/fg3/ST_fg3_start_curtain_39.png;
+fg3_curtain; background/part1/fg3/ST_fg3_curtain_40.png; 
+fg3_startprops; background/part1/fg3/ST_fg3_start_props_41.png; 
+fg3_trunk; background/part1/fg3/ST_fg3_trunk_42.png; 
+fg3_rock2; background/part1/fg3/ST_fg3_rock2_43.png; 
+fg3_rock3; background/part1/fg3/ST_fg3_rock3_44.png; 
+fg3_rock4; background/part1/fg3/ST_fg3_rock4_45.png; 
+fg3_blueplant2; background/part1/fg3/ST_fg3_blue_plant2_46.png; 
+
+fg2_star1; background/part1/fg2/ST_fg2_star1_32.png; 
+fg2_frogbot; background/part1/fg2/ST_fg2_frogbot_33.png; 
+fg2_planet; background/part1/fg2/ST_fg2_planet_34.png; 
+
+fg1_star; background/part1/fg1/ST_fg1_star1_31.png; 

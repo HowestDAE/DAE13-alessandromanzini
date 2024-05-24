@@ -15,6 +15,9 @@ public:
 	float GetFloat( const std::string& label ) const;
 	float GetFloat( int index ) const;
 
+	bool GetBoolean( const std::string& label ) const;
+	bool GetBoolean( int index ) const;
+
 	int size( ) const;
 
 	bool next( ); 
