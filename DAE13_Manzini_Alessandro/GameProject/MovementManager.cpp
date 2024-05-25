@@ -156,14 +156,28 @@ void MovementManager::KeyPressEvent( const SDL_KeyboardEvent& e )
 	switch ( e.keysym.sym )
 	{
 	case SDLK_UP:
-		m_KeysStates.faceUpKeyPressed = pressed;
+		if ( !m_IsGravityReversed )
+		{
+			m_KeysStates.faceUpKeyPressed = pressed;
+		}
+		else
+		{
+			m_KeysStates.faceDownKeyPressed = pressed;
+		}
 		break;
 	case SDLK_LEFT:
 		m_KeysStates.faceLeftKeyPressed = pressed;
 		m_KeysStates.faceRightOverride = !pressed;
 		break;
 	case SDLK_DOWN:
-		m_KeysStates.faceDownKeyPressed = pressed;
+		if ( !m_IsGravityReversed )
+		{
+			m_KeysStates.faceDownKeyPressed = pressed;
+		}
+		else
+		{
+			m_KeysStates.faceUpKeyPressed = pressed;
+		}
 		break;
 	case SDLK_RIGHT:
 		m_KeysStates.faceRightKeyPressed = pressed;
@@ -312,6 +326,7 @@ MovementManager::DirectionData MovementManager::CalculateAimDirection( ) const
 	}
 
 	directionData.direction = static_cast<AimDirection>( int( directionData.direction ) + mod ); // Direction is casted as offset + variation
+	
 	return directionData;
 }
 

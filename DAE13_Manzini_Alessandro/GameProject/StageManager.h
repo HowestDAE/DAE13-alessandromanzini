@@ -16,16 +16,19 @@ class StageManager final
 {
 public:
 	explicit StageManager( Camera* pCamera, ResourcesLinker* pResourcesLinker );
-	StageManager( const StageManager& other ) = delete;
-	StageManager& operator=( const StageManager& rhs ) = delete;
 	~StageManager();
+	StageManager( const StageManager& other ) = delete;
+	StageManager( StageManager&& other ) = delete;
+	StageManager& operator=( const StageManager& rhs ) = delete;
+	StageManager& operator=( StageManager&& rhs ) = delete;
 
-	void Start( );
-	void Pause( );
+	void Start( ) noexcept;
 
 	void Update( float elapsedSec );
 	
 	void KeyPressEvent( const SDL_KeyboardEvent& e );
+
+	bool GetIsHalted( ) const;
 
 	const std::vector<NonInterractableProp>& GetBackgroundProps( ) const;
 	const std::vector<NonInterractableProp>& GetFrontgroundProps( ) const;
@@ -60,14 +63,17 @@ private:
 #pragma endregion
 
 	void Initialize( );
-	void InitializeProps( );
+	void InitializeProps( const std::string& propsCsvPath );
 	void InitializeEntities( );
 	void InitializeHUD( );
 	void CreateNIP( BackgroundScope scope, const std::string& uid, const Point2f& position, float scale = 1.f  );
 
+	void LoadLevelStartAnimation( );
+
+	void Pause( ) noexcept;
+
 	void UpdateBackground( float elapsedSec );
 	void UpdateEntities( float elapsedSec );
-	void UpdateProjectiles( float elapsedSec );
 
 	void CheckCollisions( );
 

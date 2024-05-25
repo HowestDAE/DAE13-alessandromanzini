@@ -57,7 +57,7 @@ bool CSVReader::GetBoolean( int index ) const
 
 int CSVReader::size( ) const
 {
-	return m_DataLines.size( );
+	return static_cast<int>( m_DataLines.size( ) );
 }
 
 bool CSVReader::next( )
@@ -105,7 +105,7 @@ void CSVReader::LoadDataFromFile( const std::string& csvPath )
 
 			m_DataLines.back( ).push_back( std::move( field ) );
 
-			separatorCount = m_DataLines.size( );
+			separatorCount = static_cast<int>( m_DataLines.size( ) );
 			readerPos = separatorPos + 1;
 		}
 	}

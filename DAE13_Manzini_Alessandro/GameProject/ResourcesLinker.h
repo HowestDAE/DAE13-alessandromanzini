@@ -13,8 +13,12 @@ class ResourcesLinker final
 {
 public:
 	ResourcesLinker( );
-	ResourcesLinker( const ResourcesLinker& other ) = delete;
 	~ResourcesLinker( );
+
+	ResourcesLinker( const ResourcesLinker& other ) = delete;
+	ResourcesLinker( ResourcesLinker&& other ) = delete;
+	ResourcesLinker& operator=( const ResourcesLinker& rhs ) = delete;
+	ResourcesLinker& operator=( ResourcesLinker&& rhs ) = delete;
 
 	Texture2D* GetTexture( const std::string& uid );
 	Sprite* GetSprite( const std::string& uid );
@@ -22,9 +26,9 @@ public:
 
 	VectorSprite* GetScreenFXTexture( );
 
-	void ClearInstantiated( );
+	static std::string GetFontPath( );
 
-	ResourcesLinker& operator=( const ResourcesLinker& rhs ) = delete;
+	void ClearInstantiated( );
 
 private:
 	enum class TextureType;
@@ -36,7 +40,6 @@ private:
 	std::unordered_map<std::string, TextureType> m_TextureTypeMap;
 	std::unordered_map<std::string, PatternSettings> m_PatternSettingsMap;
 	std::unordered_map<std::string, SpriteSettings> m_SpriteSettingsMap;
-	
 
 	void InitializeTextures( );
 	void InitializeEntities( );

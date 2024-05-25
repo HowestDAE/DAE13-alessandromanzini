@@ -34,6 +34,18 @@ void AnimationQueue::NextAnimation( TextureInfo& textureInfo )
     }
 }
 
+void AnimationQueue::NextAnimation( TextureInfo& textureInfo, bool )
+{
+    if ( GetReady( ) && textureInfo.pTexture && textureInfo.pTexture->GetIsReady( ) )
+    {
+        textureInfo.pTexture = nullptr;
+    }
+    else
+    {
+        NextAnimation( textureInfo );
+    }
+}
+
 void AnimationQueue::Enqueue( const TextureInfo& textureInfo, bool priority )
 {
     if ( textureInfo.pTexture == nullptr )

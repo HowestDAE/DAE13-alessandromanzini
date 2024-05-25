@@ -1,0 +1,73 @@
+label; depth; x; y;
+bg5_bg_loop; 6; 0.f; 0.f;
+
+bg4_curtain_loop; 5; 300.f; 230.f;
+
+bg3_startcurtains; 4; 825.f; 430.f;
+bg3_moon; 4; 2150.f; 230.f;
+bg3_rocks_loop; 4; 280.f; 200.f;
+bg3_cloud1; 4; 2010.f; 480.f;
+bg3_cloud2; 4; 4020.f; 435.f;
+
+bg2_rocks_loop; 3; 200.f; 175.f;
+bg2_entrance; 3; -30.f; -30.f;
+bg2_star1; 3; 1400.f; 410.f;
+bg2_star2; 3; 2245.f; 440.f;
+bg2_blueplant; 3; 2705.f; 230.f;
+bg2_star3; 3; 3000.f; 410.f;
+bg2_star1; 3; 4225.f; 430.f;
+bg2_star2; 3; 4625.f; 465.f;
+
+bg2_startrock; 2; 800.f; 150.f;
+bg1_cloud1; 2; 1262.f; 530.f;
+bg1_cloud1; 2; 3500.f; 466.f;
+bg1_greyplant; 2; 3590.f; 210.f;
+bg1_blueplant; 2; 3890.f; 170.f;
+
+mg2_mantis; 1; 2035.f; 215.f;
+mg2_craterstart; 1; 780.f; 127.f;
+mg2_crater_loop; 1; 1283.f; 127.f;
+mg2_trunk; 1; 977.f; 247.f;
+mg2_star1; 1; 780.f; 385.f;
+mg2_star2; 1; 1430.f; 335.f;
+mg2_star1; 1; 3130.f; 335.f;
+mg2_star2; 1; 4505.f; 355.f;
+mg2_blueplant; 1; 2180.f; 110.f;
+mg2_frogbot; 1; 5010.f; 220.f;
+
+mg1_rock1; 0; 1105.f; 120.f;
+mg1_rock1; 0; 3500.f; 135.f;
+mg1_rock2; 0; 5176.f; 120.f;
+mg1_greyplant; 0; 5420.f; 90.f;
+mg1_startfloor; 0; 611.f; -37.5f;
+mg1_floor_loop; 0; 1082.f; -33.f;
+mg1_topfloor_loop; 0; 0.f; 600.f;
+
+fg3_startcurtain; -1; -54.f; 477.f;
+fg3_curtain; -1; 150.f; 460.f;
+fg3_startprops; -1; 41.f; -67.f;
+fg3_rock2; -1; 945; -190.f;
+fg3_greyplant; -1; 1180; -110.f;
+fg3_blueplant; -1; 1691.f; -95.f;
+fg3_rock1; -1; 1455.f; 585.f;
+fg3_rock3; -1; 2045.f; 630.f;
+fg3_trunk; -1; 2490.f; -190.f;
+fg3_rock4; -1; 3400.f; 500.f;
+fg3_rock2; -1; 4950.f; -150.f;
+fg3_curtain; -1; 4900.f; 530.f;
+fg3_blueplant2; -1; 4850.f; 590.f;
+fg3_greyplant; -1; 5705; -100.f;
+fg3_topgreyplant; -1; 6250; 600.f;
+fg3_blueplant; -1; 6580.f; -145.f;
+fg3_blueplant2; -1; 6710.f; 565.f;
+
+fg2_star1; -2; 1330.f; 485.f;
+fg2_star1; -2; 3030.f; 485.f;
+fg2_star1; -2; 4580.f; 525.f;
+fg2_star1; -2; 5835.f; 515.f;
+fg2_frogbot; -2; 4030.f; -190.f;
+fg2_frogbot; -2; 6900.f; -230.f;
+fg2_planet; -2; 5745.f; -195.f;
+
+fg1_star; -3; 882.f; 470.f;
+fg1_star; -3; 2600.f; 472.f }; .8f;

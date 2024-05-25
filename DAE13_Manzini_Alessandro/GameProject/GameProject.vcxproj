@@ -176,11 +176,12 @@ xcopy "$(SolutionDir)Resources\*.*" "$(TargetDir)" /y /d /s</Command>
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="SpriteSettings.cpp" />
     <ClCompile Include="StageManager.cpp" />
-    <ClCompile Include="StageManagerInit.cpp" />
+    <ClCompile Include="StringTexture.cpp" />
     <ClCompile Include="string_manip.cpp" />
     <ClCompile Include="TexturedModel.cpp" />
     <ClCompile Include="Texture2D.cpp" />
     <ClCompile Include="TextureInfo.cpp" />
+    <ClCompile Include="TitleScreenManager.cpp" />
     <ClCompile Include="Toyduck.cpp" />
     <ClCompile Include="VectorSprite.cpp" />
     <ClCompile Include="Weapon.cpp" />
@@ -215,9 +216,11 @@ xcopy "$(SolutionDir)Resources\*.*" "$(TargetDir)" /y /d /s</Command>
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="SpriteSettings.h" />
     <ClInclude Include="StageManager.h" />
+    <ClInclude Include="StringTexture.h" />
     <ClInclude Include="TexturedModel.h" />
     <ClInclude Include="Texture2D.h" />
     <ClInclude Include="TextureInfo.h" />
+    <ClInclude Include="TitleScreenManager.h" />
     <ClInclude Include="Toyduck.h" />
     <ClInclude Include="VectorSprite.h" />
     <ClInclude Include="Weapon.h" />

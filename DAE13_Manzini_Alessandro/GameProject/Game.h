@@ -3,6 +3,9 @@
 #include "ResourcesLinker.h"
 #include "Camera.h"
 #include "StageManager.h"
+#include "TitleScreenManager.h"
+
+enum class GameState;
 
 class Game : public BaseGame
 {
@@ -26,14 +29,31 @@ public:
 	void ProcessMouseUpEvent( const SDL_MouseButtonEvent& e ) override;
 
 private:
+	GameState m_GameState;
+
 	ResourcesLinker* m_pResourcesLinker;
 	Camera* m_pCamera;
 	StageManager* m_pStageManager;
 
 	VectorSprite* m_pScreenFXTexture;
 
+	TitleScreenManager* m_pTitleScreenManager;
+
 	// FUNCTIONS
 	void Initialize();
+	void InitializeGameResources( );
 	void Cleanup( );
+	void CleanupGameResources( bool deepClean = false );
 	void ClearBackground( ) const;
+
+	void StartGame( );
+
+	void ProcessTitleManagerState( );
+};
+
+enum class GameState
+{
+	title,
+	stage,
+	success
 };

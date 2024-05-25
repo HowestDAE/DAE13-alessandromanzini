@@ -1,0 +1,6 @@
+label; path;
+title_screen; screen/ST_title_screen.png;
+controls_screen; screen/ST_controls_screen.png;
+iris_transition; screen/AS_iris_transition_7x3.png;
+run_n_gun; screen/AS_runngun_5x3.png;
+bravo; screen/AS_bravo_9x3.png;

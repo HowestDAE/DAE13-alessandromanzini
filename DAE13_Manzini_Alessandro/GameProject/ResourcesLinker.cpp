@@ -64,6 +64,11 @@ VectorSprite* ResourcesLinker::GetScreenFXTexture( )
 	return pTexture;
 }
 
+std::string ResourcesLinker::GetFontPath( )
+{
+	return std::string( "F_cuphead_vogue_xbold.otf" );
+}
+
 void ResourcesLinker::ClearInstantiated( )
 {
 	for ( Texture2D* pTexture : m_pInstantiatedTextures )
@@ -77,7 +82,7 @@ void ResourcesLinker::InitializeTextures( )
 {
 	InitializeEntities( );
 	InitializeBackgroundProps( );
-	//InitializeScreens( );
+	InitializeScreens( );
 
 	//FillSettingsMap( );
 }
@@ -93,22 +98,21 @@ void ResourcesLinker::InitializeEntities( )
 	LoadSpriteSettingsFromFile( "csv/resources/hud/hud_sprite_settings.csv" );
 
 	// Weapons
-	LoadTexturesFromFile( "csv/resources/weapons/peashooter_textures.csv", true );
-	LoadSpriteSettingsFromFile( "csv/resources/weapons/peashooter_sprite_settings.csv" );
+	LoadTexturesFromFile( "csv/resources/weapon/peashooter_textures.csv", true );
+	LoadSpriteSettingsFromFile( "csv/resources/weapon/peashooter_sprite_settings.csv" );
 
 	// -- ENEMIES --
 	// Card
-	LoadTexturesFromFile( "csv/resources/enemies/card/card_textures.csv", true );
-	LoadSpriteSettingsFromFile( "csv/resources/enemies/card/card_sprite_settings.csv" );
+	LoadTexturesFromFile( "csv/resources/enemy/card/card_textures.csv", true );
+	LoadSpriteSettingsFromFile( "csv/resources/enemy/card/card_sprite_settings.csv" );
 
 	// Toyduck
-	LoadTexturesFromFile( "csv/resources/enemies/toyduck/toyduck_textures.csv", true );
-	LoadSpriteSettingsFromFile( "csv/resources/enemies/toyduck/toyduck_sprite_settings.csv" );
+	LoadTexturesFromFile( "csv/resources/enemy/toyduck/toyduck_textures.csv", true );
+	LoadSpriteSettingsFromFile( "csv/resources/enemy/toyduck/toyduck_sprite_settings.csv" );
 }
 
 void ResourcesLinker::InitializeBackgroundProps( )
 {
-
 	// part 1
 	LoadTexturesFromFile( "csv/resources/background/bg_part1_textures.csv" );
 	LoadPatternSettingsFromFile( "csv/resources/background/bg_part1_pattern_settings.csv" );
@@ -118,7 +122,7 @@ void ResourcesLinker::InitializeBackgroundProps( )
 void ResourcesLinker::InitializeScreens( )
 {
 	// Screen FX
-	{
+	/*{
 		const int screenFxCount{ 127 };
 		const std::string basePath{ "screen/ST_screen_fx/cuphead_screen_fx_" };
 		
@@ -130,7 +134,9 @@ void ResourcesLinker::InitializeScreens( )
 			m_pScreenFXTextures[i] = new Texture( path + std::to_string( i ) + ".png", false, true );
 
 		}
-	}
+	}*/
+	LoadTexturesFromFile( "csv/resources/screen/screen_textures.csv" );
+	LoadSpriteSettingsFromFile( "csv/resources/screen/screen_sprite_settings.csv" );
 }
 
 void ResourcesLinker::ReleaseTextures( )

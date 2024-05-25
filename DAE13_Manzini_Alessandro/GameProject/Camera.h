@@ -1,5 +1,6 @@
 #pragma once
 #include "Vector2f.h"
+#include "AnimationQueue.h"
 #include <vector>
 class NonInterractableProp;
 class StageManager;
@@ -16,6 +17,9 @@ public:
 	void Draw( ) const;
 	void Update( float elapsedSec );
 
+	void QueueScreenTexture( Texture2D* pTexture );
+	void FeedInScreenTexture( );
+
 private:
 	StageManager const* m_pStageManager;
 
@@ -30,11 +34,16 @@ private:
 	Vector2f m_CameraTranslationVector;
 	Vector2f m_AimLocationVector;
 
+	AnimationQueue m_ScreenOverlayQueue;
+	TextureInfo m_ScreenTexture;
+
 	void DrawPlatform( ) const;
 	void DrawHUD( ) const;
+	void DrawScreenOverlay( ) const;
 	void DrawBackground( const std::vector<NonInterractableProp>& props ) const;
 	void DrawEntities( ) const;
-	void DrawProjectiles( ) const;
+
+	void UpdateScreenOverlay( float elapsedSec );
 
 	float GetXParallaxRatio( int depth ) const;
 };

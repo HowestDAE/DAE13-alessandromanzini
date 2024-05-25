@@ -3,7 +3,6 @@
 #include "StageManager.h"
 #include "Projectile.h"
 #include "NonInterractableProp.h"
-#include "ResourcesLinker.h"
 #include "HUDManager.h"
 #include "Cuphead.h"
 #include "Toyduck.h"
@@ -22,6 +21,8 @@ Camera::Camera( const Rectf& viewPort )
 	, m_CameraLocationVector{}
 	, m_CameraTranslationVector{}
 	, m_AimLocationVector{}
+	, m_ScreenOverlayQueue{}
+	, m_ScreenTexture{}
 {
 }
 
@@ -57,6 +58,7 @@ void Camera::Draw( ) const
 	glPopMatrix( );
 
 	DrawHUD( );
+	DrawScreenOverlay( );
 }
 
 void Camera::Update( float elapsedSec )
@@ -74,6 +76,18 @@ void Camera::Update( float elapsedSec )
 		const float relativeSpeed{ waveCoefficient * smk_CameraMaxSpeed * elapsedSec };
 		m_CameraLocationVector += m_CameraTranslationVector.Normalized( ) * relativeSpeed;
 	}
+
+	UpdateScreenOverlay( elapsedSec );
+}
+
+void Camera::QueueScreenTexture( Texture2D* pTexture )
+{
+	m_ScreenOverlayQueue.Enqueue( TextureInfo{ pTexture, false, false } );
+}
+
+void Camera::FeedInScreenTexture( )
+{
+	m_ScreenOverlayQueue.NextAnimation( m_ScreenTexture, true );
 }
 
 void Camera::DrawPlatform( ) const
@@ -90,6 +104,14 @@ void Camera::DrawHUD( ) const
 	const HUDManager* pHUDManager{ m_pStageManager->GetHUDManager( ) };
 
 	pHUDManager->Draw( );
+}
+
+void Camera::DrawScreenOverlay( ) const
+{
+	if ( m_ScreenTexture.pTexture )
+	{
+		m_ScreenTexture.pTexture->Draw( Point2f{ 0.f, 0.f } );
+	}
 }
 
 void Camera::DrawBackground( const std::vector<NonInterractableProp>& props ) const
@@ -117,6 +139,15 @@ void Camera::DrawEntities( ) const
 	}
 
 	m_pStageManager->GetPlayer( )->DrawProjectiles( );
+}
+
+void Camera::UpdateScreenOverlay( float elapsedSec )
+{
+	FeedInScreenTexture( );
+	if ( m_ScreenTexture.pTexture )
+	{
+		m_ScreenTexture.pTexture->Update( elapsedSec ); 
+	}
 }
 
 float Camera::GetXParallaxRatio( int depth ) const

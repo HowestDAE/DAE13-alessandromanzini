@@ -30,6 +30,9 @@
     <Filter Include="Artifacts\Weapons">
       <UniqueIdentifier>{898ff4ce-a0bf-4bf3-87cd-da0d57645de3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Managers\Screen">
+      <UniqueIdentifier>{207e4a22-5e84-409d-8696-c57b5a7d0063}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp">
@@ -67,9 +70,6 @@
     </ClCompile>
     <ClCompile Include="Constants.cpp">
       <Filter>Helpers</Filter>
-    </ClCompile>
-    <ClCompile Include="StageManagerInit.cpp">
-      <Filter>Managers</Filter>
     </ClCompile>
     <ClCompile Include="Entity.cpp">
       <Filter>Artifacts</Filter>
@@ -144,6 +144,12 @@
       <Filter>Helpers</Filter>
     </ClCompile>
     <ClCompile Include="VectorSprite.cpp">
+      <Filter>Managers\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="TitleScreenManager.cpp">
+      <Filter>Managers\Screen</Filter>
+    </ClCompile>
+    <ClCompile Include="StringTexture.cpp">
       <Filter>Managers\Texture</Filter>
     </ClCompile>
   </ItemGroup>
@@ -251,6 +257,12 @@
       <Filter>Helpers</Filter>
     </ClInclude>
     <ClInclude Include="VectorSprite.h">
+      <Filter>Managers\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="TitleScreenManager.h">
+      <Filter>Managers\Screen</Filter>
+    </ClInclude>
+    <ClInclude Include="StringTexture.h">
       <Filter>Managers\Texture</Filter>
     </ClInclude>
   </ItemGroup>

@@ -22,7 +22,10 @@ void TexturedModel::DrawTextureOutline( ) const
 
 void TexturedModel::Draw( const TextureInfo& textureInfo ) const
 {
-	textureInfo.pTexture->Draw( m_Location.ToPoint2f( ), textureInfo.flipX, textureInfo.flipY, m_TextureFlashing );
+	if ( textureInfo.pTexture )
+	{
+		textureInfo.pTexture->Draw( m_Location.ToPoint2f( ), textureInfo.flipX, textureInfo.flipY, m_TextureFlashing );
+	}
 }
 
 void TexturedModel::Draw( Texture2D const* pTexture ) const

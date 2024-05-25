@@ -1,0 +1,3 @@
+label; rows; cols; delay; boomerang; x; y; mustcomplete;
+peashooter;1;6;0.1f;0;0.f;0.f;0;
+peashooter_ex;2;4;0.1f;0;-90.f;0.f;0;
