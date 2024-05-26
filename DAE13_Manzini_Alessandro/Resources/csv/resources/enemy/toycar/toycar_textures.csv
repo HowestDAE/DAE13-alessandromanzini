@@ -1,0 +1,5 @@
+label; path;
+toycar_idle_a; enemy/toycar/AS_toycar_idle_a_17x1.png;
+toycar_idle_b; enemy/toycar/AS_toycar_idle_b_17x1.png;
+toycar_idle_c; enemy/toycar/AS_toycar_idle_c_17x1.png;
+toycar_idle_d; enemy/toycar/AS_toycar_idle_d_17x1.png;

@@ -109,6 +109,10 @@ void ResourcesLinker::InitializeEntities( )
 	// Toyduck
 	LoadTexturesFromFile( "csv/resources/enemy/toyduck/toyduck_textures.csv", true );
 	LoadSpriteSettingsFromFile( "csv/resources/enemy/toyduck/toyduck_sprite_settings.csv" );
+
+	// Toycar
+	LoadTexturesFromFile( "csv/resources/enemy/toycar/toycar_textures.csv", true );
+	LoadSpriteSettingsFromFile( "csv/resources/enemy/toycar/toycar_sprite_settings.csv" );
 }
 
 void ResourcesLinker::InitializeBackgroundProps( )

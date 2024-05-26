@@ -90,6 +90,15 @@ void Camera::FeedInScreenTexture( )
 	m_ScreenOverlayQueue.NextAnimation( m_ScreenTexture, true );
 }
 
+void Camera::Reset( )
+{
+	m_CameraLocationVector.Set( 0.f, 0.f );
+	m_CameraTranslationVector.Set( 0.f, 0.f );
+	m_AimLocationVector.Set( 0.f, 0.f );
+	m_ScreenOverlayQueue = AnimationQueue( );
+	m_ScreenTexture = TextureInfo( );
+}
+
 void Camera::DrawPlatform( ) const
 {
 	PlatformManager const* pPlatformManager{ mk_pStageManager->GetPlatformManager( ) };

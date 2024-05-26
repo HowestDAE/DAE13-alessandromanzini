@@ -4,12 +4,14 @@
 #include "ResourcesLinker.h"
 #include "PlatformManager.h"
 #include "Cuphead.h"
-#include "Toyduck.h"
 #include "Card.h"
-#include "Enemy.h"
+#include "Toyduck.h"
+#include "Toycar.h"
 #include "NonInterractableProp.h"
 #include "Projectile.h"
 #include "CSVReader.h"
+
+const float StageManager::smk_RequestTitleScreenDelay{ 1.5f };
 
 StageManager::StageManager( Camera* pCamera, ResourcesLinker* pResourcesLinker )
 	: m_pCamera{ pCamera }
@@ -18,6 +20,10 @@ StageManager::StageManager( Camera* pCamera, ResourcesLinker* pResourcesLinker )
 	, m_HUDManager{}
 	, m_IsHalted{ true }
 	, m_IsCameraFixed{ false }
+
+	, m_RequestTitleScreenElapsedTime{}
+	, m_RequestingTitleScreen{}
+	, m_RequestTitleScreen{}
 
 	, m_pCards{}
 	, m_pEntities{}
@@ -56,6 +62,7 @@ void StageManager::Update( float elapsedSec )
 
 	UpdateBackground( elapsedSec );
 	UpdateEntities( elapsedSec );
+	CheckRequestTitleScreen( elapsedSec );
 	
 	if ( !m_IsCameraFixed )
 	{
@@ -69,17 +76,33 @@ void StageManager::Update( float elapsedSec )
 
 void StageManager::KeyPressEvent( const SDL_KeyboardEvent& e )
 {
-	if ( e.keysym.sym == SDLK_ESCAPE && e.type == SDL_KEYDOWN )
+	const bool pressed{ e.type == SDL_KEYDOWN };
+	switch ( e.keysym.sym )
 	{
-		if ( m_IsHalted )
+	case SDLK_ESCAPE:
+		if ( pressed )
 		{
-			Start( );
+			if ( m_IsHalted )
+			{
+				Start( );
+			}
+			else
+			{
+				Pause( );
+			}
+			return;
+		}
+
+	case SDLK_q:
+		if ( pressed )
+		{
+			m_RequestingTitleScreen = true;
 		}
 		else
 		{
-			Pause( );
+			m_RequestingTitleScreen = false;
+			m_RequestTitleScreenElapsedTime = 0.f;
 		}
-
 		return;
 	}
 	
@@ -89,6 +112,11 @@ void StageManager::KeyPressEvent( const SDL_KeyboardEvent& e )
 bool StageManager::GetIsHalted( ) const
 {
 	return m_IsHalted;
+}
+
+bool StageManager::GetRequestTitleScreen( ) const
+{
+	return m_RequestTitleScreen;
 }
 
 const std::vector<NonInterractableProp>& StageManager::GetBackgroundProps( ) const
@@ -221,6 +249,10 @@ Entity* StageManager::CreateEntity( const CSVReader& reader )
 	case 1: // Toyduck
 		pEntity = new Toyduck( Point2f{ reader.GetFloat( "x" ), reader.GetFloat( "y" ) }, reader.GetFloat( "aggro" ), reader.GetFloat( "drop" ) );
 		break;
+
+	case 2: // Toycar
+		pEntity = new Toycar( Point2f{ reader.GetFloat( "x" ), reader.GetFloat( "y" ) }, reader.GetFloat( "aggro" ), reader.GetFloat( "drop" ), 3 );
+		break;
 	}
 	pEntity->LinkTexture( m_pResourcesLinker );
 	m_pEntities.push_back( pEntity );
@@ -247,6 +279,18 @@ void StageManager::UpdateEntities( float elapsedSec )
 	for ( Entity* pEntity : m_pEntities )
 	{
 		pEntity->Update( elapsedSec );
+	}
+}
+
+void StageManager::CheckRequestTitleScreen( float elapsedSec )
+{
+	if ( m_RequestingTitleScreen )
+	{
+		m_RequestTitleScreenElapsedTime += elapsedSec;
+		if ( m_RequestTitleScreenElapsedTime >= smk_RequestTitleScreenDelay )
+		{
+			m_RequestTitleScreen = true;
+		}
 	}
 }
 

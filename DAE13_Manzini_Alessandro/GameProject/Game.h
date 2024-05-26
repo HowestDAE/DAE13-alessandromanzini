@@ -31,13 +31,13 @@ public:
 private:
 	GameState m_GameState;
 
-	ResourcesLinker* m_pResourcesLinker;
-	Camera* m_pCamera;
+	ResourcesLinker m_ResourcesLinker;
+	Camera m_Camera;
 	StageManager* m_pStageManager;
 
-	VectorSprite* m_pScreenFXTexture;
+	TitleScreenManager m_TitleScreenManager;
 
-	TitleScreenManager* m_pTitleScreenManager;
+	VectorSprite* m_pScreenFXTexture;
 
 	// FUNCTIONS
 	void Initialize();
@@ -47,6 +47,7 @@ private:
 	void ClearBackground( ) const;
 
 	void StartGame( );
+	void TerminateGame( );
 
 	void ProcessTitleManagerState( );
 };

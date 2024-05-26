@@ -61,6 +61,7 @@ void TitleScreenManager::KeyDownEvent( const SDL_KeyboardEvent& e )
 		m_IsOptionSelected = true;
 		break;
 	case SDLK_ESCAPE:
+	case SDLK_q:
 		m_IsOptionSelected = false;
 		break;
 	}

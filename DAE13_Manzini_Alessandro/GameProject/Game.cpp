@@ -7,7 +7,11 @@
 Game::Game( const Window& window ) 
 	: BaseGame{ window }
 	, m_GameState{ GameState::title }
+	, m_ResourcesLinker{}
+	, m_Camera{ GetViewPort( ) }
 	, m_pStageManager{}
+	, m_TitleScreenManager{ GetViewPort( ) }
+	, m_pScreenFXTexture{}
 {
 	Initialize();
 }
@@ -19,42 +23,28 @@ Game::~Game( )
 
 void Game::Initialize( )
 {
-	m_pResourcesLinker = new ResourcesLinker( );
-	m_pCamera = new Camera( GetViewPort( ) );
-
-	m_pTitleScreenManager = new TitleScreenManager( GetViewPort( ) );
-	m_pTitleScreenManager->LinkTexture( m_pResourcesLinker );
+	m_TitleScreenManager.LinkTexture( &m_ResourcesLinker );
 
 	//m_pScreenFXTexture = m_pResourcesLinker->GetScreenFXTexture( );
 }
 
 void Game::InitializeGameResources( )
 {
-	m_pStageManager = new StageManager( m_pCamera, m_pResourcesLinker ); // Association1 + Aggregation
-	m_pCamera->SetStageManager( m_pStageManager ); // Association2
+	m_pStageManager = new StageManager( &m_Camera, &m_ResourcesLinker ); // Association1 + Aggregation
+	m_Camera.SetStageManager( m_pStageManager ); // Association2
 }
 
 void Game::Cleanup( )
 {
 	CleanupGameResources( true );
-
-	delete m_pResourcesLinker;
-	delete m_pCamera;
-
-	delete m_pTitleScreenManager;
-
-	m_pResourcesLinker = nullptr;
-	m_pCamera = nullptr;
-
-	m_pTitleScreenManager = nullptr;
 }
 
 void Game::CleanupGameResources( bool deepClean )
 {
-	m_pResourcesLinker->ClearInstantiated( );
+	m_ResourcesLinker.ClearInstantiated( );
 	if ( !deepClean )
 	{
-		m_pTitleScreenManager->LinkTexture( m_pResourcesLinker );
+		m_TitleScreenManager.LinkTexture( &m_ResourcesLinker );
 	}
 
 	if ( m_pStageManager )
@@ -69,12 +59,17 @@ void Game::Update( float elapsedSec )
 	switch ( m_GameState )
 	{
 	case GameState::title:
-		m_pTitleScreenManager->Update( elapsedSec );
+		m_TitleScreenManager.Update( elapsedSec );
 		ProcessTitleManagerState( );
 		break;
 	case GameState::stage:
+		if ( m_pStageManager->GetRequestTitleScreen( ) )
+		{
+			TerminateGame( );
+			return;
+		}
 		m_pStageManager->Update( elapsedSec );
-		m_pCamera->Update( elapsedSec );
+		m_Camera.Update( elapsedSec );
 		break;
 	}
 
@@ -86,14 +81,14 @@ void Game::Draw( ) const
 	switch ( m_GameState )
 	{
 	case GameState::title:
-		m_pTitleScreenManager->Draw( );
+		m_TitleScreenManager.Draw( );
 		break;
 	//case GameState::starting:
 	case GameState::stage:
-		m_pCamera->Draw( );
+		m_Camera.Draw( );
 		if ( m_pStageManager->GetIsHalted( ) )
 		{
-			m_pTitleScreenManager->Draw( TitleScreenManager::TitleOptions::controls );
+			m_TitleScreenManager.Draw( TitleScreenManager::TitleOptions::controls );
 		}
 		break;
 	}
@@ -106,7 +101,7 @@ void Game::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )
 	switch ( m_GameState )
 	{
 	case GameState::title:
-		m_pTitleScreenManager->KeyDownEvent( e );
+		m_TitleScreenManager.KeyDownEvent( e );
 		break;
 	case GameState::stage:
 		m_pStageManager->KeyPressEvent( e );
@@ -151,19 +146,27 @@ void Game::StartGame( )
 	m_pStageManager->Start( );
 }
 
+void Game::TerminateGame( )
+{
+	m_GameState = GameState::title;
+
+	CleanupGameResources( );
+	m_Camera.Reset( );
+}
+
 void Game::ProcessTitleManagerState( )
 {
 	TitleScreenManager::TitleOptions option;
-	if ( m_pTitleScreenManager->IsOptionSelected( option ) )
+	if ( m_TitleScreenManager.IsOptionSelected( option ) )
 	{
 		switch ( option )
 		{
 		case TitleScreenManager::TitleOptions::start:
 			StartGame( );
-			m_pTitleScreenManager->Clear( );
+			m_TitleScreenManager.Clear( );
 			break;
 		case TitleScreenManager::TitleOptions::exit:
-			m_pTitleScreenManager->Clear( );
+			m_TitleScreenManager.Clear( );
 			break;
 		default:
 			break;

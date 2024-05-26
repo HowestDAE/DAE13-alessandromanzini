@@ -1,0 +1,5 @@
+label; rows; cols; delay; boomerang; x; y; mustcomplete;
+toycar_idle_a; 17; 1; 0.04f; 0; 0.f; 0.f; 0;
+toycar_idle_b; 17; 1; 0.04f; 0; 0.f; 0.f; 0;
+toycar_idle_c; 17; 1; 0.04f; 0; 0.f; 0.f; 0;
+toycar_idle_d; 17; 1; 0.04f; 0; 0.f; 0.f; 0;

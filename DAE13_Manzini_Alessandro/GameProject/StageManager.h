@@ -32,6 +32,7 @@ public:
 	void KeyPressEvent( const SDL_KeyboardEvent& e );
 
 	bool GetIsHalted( ) const;
+	bool GetRequestTitleScreen( ) const;
 
 	const std::vector<NonInterractableProp>& GetBackgroundProps( ) const;
 	const std::vector<NonInterractableProp>& GetFrontgroundProps( ) const;
@@ -53,6 +54,11 @@ private:
 
 	bool m_IsHalted;
 	bool m_IsCameraFixed;
+
+	static const float smk_RequestTitleScreenDelay;
+	float m_RequestTitleScreenElapsedTime;
+	bool m_RequestingTitleScreen;
+	bool m_RequestTitleScreen;
 
 #pragma region gameUnits
 	std::vector<NonInterractableProp> m_BackgroundProps;
@@ -81,11 +87,13 @@ private:
 
 	void UpdateBackground( float elapsedSec );
 	void UpdateEntities( float elapsedSec );
+	void CheckRequestTitleScreen( float elapsedSec );
 
 	void CheckCollisions( );
 
 	void LockCamera( const Point2f& centerPoint );
 	void UnlockCamera( );
+
 };
 
 enum class StageManager::BackgroundScope

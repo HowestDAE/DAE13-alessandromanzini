@@ -28,6 +28,9 @@ public:
 	static const int sk_ToyduckStartingHP;
 	static const float sk_ToyduckSpeed;
 
+	static const int sk_ToycarStartingHP;
+	static const float sk_ToycarSpeed;
+
 	static const float sk_GravityPullSpeed;
 	static const float sk_GravityPullAcceleration;
 

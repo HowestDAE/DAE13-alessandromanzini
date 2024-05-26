@@ -152,8 +152,11 @@
     <ClCompile Include="StringTexture.cpp">
       <Filter>Managers\Texture</Filter>
     </ClCompile>
+    <ClCompile Include="Toycar.cpp">
+      <Filter>Artifacts\Entities</Filter>
+    </ClCompile>
     <ClCompile Include="Enemy.cpp">
-      <Filter>GameFiles</Filter>
+      <Filter>Artifacts</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -269,10 +272,13 @@
       <Filter>Managers\Texture</Filter>
     </ClInclude>
     <ClInclude Include="resource.h">
-      <Filter>Managers</Filter>
+      <Filter>GameFiles</Filter>
     </ClInclude>
     <ClInclude Include="Enemy.h">
-      <Filter>Managers</Filter>
+      <Filter>Artifacts</Filter>
+    </ClInclude>
+    <ClInclude Include="Toycar.h">
+      <Filter>Artifacts\Entities</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

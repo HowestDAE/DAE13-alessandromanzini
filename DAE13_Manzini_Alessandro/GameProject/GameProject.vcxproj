@@ -183,6 +183,7 @@ xcopy "$(SolutionDir)Resources\*.*" "$(TargetDir)" /y /d /s</Command>
     <ClCompile Include="Texture2D.cpp" />
     <ClCompile Include="TextureInfo.cpp" />
     <ClCompile Include="TitleScreenManager.cpp" />
+    <ClCompile Include="Toycar.cpp" />
     <ClCompile Include="Toyduck.cpp" />
     <ClCompile Include="VectorSprite.cpp" />
     <ClCompile Include="Weapon.cpp" />
@@ -224,6 +225,7 @@ xcopy "$(SolutionDir)Resources\*.*" "$(TargetDir)" /y /d /s</Command>
     <ClInclude Include="Texture2D.h" />
     <ClInclude Include="TextureInfo.h" />
     <ClInclude Include="TitleScreenManager.h" />
+    <ClInclude Include="Toycar.h" />
     <ClInclude Include="Toyduck.h" />
     <ClInclude Include="VectorSprite.h" />
     <ClInclude Include="Weapon.h" />

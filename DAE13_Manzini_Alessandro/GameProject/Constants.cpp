@@ -24,6 +24,9 @@ const int Constants::sk_ExMovesLimit{ 5 };
 const int Constants::sk_ToyduckStartingHP{ 200 };
 const float Constants::sk_ToyduckSpeed{ 100.f };
 
+const int Constants::sk_ToycarStartingHP{ 1 };
+const float Constants::sk_ToycarSpeed{ 300.f };
+
 const float Constants::sk_GravityPullSpeed{ 1000.f }; // 1000
 const float Constants::sk_GravityPullAcceleration{ 90.f }; // 90
 

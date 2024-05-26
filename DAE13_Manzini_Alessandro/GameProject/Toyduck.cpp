@@ -6,7 +6,7 @@
 
 Toyduck::Toyduck( const Point2f& position, float aggroRadius, float dropRadius )
 	: Enemy( position, Constants::sk_ToyduckStartingHP, aggroRadius, dropRadius )
-	, m_CollisionManager{ std::vector<CollisionCircle>{ CollisionCircle{ 180.f, 140.f, 70.f, CollisionType::noHit }, CollisionCircle{ 130.f, 250.f, 60.f } }, &m_Location}
+	, m_CollisionManager{ std::vector<CollisionCircle>{ CollisionCircle{ 180.f, 140.f, 70.f, CollisionType::noHit }, CollisionCircle{ 130.f, 250.f, 60.f } }, &m_Location }
 {
 	m_Velocity.Set( -Constants::sk_ToyduckSpeed, 0.f );
 	SetCollisionManager( &m_CollisionManager );

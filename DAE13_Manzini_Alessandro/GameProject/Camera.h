@@ -20,6 +20,8 @@ public:
 	void QueueScreenTexture( Texture2D* pTexture );
 	void FeedInScreenTexture( );
 
+	void Reset( );
+
 private:
 	StageManager const* mk_pStageManager;
 

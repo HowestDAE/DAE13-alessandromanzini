@@ -3,10 +3,10 @@
 
 enum class CollisionType
 {
-	defaultHit,
-	noHit,
-	forceHit,
-	hollow
+	defaultHit, // gets and generates hits between other default circles.
+	noHit,		// doesn't hit default circles.
+	forceHit,	// can hit noHit circles.
+	hollow		// creates a collision with everybody but disables hits.
 };
 
 struct CollisionCircle final
