@@ -3,7 +3,7 @@
 #include "Texture2D.h"
 
 TextureInfo::TextureInfo( )
-	: TextureInfo( nullptr, false, false )
+	: TextureInfo( nullptr )
 {
 }
 

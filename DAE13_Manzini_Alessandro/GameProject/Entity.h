@@ -44,6 +44,7 @@ protected:
 	void Revive( int hp );
 
 	void InitializeQueues( unsigned int count = 1, unsigned int backsideIndex = 0 );
+	void QueueTexture( unsigned int index, const TextureInfo& textureInfo, bool priority = false );
 	void QueueTexture( unsigned int index, Texture2D* pTexture, bool flipX = false, bool flipY = false, bool priority = false );
 	bool IsQueueReady( unsigned int index ) const;
 

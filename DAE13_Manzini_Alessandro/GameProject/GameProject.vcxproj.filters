@@ -152,6 +152,9 @@
     <ClCompile Include="StringTexture.cpp">
       <Filter>Managers\Texture</Filter>
     </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>GameFiles</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Cuphead.h">
@@ -265,5 +268,14 @@
     <ClInclude Include="StringTexture.h">
       <Filter>Managers\Texture</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>Managers</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="GameProject.rc" />
   </ItemGroup>
 </Project>

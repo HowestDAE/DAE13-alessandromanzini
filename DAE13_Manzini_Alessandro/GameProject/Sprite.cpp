@@ -24,6 +24,8 @@ Sprite::Sprite( Texture const* pTexture, Texture const* pFlashTexture, int rows,
 	, mk_Boomerang{ boomerang }
 	, mk_TotalAnimationTime{ rows * cols * frameDelay }
 	, mk_MustComplete{ mustComplete }
+	, m_NoRepeat{}
+	, m_CanDraw{ true }
 {
 	Reset( );
 	m_SourceRect = Rectf{ 0.f, 0.f,
@@ -34,11 +36,14 @@ Sprite::Sprite( Texture const* pTexture, Texture const* pFlashTexture, int rows,
 
 void Sprite::Draw( const Point2f& pos, bool flipX, bool flipY, bool flash ) const
 {
-	Texture2D::Draw( pos, m_SourceRect, flipX, flipY );
-
-	if ( flash && mk_pFlashTexture )
+	if ( m_CanDraw )
 	{
-		Texture2D::Draw( mk_pFlashTexture, pos, m_SourceRect, flipX, flipY );
+		Texture2D::Draw( pos, m_SourceRect, flipX, flipY );
+
+		if ( flash && mk_pFlashTexture )
+		{
+			Texture2D::Draw( mk_pFlashTexture, pos, m_SourceRect, flipX, flipY );
+		}
 	}
 }
 
@@ -64,6 +69,7 @@ void Sprite::Update( float elapsedSec )
 			}
 
 			m_LastFrameReached = true;
+			m_CanDraw = !m_NoRepeat;
 		}
 
 		m_SourceRect.left = float( m_CurrentFrame % mk_Cols ) * m_SourceRect.width;
@@ -78,6 +84,7 @@ void Sprite::Reset( )
 
 	m_AccumulatedTime = 0.f;
 	m_LastFrameReached = false;
+	m_CanDraw = true;
 }
 
 float Sprite::GetWidth( ) const
@@ -118,6 +125,11 @@ int Sprite::GetCurrentFrame( ) const
 void Sprite::SetCurrentFrame( int currentFrame )
 {
 	m_CurrentFrame = currentFrame;
+}
+
+void Sprite::SetNoRepeat( bool noRepeat )
+{
+	m_NoRepeat = noRepeat;
 }
 
 bool Sprite::GetMustComplete( ) const

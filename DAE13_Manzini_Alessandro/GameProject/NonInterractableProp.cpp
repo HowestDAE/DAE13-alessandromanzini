@@ -18,7 +18,7 @@ NonInterractableProp::NonInterractableProp( const NonInterractableProp& other )
 	, mk_Depth{ other.mk_Depth }
 	, mk_Uid{ other.mk_Uid }
 	, mk_Scale{ other.mk_Scale }
-	, m_pTexture{ m_pTexture }
+	, m_pTexture{ other.m_pTexture }
 {
 }
 
@@ -27,7 +27,7 @@ NonInterractableProp::NonInterractableProp( NonInterractableProp&& other ) noexc
 	, mk_Depth{ other.mk_Depth }
 	, mk_Uid{ other.mk_Uid }
 	, mk_Scale{ other.mk_Scale }
-	, m_pTexture{ std::move( m_pTexture ) }
+	, m_pTexture{ std::move( other.m_pTexture ) }
 {
 }
 

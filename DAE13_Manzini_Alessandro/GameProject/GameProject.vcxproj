@@ -157,6 +157,7 @@ xcopy "$(SolutionDir)Resources\*.*" "$(TargetDir)" /y /d /s</Command>
     <ClCompile Include="Constants.cpp" />
     <ClCompile Include="CSVReader.cpp" />
     <ClCompile Include="Cuphead.cpp" />
+    <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="HUDManager.cpp" />
@@ -198,6 +199,7 @@ xcopy "$(SolutionDir)Resources\*.*" "$(TargetDir)" /y /d /s</Command>
     <ClInclude Include="Constants.h" />
     <ClInclude Include="CSVReader.h" />
     <ClInclude Include="Cuphead.h" />
+    <ClInclude Include="Enemy.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="HUDManager.h" />
@@ -211,6 +213,7 @@ xcopy "$(SolutionDir)Resources\*.*" "$(TargetDir)" /y /d /s</Command>
     <ClInclude Include="PlatformManager.h" />
     <ClInclude Include="Projectile.h" />
     <ClInclude Include="ProjectileSettings.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="ResourcesLinker.h" />
     <ClInclude Include="Spread.h" />
     <ClInclude Include="Sprite.h" />
@@ -225,6 +228,9 @@ xcopy "$(SolutionDir)Resources\*.*" "$(TargetDir)" /y /d /s</Command>
     <ClInclude Include="VectorSprite.h" />
     <ClInclude Include="Weapon.h" />
     <ClInclude Include="WeaponsManager.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="GameProject.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -7,10 +7,12 @@
 class ResourcesLinker;
 class Cuphead;
 class Toyduck;
-class Card;
 class Entity;
+class Enemy;
+class Card;
 class NonInterractableProp;
 class Projectile;
+class CSVReader;
 
 class StageManager final
 {
@@ -53,13 +55,14 @@ private:
 	bool m_IsCameraFixed;
 
 #pragma region gameUnits
-	Cuphead* m_pPlayer;
-	Toyduck* m_pToyduck;
-	std::vector<Card*> m_pCards;
 	std::vector<NonInterractableProp> m_BackgroundProps;
 	std::vector<NonInterractableProp> m_FrontgroundProps;
 
+	Cuphead* m_pPlayer;
+
 	std::vector<Entity*> m_pEntities;
+	std::vector<Enemy*> m_pEnemies;
+	std::vector<Entity*> m_pCards;
 
 #pragma endregion
 
@@ -67,9 +70,12 @@ private:
 	void InitializeProps( const std::string& propsCsvPath );
 	void InitializeEntities( );
 	void InitializeHUD( );
-	void CreateNIP( BackgroundScope scope, const std::string& uid, const Point2f& position, float scale = 1.f  );
 
 	void LoadLevelStartAnimation( );
+	void LoadEntitiesFromFile( const std::string& csvPath, std::vector<Entity*>& pEntities );
+	void LoadEnemiesFromFile( const std::string& csvPath, std::vector<Enemy*>& pEnemies );
+	void CreateNIP( BackgroundScope scope, const std::string& uid, const Point2f& position, float scale = 1.f  );
+	Entity* CreateEntity( const CSVReader& reader );
 
 	void Pause( ) noexcept;
 

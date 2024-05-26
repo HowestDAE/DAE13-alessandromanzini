@@ -31,5 +31,4 @@ void TexturedModel::Draw( const TextureInfo& textureInfo ) const
 void TexturedModel::Draw( Texture2D const* pTexture ) const
 {
 	pTexture->Draw( m_Location.ToPoint2f( ) );
-
 }

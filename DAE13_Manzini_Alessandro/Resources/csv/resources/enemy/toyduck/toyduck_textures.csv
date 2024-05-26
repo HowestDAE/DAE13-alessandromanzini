@@ -1,3 +1,5 @@
 label; path;
 toyduck_idle; enemy/toyduck/AS_toyduck_idle_2x8.png;
 toyduck_backtire; enemy/toyduck/AS_toyduck_backtire_2x8.png;
+toyduck_death; enemy/toyduck/AS_toyduck_death_2x7.png;
+toyduck_death_backtire; enemy/toyduck/AS_toyduck_death_backtire_1x3.png;

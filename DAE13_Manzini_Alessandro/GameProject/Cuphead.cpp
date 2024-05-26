@@ -199,15 +199,10 @@ void Cuphead::Hit( int damage )
 {
 	if ( !m_IsInvincible && GetIsAlive( ) )
 	{
+		QueueTexture( m_pHitSprite, true );
 		Entity::Hit( damage );
 
-		QueueTexture( m_pHitSprite, true );
-
-		if ( !GetIsAlive( ) )
-		{
-			Kill( );
-		}
-		else
+		if ( GetIsAlive( ) )
 		{
 			m_IsInvincible = true;
 			m_IFramesElapsedTime = 0.f;

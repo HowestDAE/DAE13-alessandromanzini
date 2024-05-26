@@ -6,6 +6,7 @@
 #include "Cuphead.h"
 #include "Toyduck.h"
 #include "Card.h"
+#include "Enemy.h"
 #include "NonInterractableProp.h"
 #include "Projectile.h"
 #include "CSVReader.h"
@@ -29,13 +30,14 @@ StageManager::StageManager( Camera* pCamera, ResourcesLinker* pResourcesLinker )
 StageManager::~StageManager( )
 {
 	delete m_pPlayer;
-	delete m_pToyduck;
 
-	for ( Card* pCard : m_pCards )
+	for ( Entity* pEntity : m_pEntities )
 	{
-		delete pCard;
-		pCard = nullptr;
+		delete pEntity;
 	}
+	m_pEntities.clear( );
+	m_pEnemies.clear( );
+	m_pCards.clear( );
 }
 
 void StageManager::Start( ) noexcept
@@ -147,25 +149,48 @@ void StageManager::InitializeEntities( )
 	m_pPlayer = new Cuphead( Constants::sk_CupheadStartingPosition, &m_HUDManager );
 	m_pPlayer->LinkTexture( m_pResourcesLinker );
 
-	m_pToyduck = new Toyduck( Constants::sk_CupheadStartingPosition + Vector2f{ 1200.f, 0.f } );
-	m_pToyduck->LinkTexture( m_pResourcesLinker );
-	m_pEntities.push_back( m_pToyduck );
-
-	Card* currentCard{ new Card( Point2f{ 570.f, 300.f } ) };
-	currentCard->LinkTexture( m_pResourcesLinker );
-	m_pCards.push_back( currentCard );
-	m_pEntities.push_back( currentCard );
-
-	currentCard = new Card( Point2f{ 1210.f, 325.f } );
-	currentCard->LinkTexture( m_pResourcesLinker );
-	m_pCards.push_back( currentCard );
-	m_pEntities.push_back( currentCard );
-
+	LoadEnemiesFromFile( "csv/enemies_layout.csv", m_pEnemies );
+	LoadEntitiesFromFile( "csv/cards_layout.csv", m_pCards );
 }
 
 void StageManager::InitializeHUD( )
 {
 	m_HUDManager.LinkTexture( m_pResourcesLinker );
+}
+
+void StageManager::LoadLevelStartAnimation( )
+{
+	m_pCamera->QueueScreenTexture( m_pResourcesLinker->GetSprite( "iris_transition" ) );
+	m_pCamera->QueueScreenTexture( m_pResourcesLinker->GetSprite( "run_n_gun" ) );
+	m_pCamera->FeedInScreenTexture( );
+}
+
+void StageManager::LoadEntitiesFromFile( const std::string& csvPath, std::vector<Entity*>& pEntities )
+{
+	CSVReader reader{ csvPath };
+
+	while ( !reader.eof( ) )
+	{
+		Entity* const pEntity{ CreateEntity( reader ) };
+
+		pEntities.push_back( pEntity );
+		
+		reader.next( );
+	}
+}
+
+void StageManager::LoadEnemiesFromFile( const std::string& csvPath, std::vector<Enemy*>& pEnemies )
+{
+	CSVReader reader{ csvPath };
+
+	while ( !reader.eof( ) )
+	{
+		Enemy* const pEntity{ static_cast<Enemy*>( CreateEntity( reader ) ) };
+
+		pEnemies.push_back( pEntity );
+
+		reader.next( );
+	}
 }
 
 void StageManager::CreateNIP( BackgroundScope scope, const std::string& uid, const Point2f& position, float scale )
@@ -183,11 +208,24 @@ void StageManager::CreateNIP( BackgroundScope scope, const std::string& uid, con
 	}
 }
 
-void StageManager::LoadLevelStartAnimation( )
+Entity* StageManager::CreateEntity( const CSVReader& reader )
 {
-	m_pCamera->QueueScreenTexture( m_pResourcesLinker->GetSprite( "iris_transition" ) );
-	m_pCamera->QueueScreenTexture( m_pResourcesLinker->GetSprite( "run_n_gun" ) );
-	m_pCamera->FeedInScreenTexture( );
+	Entity* pEntity{};
+
+	switch ( reader.GetInt( "id" ) )
+	{
+	case 0: // Card
+		pEntity = new Card( Point2f{ reader.GetFloat( "x" ), reader.GetFloat( "y" ) } );
+		break;
+
+	case 1: // Toyduck
+		pEntity = new Toyduck( Point2f{ reader.GetFloat( "x" ), reader.GetFloat( "y" ) }, reader.GetFloat( "aggro" ), reader.GetFloat( "drop" ) );
+		break;
+	}
+	pEntity->LinkTexture( m_pResourcesLinker );
+	m_pEntities.push_back( pEntity );
+
+	return pEntity;
 }
 
 void StageManager::UpdateBackground( float elapsedSec )
@@ -205,11 +243,10 @@ void StageManager::UpdateBackground( float elapsedSec )
 void StageManager::UpdateEntities( float elapsedSec )
 {
 	m_pPlayer->Update( elapsedSec );
-	m_pToyduck->Update( elapsedSec );
 
-	for ( Card* pCard : m_pCards )
+	for ( Entity* pEntity : m_pEntities )
 	{
-		pCard->Update( elapsedSec );
+		pEntity->Update( elapsedSec );
 	}
 }
 
@@ -217,13 +254,20 @@ void StageManager::CheckCollisions( )
 {
 	m_pPlayer->CheckCollision( &m_PlatformManager );
 
-	m_pPlayer->CheckCollision( *m_pToyduck );
-
-	for ( Card* pCard : m_pCards )
+	for ( Enemy* pEnemy : m_pEnemies )
 	{
-		m_pPlayer->CheckCollision( *pCard );
+		if ( pEnemy->CompareAggroDistance( m_pPlayer->GetLocation( ) ) )
+		{
+			if ( pEnemy->GetIsAlive( ) )
+			{
+				m_pPlayer->CheckCollision( *pEnemy );
+			}
+		}
 	}
-	//m_pPlayer->CheckCollision( m_Cards[0] );
+	for ( Entity* pCard : m_pCards )
+	{
+		m_pPlayer->CheckCollision( *static_cast<Card*>( pCard ) );
+	}
 }
 
 void StageManager::LockCamera( const Point2f& centerPoint )

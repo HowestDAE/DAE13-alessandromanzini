@@ -30,6 +30,8 @@ public:
     int GetCurrentFrame( ) const;
     void SetCurrentFrame( int currentFrame );
 
+    void SetNoRepeat( bool noRepeat );
+
     bool GetMustComplete( ) const;
     
     // Resets animation data
@@ -55,5 +57,8 @@ private:
     float m_AccumulatedTime;
 
     bool m_LastFrameReached;
+
+    bool m_NoRepeat;
+    bool m_CanDraw;
 };
 

@@ -109,27 +109,46 @@ int Entity::GetHP( ) const
 
 float Entity::GetTextureWidth( ) const
 {
-    return m_TextureInfos[0].pTexture->GetWidth();
+    if ( m_TextureInfos[0].pTexture )
+    {
+        return m_TextureInfos[0].pTexture->GetWidth();
+    }
+    return 0.f;
 }
 
 float Entity::GetTextureHeight( ) const
 {
-    return m_TextureInfos[0].pTexture->GetHeight( );
+    if ( m_TextureInfos[0].pTexture )
+    {
+        return m_TextureInfos[0].pTexture->GetHeight( );
+    }
+    return 0.f;
 }
 
 Vector2f Entity::GetTextureOffset( ) const
 {
-    return m_TextureInfos[0].pTexture->GetOffset( );
+    if ( m_TextureInfos[0].pTexture )
+    {
+        return m_TextureInfos[0].pTexture->GetOffset( );
+    }
+    return Vector2f{};
 }
 
 void Entity::Hit( int damage )
 {
-    m_HP -= damage;
+    if ( GetIsAlive( ) )
+    {
+        m_HP -= damage;
 
-    m_TextureFlashing = true;
-    m_FlashElapsedTime = 0.f;
+        m_TextureFlashing = true;
+        m_FlashElapsedTime = 0.f;
 
-    m_IsAlive = (m_HP > 0);
+        m_IsAlive = (m_HP > 0);
+        if ( !GetIsAlive( ) )
+        {
+            Kill( );
+        }
+    }
 }
 
 void Entity::InitializeQueues( unsigned int count, unsigned int backsideIndex )
@@ -143,14 +162,19 @@ void Entity::InitializeQueues( unsigned int count, unsigned int backsideIndex )
     m_BacksideLimitIndex = backsideIndex;
 }
 
-void Entity::QueueTexture( unsigned int index, Texture2D* pTexture, bool flipX, bool flipY, bool priority )
+void Entity::QueueTexture( unsigned int index, const TextureInfo& textureInfo, bool priority )
 {
     if ( index > m_AnimationQueues.size( ) )
     {
-        throw std::invalid_argument( "Trying to queue texture at index " + std::to_string( index ) + " but max index is " + std::to_string( m_AnimationQueues.size() - 1 ) + "." );
+        throw std::invalid_argument( "Trying to queue texture at index " + std::to_string( index ) + " but max index is " + std::to_string( m_AnimationQueues.size( ) - 1 ) + "." );
     }
 
-    m_AnimationQueues[index].Enqueue( TextureInfo{ pTexture, flipX, flipY }, priority );
+    m_AnimationQueues[index].Enqueue( textureInfo, priority );
+}
+
+void Entity::QueueTexture( unsigned int index, Texture2D* pTexture, bool flipX, bool flipY, bool priority )
+{
+    QueueTexture( index, TextureInfo{ pTexture, flipX, flipY }, priority );
 }
 
 bool Entity::IsQueueReady( unsigned int index ) const
