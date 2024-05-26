@@ -1,7 +1,7 @@
 #pragma once
 #include <unordered_map>
 
-class CSVReader
+class CSVReader final
 {
 public:
 	explicit CSVReader( const std::string& csvPath );

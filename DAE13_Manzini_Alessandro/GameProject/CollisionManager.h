@@ -4,7 +4,7 @@
 #include "CollisionCircle.h"
 #include "CollisionInfo.h"
 
-class CollisionManager
+class CollisionManager final
 {
 public:
 	CollisionManager( );

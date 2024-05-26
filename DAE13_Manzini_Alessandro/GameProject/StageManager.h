@@ -17,6 +17,7 @@ class StageManager final
 public:
 	explicit StageManager( Camera* pCamera, ResourcesLinker* pResourcesLinker );
 	~StageManager();
+
 	StageManager( const StageManager& other ) = delete;
 	StageManager( StageManager&& other ) = delete;
 	StageManager& operator=( const StageManager& rhs ) = delete;

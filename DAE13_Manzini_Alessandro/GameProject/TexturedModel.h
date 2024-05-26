@@ -8,6 +8,12 @@ class TexturedModel
 {
 public:
 	TexturedModel( const Point2f& position );
+	virtual ~TexturedModel( ) noexcept = default;
+
+	TexturedModel( const TexturedModel& other ) = delete;
+	TexturedModel( TexturedModel&& other ) = delete;
+	TexturedModel& operator=( const TexturedModel& rhs ) = delete;
+	TexturedModel& operator=( TexturedModel&& rhs ) = delete;
 
 	Vector2f GetLocation( ) const;
 

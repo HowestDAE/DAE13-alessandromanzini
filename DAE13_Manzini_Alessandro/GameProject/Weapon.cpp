@@ -39,6 +39,18 @@ Weapon::~Weapon( )
 	}
 }
 
+Weapon::Weapon( Weapon&& other ) noexcept
+	: mk_ProjectileSettings{ other.mk_ProjectileSettings }
+	, mk_ExMoveSettings{ other.mk_ExMoveSettings }
+	, mk_ExProgressPerHit{ other.mk_ExProgressPerHit }
+
+	, m_pProjectiles{ std::move( other.m_pProjectiles ) }
+	, m_pExMoves{ std::move( other.m_pExMoves ) }
+	, m_CurrentProjectileIndex{ other.m_CurrentProjectileIndex }
+	, m_CurrentExMoveIndex{ other.m_CurrentExMoveIndex }
+{
+}
+
 void Weapon::SpawnProjectile( const Point2f& origin, float radius, float rotation )
 {
 	// Picks next available projectile

@@ -12,6 +12,12 @@ class Entity
 {
 public:
 	explicit Entity( const Point2f& position, int hp, int contactDamage = 1, bool isPink = false );
+	virtual ~Entity( ) noexcept = default;
+
+	Entity( const Entity& other ) = delete;
+	Entity( Entity&& other ) noexcept;
+	Entity& operator=( const Entity& other ) = delete;
+	Entity& operator=( Entity&& other ) = delete;
 
 	virtual void Draw( ) const override;
 	void DrawBackside( ) const;

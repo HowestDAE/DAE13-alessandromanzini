@@ -28,6 +28,17 @@ WeaponsManager::~WeaponsManager( )
 	}
 }
 
+WeaponsManager::WeaponsManager( WeaponsManager&& other ) noexcept
+	: m_pWeapons{ *std::move( other.m_pWeapons ) }
+	, m_EquippedWeaponIndex{ other.m_EquippedWeaponIndex }
+	, m_ShotAccumulatedTime{ other.m_ShotAccumulatedTime }
+	, m_ExAccumulatedTime{ smk_ExDelay }
+	, m_ExNeedsQueue{ other.m_ExNeedsQueue }
+	, m_ExMoves{ other.m_ExMoves }
+	, m_ExProgress{ other.m_ExProgress }
+{
+}
+
 void WeaponsManager::SwapWeapons( )
 {
 	m_EquippedWeaponIndex = (m_EquippedWeaponIndex + 1) % smk_WeaponsCount;

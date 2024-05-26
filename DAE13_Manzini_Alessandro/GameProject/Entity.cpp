@@ -18,6 +18,19 @@ Entity::Entity( const Point2f& position, int hp, int contactDamage, bool isPink 
 {
 }
 
+Entity::Entity( Entity&& other ) noexcept
+    : TexturedModel( other.m_Location.ToPoint2f( ) )
+    , CollidableEntity( other.GetContactDamage( ), other.GetIsPink( ) )
+    , m_IsAlive{ other.GetIsAlive( ) }
+    , m_HP{ other.GetHP( ) }
+    , m_Velocity{ other.GetVelocity( ) }
+    , m_FlashElapsedTime{ other.m_FlashElapsedTime }
+    , m_AnimationQueues{ std::move( other.m_AnimationQueues ) }
+    , m_TextureInfos{ std::move( other.m_TextureInfos ) }
+    , m_BacksideLimitIndex{ other.m_BacksideLimitIndex }
+{
+}
+
 void Entity::Draw( ) const
 {
     for ( int i{ m_BacksideLimitIndex }; i < m_TextureInfos.size(); ++i )

@@ -1,7 +1,7 @@
 #pragma once
 #include "CollisionCircle.h"
 
-struct ProjectileSettings
+struct ProjectileSettings final
 {
 	int initialCount;
 	int hp;

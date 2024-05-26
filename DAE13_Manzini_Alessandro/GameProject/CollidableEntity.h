@@ -6,7 +6,13 @@ class CollisionManager;
 class CollidableEntity
 {
 public:
-	CollidableEntity( int contactDamage, bool isPink = false );
+	explicit CollidableEntity( int contactDamage, bool isPink = false );
+	virtual ~CollidableEntity( ) noexcept = default;
+
+	CollidableEntity( const CollidableEntity& other ) = delete;
+	CollidableEntity( CollidableEntity&& other ) = delete;
+	CollidableEntity& operator=( const CollidableEntity& rhs) = delete;
+	CollidableEntity& operator=( CollidableEntity&& rhs ) = delete;
 
 	int GetContactDamage( ) const;
 	int GetIsPink( ) const;
@@ -23,6 +29,6 @@ private:
 	const int mk_ContactDamage;
 	const bool mk_IsPink;
 
-	CollisionManager const* mk_pCollisionManager;
+	CollisionManager const* const mk_pCollisionManager;
 };
 

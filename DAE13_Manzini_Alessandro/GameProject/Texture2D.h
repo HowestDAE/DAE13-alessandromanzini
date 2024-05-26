@@ -5,10 +5,14 @@ class Texture;
 class Texture2D
 {
 public:
-	Texture2D( );
 	explicit Texture2D( Texture const* pTexture, const Vector2f& offset = {} );
-	Texture2D( const Texture2D& other ) = delete;
+	Texture2D( );
 	virtual ~Texture2D( ) = default;
+
+	Texture2D( const Texture2D& other ) = default;
+	Texture2D( Texture2D&& other ) noexcept = default;
+	Texture2D& operator=( const Texture2D& rhs ) = delete;
+	Texture2D& operator=( Texture2D&& rhs ) = delete;
 
 	// public drawing methods
 	virtual void Draw( ) const;

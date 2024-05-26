@@ -1,5 +1,5 @@
 #pragma once
-struct KeysState
+struct KeysState final
 {
 	bool faceRightKeyPressed;
 	bool faceRightOverride;

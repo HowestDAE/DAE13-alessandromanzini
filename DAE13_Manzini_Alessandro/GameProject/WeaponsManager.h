@@ -9,7 +9,12 @@ class WeaponsManager final
 {
 public:
 	WeaponsManager( );
-	~WeaponsManager( );
+	~WeaponsManager( ) noexcept;
+
+	WeaponsManager( const WeaponsManager& other ) = delete;
+	WeaponsManager( WeaponsManager&& other ) noexcept;
+	WeaponsManager& operator=( const WeaponsManager& rhs ) = delete;
+	WeaponsManager& operator=( WeaponsManager&& rhs ) = delete;
 
 	void SwapWeapons( );
 	void Shoot( const Point2f& origin, float radius, float rotation );

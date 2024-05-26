@@ -9,7 +9,7 @@ enum class CollisionType
 	hollow
 };
 
-struct CollisionCircle
+struct CollisionCircle final
 {
 	CollisionCircle( );
 	explicit CollisionCircle( Point2f center, float radius, CollisionType collisionType = CollisionType::defaultHit );

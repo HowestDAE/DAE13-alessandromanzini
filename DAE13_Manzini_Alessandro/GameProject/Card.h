@@ -2,11 +2,12 @@
 #include "Entity.h"
 #include "CollisionManager.h"
 
-class Card :
-    public Entity
+class Card final 
+    : public Entity
 {
 public:
     explicit Card( const Point2f& position );
+    virtual ~Card( ) noexcept = default;
 
     virtual void Draw( ) const override;
     virtual void Update( float elapsedSec ) override;

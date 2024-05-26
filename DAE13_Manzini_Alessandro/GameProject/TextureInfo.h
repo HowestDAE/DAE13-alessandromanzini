@@ -1,7 +1,7 @@
 #pragma once
 class Texture2D;
 
-struct TextureInfo
+struct TextureInfo final
 {
 public:
 	TextureInfo( );

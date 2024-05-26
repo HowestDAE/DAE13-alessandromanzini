@@ -8,6 +8,7 @@ class Toyduck final :
 {
 public:
     explicit Toyduck( const Point2f& position );
+    virtual ~Toyduck( ) noexcept = default;
 
     virtual void Update( float elapsedSec ) override;
 

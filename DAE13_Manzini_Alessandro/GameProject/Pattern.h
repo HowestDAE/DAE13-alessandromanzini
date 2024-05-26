@@ -10,7 +10,12 @@ public:
 	explicit Pattern( Texture const* pTexture, int repetition = 0 );
 	explicit Pattern( Texture const* pTexture, Vector2f offset, int repetition = 0 );
 	Pattern( const Pattern& other ) = delete;
-	virtual ~Pattern( ) override = default;
+	virtual ~Pattern( ) noexcept = default;
+
+	Pattern( const Pattern& other ) = default;
+	Pattern( Pattern&& other ) noexcept = default;
+	Pattern& operator=( const Pattern& rhs ) = delete;
+	Pattern& operator=( Pattern&& rhs ) = delete;
 
 	virtual void Draw( const Point2f& pos, bool flipX = false, bool flipY = false, bool flash = false ) const override;
 	void Draw( const Point2f& pos, float percentage ) const;
@@ -21,8 +26,6 @@ public:
 	virtual float GetAnimationTimer( ) const override;
 
 	virtual void Reset( ) override;
-
-	Pattern& operator=( const Pattern& rhs ) = delete;
 
 private:
 	const int mk_Repetition;

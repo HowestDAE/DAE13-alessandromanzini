@@ -4,7 +4,7 @@ class ResourcesLinker;
 class Texture2D;
 class Pattern;
 
-class HUDManager
+class HUDManager final
 {
 public:
 	HUDManager( );

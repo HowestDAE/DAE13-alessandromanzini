@@ -3,14 +3,14 @@
 #include "Texture.h"
 #include "Vector2f.h"
 
-Texture2D::Texture2D( )
-	: Texture2D( nullptr )
-{
-}
-
 Texture2D::Texture2D( Texture const* pTexture, const Vector2f& offset )
 	: mk_pTexture{ pTexture }
 	, mk_Offset{ offset }
+{
+}
+
+Texture2D::Texture2D( )
+	: Texture2D( nullptr )
 {
 }
 

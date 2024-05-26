@@ -1,6 +1,6 @@
 #pragma once
 #include <Vector2f.h>
-class SpriteSettings
+class SpriteSettings final
 {
 public:
 	SpriteSettings( );

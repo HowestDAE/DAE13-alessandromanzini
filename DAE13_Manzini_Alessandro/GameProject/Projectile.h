@@ -11,6 +11,7 @@ class Projectile final
 {
 public:
 	explicit Projectile( const ProjectileSettings* settings );
+	virtual ~Projectile( ) noexcept = default;
 
 	void Draw( ) const;
 	void Update( float elapsedSec );

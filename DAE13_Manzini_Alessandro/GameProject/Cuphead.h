@@ -12,11 +12,7 @@ class Cuphead final
 {
 public:
     explicit Cuphead( const Point2f& position, HUDManager* pHUDManager );
-    /*Cuphead( const Cuphead& other ) = delete;
-    Cuphead& operator=( const Cuphead& rhs ) = delete;
-    Cuphead( Cuphead&& other ) = delete;
-    Cuphead& operator=( Cuphead&& rhs ) = delete;
-    ~Cuphead( );*/
+    virtual ~Cuphead( ) noexcept = default;
 
     virtual void Draw( ) const override;
     void DrawProjectiles( ) const;

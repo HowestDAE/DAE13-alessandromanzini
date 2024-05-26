@@ -12,7 +12,12 @@ public:
 	enum class WeaponType;
 
 	explicit Weapon( const ProjectileSettings& projectileSettings, const ProjectileSettings& exMoveSettings, float exProgressPerHit );
-	~Weapon( );
+	virtual ~Weapon( ) noexcept;
+
+	Weapon( const Weapon& other ) = delete;
+	Weapon( Weapon&& other ) noexcept;
+	Weapon& operator=( const Weapon& rhs ) = delete;
+	Weapon& operator=( Weapon&& rhs ) = delete;
 
 	virtual WeaponType GetType( ) const = 0;
 

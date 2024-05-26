@@ -1,5 +1,5 @@
 #pragma once
-struct CollisionInfo
+struct CollisionInfo final
 {
 	bool selfHit;
 	bool otherHit;
