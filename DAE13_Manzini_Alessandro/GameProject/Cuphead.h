@@ -30,7 +30,7 @@ public:
     virtual void LinkTexture( ResourcesLinker* pResourcesLinker ) override;
 
 private:
-    HUDManager* m_pHUDManager;
+    HUDManager* const m_pHUDManager;
 
     WeaponsManager m_WeaponManager;
     MovementManager m_MovementManager;

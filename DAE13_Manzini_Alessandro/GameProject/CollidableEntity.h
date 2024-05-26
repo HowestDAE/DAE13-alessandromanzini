@@ -29,6 +29,6 @@ private:
 	const int mk_ContactDamage;
 	const bool mk_IsPink;
 
-	CollisionManager const* const mk_pCollisionManager;
+	CollisionManager const* mk_pCollisionManager;
 };
 

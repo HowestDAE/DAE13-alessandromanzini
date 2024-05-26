@@ -16,7 +16,7 @@ const float Camera::smk_CameraPulsation{ float(M_PI / 2.) / (smk_GreenwichMeridi
 const float Camera::smk_CameraMovementEpsilon{ 10.f };
 
 Camera::Camera( const Rectf& viewPort )
-	: m_pStageManager{}
+	: mk_pStageManager{}
 	, mk_ViewPort{ viewPort }
 	, m_CameraLocationVector{}
 	, m_CameraTranslationVector{}
@@ -28,7 +28,7 @@ Camera::Camera( const Rectf& viewPort )
 
 void Camera::SetStageManager( StageManager const* pStageManager )
 {
-	m_pStageManager = pStageManager;
+	mk_pStageManager = pStageManager;
 }
 
 void Camera::Aim( const Point2f& position, float width )
@@ -50,9 +50,9 @@ void Camera::Draw( ) const
 		const float cameraX{ -m_CameraLocationVector.x }, cameraY{ -m_CameraLocationVector.y };
 		glTranslatef( cameraX, cameraY, 0.f ); // position camera
 
-		DrawBackground( m_pStageManager->GetBackgroundProps() ); // Draw background, midground
+		DrawBackground( mk_pStageManager->GetBackgroundProps() ); // Draw background, midground
 		DrawEntities( );
-		DrawBackground( m_pStageManager->GetFrontgroundProps( ) ); // Draw frontground
+		DrawBackground( mk_pStageManager->GetFrontgroundProps( ) ); // Draw frontground
 		DrawPlatform( );
 	}
 	glPopMatrix( );
@@ -92,8 +92,8 @@ void Camera::FeedInScreenTexture( )
 
 void Camera::DrawPlatform( ) const
 {
-	PlatformManager const* pPlatformManager{ m_pStageManager->GetPlatformManager( ) };
-	Cuphead const* pCuphead{ m_pStageManager->GetPlayer( ) };
+	PlatformManager const* pPlatformManager{ mk_pStageManager->GetPlatformManager( ) };
+	Cuphead const* pCuphead{ mk_pStageManager->GetPlayer( ) };
 
 	pPlatformManager->Draw( );
 	pPlatformManager->Draw( pCuphead );
@@ -101,7 +101,7 @@ void Camera::DrawPlatform( ) const
 
 void Camera::DrawHUD( ) const
 {
-	const HUDManager* pHUDManager{ m_pStageManager->GetHUDManager( ) };
+	const HUDManager* pHUDManager{ mk_pStageManager->GetHUDManager( ) };
 
 	pHUDManager->Draw( );
 }
@@ -125,20 +125,20 @@ void Camera::DrawBackground( const std::vector<NonInterractableProp>& props ) co
 
 void Camera::DrawEntities( ) const
 {
-	const std::vector<Entity*>& entitites{ m_pStageManager->GetEntities( ) };
+	const std::vector<Entity*>& entitites{ mk_pStageManager->GetEntities( ) };
 	for ( Entity const* pEntity : entitites )
 	{
 		pEntity->DrawBackside( );
 	}
 
-	m_pStageManager->GetPlayer()->Draw( );
+	mk_pStageManager->GetPlayer()->Draw( );
 
 	for ( Entity const* pEntity : entitites )
 	{
 		pEntity->Draw( );
 	}
 
-	m_pStageManager->GetPlayer( )->DrawProjectiles( );
+	mk_pStageManager->GetPlayer( )->DrawProjectiles( );
 }
 
 void Camera::UpdateScreenOverlay( float elapsedSec )

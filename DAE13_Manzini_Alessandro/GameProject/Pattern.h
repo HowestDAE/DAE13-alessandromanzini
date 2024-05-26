@@ -9,7 +9,6 @@ public:
 	explicit Pattern( Texture const* pTexture, const PatternSettings& patternSettings );
 	explicit Pattern( Texture const* pTexture, int repetition = 0 );
 	explicit Pattern( Texture const* pTexture, Vector2f offset, int repetition = 0 );
-	Pattern( const Pattern& other ) = delete;
 	virtual ~Pattern( ) noexcept = default;
 
 	Pattern( const Pattern& other ) = default;

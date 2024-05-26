@@ -30,8 +30,6 @@ public:
 	// Resets animation data
 	virtual void Reset( ) = 0;
 
-	Texture2D& operator=( const Texture2D& rhs ) = delete;
-
 protected:
 	// children drawing methods
 	void Draw( Texture const* pTexture, const Point2f& pos, const Rectf& srcRect, bool flipX = false, bool flipY = false ) const;
@@ -39,7 +37,7 @@ protected:
 	
 private:
 	const Vector2f mk_Offset;
-	Texture const* mk_pTexture;
+	Texture const* const mk_pTexture;
 
 };
 

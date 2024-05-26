@@ -12,7 +12,7 @@ public:
 	explicit NonInterractableProp( int depth, const Point2f& position, const std::string& uid, float scale = 1.f );
 	virtual ~NonInterractableProp( ) noexcept = default;
 
-	NonInterractableProp( const NonInterractableProp& other ) = delete;
+	NonInterractableProp( const NonInterractableProp& other );
 	NonInterractableProp( NonInterractableProp&& other ) noexcept;
 	NonInterractableProp& operator=( const NonInterractableProp& other ) = delete;
 	NonInterractableProp& operator=( NonInterractableProp&& other ) = delete;

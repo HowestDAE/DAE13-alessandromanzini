@@ -35,10 +35,8 @@ public:
     // Resets animation data
     virtual void Reset( ) override;
 
-    Sprite& operator=( const Sprite& rhs ) = delete;
-
 private:
-    const Texture* mk_pFlashTexture;
+    Texture const* const mk_pFlashTexture;
 
     const int mk_Rows;
     const int mk_Cols;

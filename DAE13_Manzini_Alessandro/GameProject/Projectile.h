@@ -24,7 +24,7 @@ public:
 	virtual void LinkTexture( ResourcesLinker* pResourceLinker ) override;
 
 private:
-	const ProjectileSettings* mk_pProjectileSettings;
+	ProjectileSettings const* const mk_pProjectileSettings;
 	CollisionManager m_CollisionManager;
 
 	Sprite* m_pSprite;

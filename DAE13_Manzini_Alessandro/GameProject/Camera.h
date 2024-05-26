@@ -21,7 +21,7 @@ public:
 	void FeedInScreenTexture( );
 
 private:
-	StageManager const* m_pStageManager;
+	StageManager const* mk_pStageManager;
 
 	const Rectf mk_ViewPort;
 

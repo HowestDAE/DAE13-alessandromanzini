@@ -13,6 +13,15 @@ NonInterractableProp::NonInterractableProp( int depth, const Point2f& position, 
 {
 }
 
+NonInterractableProp::NonInterractableProp( const NonInterractableProp& other )
+	: TexturedModel( other.m_Location.ToPoint2f( ) )
+	, mk_Depth{ other.mk_Depth }
+	, mk_Uid{ other.mk_Uid }
+	, mk_Scale{ other.mk_Scale }
+	, m_pTexture{ m_pTexture }
+{
+}
+
 NonInterractableProp::NonInterractableProp( NonInterractableProp&& other ) noexcept
 	: TexturedModel( other.m_Location.ToPoint2f( ) )
 	, mk_Depth{ other.mk_Depth }
