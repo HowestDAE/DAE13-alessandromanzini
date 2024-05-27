@@ -47,6 +47,8 @@ public:
 		
 	}
 
+	void RequestQuit( );
+
 	const Rectf& GetViewPort() const
 	{
 		return m_Viewport;
@@ -66,6 +68,8 @@ private:
 	// Prevent timing jumps when debugging
 	const float m_MaxElapsedSeconds;
 	
+	bool m_IsRequestQuit;
+
 	// FUNCTIONS
 	void InitializeGameEngine( );
 	void CleanupGameEngine( );

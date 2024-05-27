@@ -167,6 +167,7 @@ void Game::ProcessTitleManagerState( )
 			break;
 		case TitleScreenManager::TitleOptions::exit:
 			m_TitleScreenManager.Clear( );
+			RequestQuit( );
 			break;
 		default:
 			break;

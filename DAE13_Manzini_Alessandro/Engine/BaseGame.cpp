@@ -11,6 +11,7 @@ BaseGame::BaseGame(const Window& window)
 	, m_pContext{ nullptr }
 	, m_Initialized{ false }
 	, m_MaxElapsedSeconds{ 0.1f }
+	, m_IsRequestQuit{ false }
 {
 	InitializeGameEngine();
 }
@@ -18,6 +19,11 @@ BaseGame::BaseGame(const Window& window)
 BaseGame::~BaseGame()
 {
 	CleanupGameEngine();
+}
+
+void BaseGame::RequestQuit( )
+{
+	m_IsRequestQuit = true;
 }
 
 void BaseGame::InitializeGameEngine()
@@ -135,14 +141,14 @@ void BaseGame::Run()
 	}
 
 	// Main loop flag
-	bool quit{ false };
+	m_IsRequestQuit = false;
 
 	// Set start time
 	std::chrono::steady_clock::time_point t1 = std::chrono::steady_clock::now();
 
 	//The event loop
 	SDL_Event e{};
-	while (!quit)
+	while (!m_IsRequestQuit)
 	{
 		// Poll next event from queue
 		while (SDL_PollEvent(&e) != 0)
@@ -151,7 +157,7 @@ void BaseGame::Run()
 			switch (e.type)
 			{
 			case SDL_QUIT:
-				quit = true;
+				m_IsRequestQuit = true;
 				break;
 			case SDL_KEYDOWN:
 			case SDL_CONTROLLERBUTTONDOWN:
@@ -176,7 +182,7 @@ void BaseGame::Run()
 			}
 		}
 
-		if (!quit)
+		if (!m_IsRequestQuit)
 		{
 			// Get current time
 			std::chrono::steady_clock::time_point t2 = std::chrono::steady_clock::now();
