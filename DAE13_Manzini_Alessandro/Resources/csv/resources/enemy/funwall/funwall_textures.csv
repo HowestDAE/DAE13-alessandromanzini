@@ -1,0 +1,8 @@
+label; path;
+funwall_boil; enemy/funwall/AS_funwall_boil_1x3.png;
+funwall_eye_idle; enemy/funwall/AS_funwall_eye_idle_1x3.png;
+funwall_eye_hit; enemy/funwall/AS_funwall_eye_hit_1x7.png;
+funwall_honk_bottom; enemy/funwall/AS_funwall_horn_bottom_8x4.png;
+funwall_honk_top; enemy/funwall/AS_funwall_horn_top_8x4.png;
+
+lips_loop; enemy/lips/AS_lips_loop_2x5.png;

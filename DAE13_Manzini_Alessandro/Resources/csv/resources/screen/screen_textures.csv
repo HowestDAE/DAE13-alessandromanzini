@@ -2,5 +2,12 @@ label; path;
 title_screen; screen/ST_title_screen.png;
 controls_screen; screen/ST_controls_screen.png;
 iris_transition; screen/AS_iris_transition_7x3.png;
+iris_transition_reversed; screen/AS_iris_transition_reversed_7x3.png;
 run_n_gun; screen/AS_runngun_5x3.png;
 bravo; screen/AS_bravo_9x3.png;
+you_died_screen; screen/ST_you_died.png;
+
+winscreen_results; screen/winscreen/AS_results_3x1.png;
+winscreen_bg; screen/winscreen/ST_winscreen_bg.png;
+winscreen_board; screen/winscreen/ST_winscreen_board.png;
+winscreen_cuphead; screen/winscreen/AS_winscreen_cuphead_1x7.png;

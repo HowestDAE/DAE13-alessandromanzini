@@ -38,16 +38,25 @@ void Pattern::Draw( const Point2f& pos, float percentage ) const
 	Texture2D::Draw( pos, Rectf{ 0.f, 0.f, GetWidth(), GetHeight() * percentage } );
 }
 
+void Pattern::Draw( const Point2f& pos, float rotation, bool pointToCenter ) const
+{
+	glPushMatrix( );
+	{
+		glTranslatef( pos.x, pos.y, 0.f );
+		glRotatef( rotation, 0.f, 0.f, 1.f );
+		Draw( Point2f{ -GetWidth( ) / 2.f, -GetHeight( )/2.f } );
+	}
+	glPopMatrix( );
+}
+
 void Pattern::Update( float elapsedSec )
 {
 	// No behaviour
-	return;
 }
 
 void Pattern::ForceReady( )
 {
 	// No behaviour
-	return;
 }
 
 bool Pattern::GetIsReady( ) const
@@ -63,5 +72,4 @@ float Pattern::GetAnimationTimer( ) const
 void Pattern::Reset( )
 {
 	// No behaviour
-	return;
 }

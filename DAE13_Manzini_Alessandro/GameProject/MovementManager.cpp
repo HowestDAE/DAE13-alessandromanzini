@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "MovementManager.h"
+#include "SoundManager.h"
 #include "Constants.h"
 #include <iostream>
 
@@ -20,9 +21,16 @@ MovementManager::MovementManager( )
 	, m_AirborneAccumulatedTime{}
 	, m_IsParrying{}
 	, m_IsParried{}
+	, m_IsGravityReversing{}
+	, m_GravityReversingAccumulatedTime{}
 	, m_IsGravityReversed{}
 	, m_GravityNormal{ -1 } // default Gravity goes down
 	, m_IsMoving{}
+	, m_IsParryIFraming{}
+	, m_ParryIFramingElapsedTime{}
+	, m_IsPropelled{}
+	, m_IsPropelling{}
+	, m_PropelledAccumulatedTime{}
 {
 	m_KeysStates.stopKeyPressed = true;
 }
@@ -52,6 +60,11 @@ bool MovementManager::GetIsTransitioning( ) const
 	return m_IsTransitioning;
 }
 
+bool MovementManager::GetIsIFraming( ) const
+{
+	return m_IsParryIFraming;
+}
+
 bool MovementManager::GetIsShooting( ) const
 {
 	return m_IsShooting;
@@ -79,10 +92,7 @@ void MovementManager::SetExingState( bool isExing )
 
 void MovementManager::ToggleGravity( )
 {
-	m_IsGravityReversed = !m_IsGravityReversed;
-	m_GravityNormal *= -1;
-
-	m_AirborneAccumulatedTime = 0.f;
+	m_IsGravityReversing = true;
 }
 
 void MovementManager::PlatformCollisionFeedback( )
@@ -93,9 +103,21 @@ void MovementManager::PlatformCollisionFeedback( )
 	m_AirborneAccumulatedTime = 0.f;
 }
 
+void MovementManager::VerticalBoundsCollisionFeedback( )
+{
+	if ( !m_IsPropelled )
+	{
+		m_IsPropelled = true;
+		m_IsPropelling = true;
+	}
+}
+
 void MovementManager::ParryCollisionFeedback( )
 {
 	m_IsParrying = false;
+	m_IsParryIFraming = true;
+
+	SoundManager::Play( "cuphead_parry" );
 }
 
 void MovementManager::Update( float elapsedSec )
@@ -104,6 +126,7 @@ void MovementManager::Update( float elapsedSec )
 	UpdateState( elapsedSec );
 
 	ProcessMovementData( );
+	m_IsAirborne = true;
 }
 
 void MovementManager::UpdateVelocity( Vector2f& velocity, float elapsedSec )
@@ -131,6 +154,13 @@ void MovementManager::UpdateVelocity( Vector2f& velocity, float elapsedSec )
 	// ... else do other basic movements
 	else 
 	{
+		if ( m_IsPropelling )
+		{
+			velocity.y = 0.f;
+			m_AirborneAccumulatedTime = 0.f;
+			m_VelocityModifiers.y += -Constants::sk_CupheadOutOfBoundsSpeed * m_GravityNormal;
+			m_IsPropelling = false;
+		}
 		if ( m_IsMoving )
 		{
 			if ( m_DirectionData.facingRight )
@@ -231,9 +261,17 @@ void MovementManager::Reset( )
 
 	m_IsMoving = false;
 
+	m_IsGravityReversing = false;
 	m_IsGravityReversed = false;
 	m_GravityNormal = -1;
 	m_VelocityModifiers.Set( 0.f, 0.f );
+
+	m_IsParryIFraming = false;
+	m_ParryIFramingElapsedTime = 0.f;
+
+	m_IsPropelled = false;
+	m_IsPropelling = false;
+	m_PropelledAccumulatedTime = 0.f;
 }
 
 void MovementManager::DefineState( )
@@ -243,6 +281,7 @@ void MovementManager::DefineState( )
 		if ( m_KeysStates.dashKeyPressed && m_KeysStates.dashKeyChanged
 			&& m_DashingCooldownAccumulatedTime > Constants::sk_CupheadDashCooldownTime )
 		{
+			SoundManager::Play( "cuphead_dash" );
 			m_IsDashing = true;
 		}
 	}
@@ -253,6 +292,7 @@ void MovementManager::DefineState( )
 
 		if ( !m_IsAirborne )
 		{
+			SoundManager::Play( "cuphead_jump" );
 			m_VelocityModifiers.y += Constants::sk_CupheadJumpSpeed * ( -m_GravityNormal );
 			m_IsAirborne = true;
 		}
@@ -287,6 +327,43 @@ void MovementManager::UpdateState( float elapsedSec )
 		if ( m_IsAirborne )
 		{
 			m_AirborneAccumulatedTime += elapsedSec;
+		}
+
+		if ( m_IsGravityReversing )
+		{
+			m_GravityReversingAccumulatedTime += elapsedSec;
+			if ( m_GravityReversingAccumulatedTime >= Constants::sk_CupheadGravityReversingTime )
+			{
+				m_IsGravityReversed = !m_IsGravityReversed;
+				m_GravityNormal *= -1;
+
+				m_AirborneAccumulatedTime = 0.f;
+
+				m_IsGravityReversing = false;
+				m_GravityReversingAccumulatedTime = 0.f;
+			}
+		}
+	}
+
+	if ( m_IsPropelled )
+	{
+		m_PropelledAccumulatedTime += elapsedSec;
+
+		if ( m_PropelledAccumulatedTime >= Constants::sk_CupheadPropelledCooldownTime )
+		{
+			m_IsPropelled = false;
+			m_PropelledAccumulatedTime = 0.f;
+		}
+	}
+
+	if ( m_IsParryIFraming )
+	{
+		m_ParryIFramingElapsedTime += elapsedSec;
+
+		if ( m_ParryIFramingElapsedTime >= Constants::sk_CupheadParryIFrameTime )
+		{
+			m_IsParryIFraming = false;
+			m_ParryIFramingElapsedTime = 0.f;
 		}
 	}
 }

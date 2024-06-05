@@ -20,6 +20,9 @@ public:
 	void QueueScreenTexture( Texture2D* pTexture );
 	void FeedInScreenTexture( );
 
+	Rectf GetViewPort( ) const;
+	Vector2f GetCameraLocation( ) const;
+
 	void Reset( );
 
 private:

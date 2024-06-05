@@ -24,6 +24,8 @@ public:
     virtual bool CheckCollision( CollidableEntity& other ) override;
     bool CheckCollision( Card& card );
 
+    void Win( ) noexcept;
+
     // Gets the width of the idle instead of the current texture
     float GetTextureWidth( ) const;
 
@@ -44,12 +46,15 @@ private:
     bool m_IsInvincible;
     float m_IFramesElapsedTime;
 
+    bool m_LockControls;
+
     Sprite* m_pIdleSprite;
     Sprite* m_pRunSprite;
     Sprite* m_pDuckBeginSprite;
     Sprite* m_pDuckSprite;
     Sprite* m_pDuckShootSprite;
     Sprite* m_pJumpSprite;
+    Sprite* m_pJumpDustSprite;
     Sprite* m_pParrySprite;
     Sprite* m_pDashGroundSprite;
     Sprite* m_pDashAirSprite;
@@ -71,6 +76,7 @@ private:
     Sprite* m_pRunShootStraightSprite;
     Sprite* m_pRunShootDiagonalupSprite;
     Sprite* m_pHitSprite;
+    Sprite* m_pHitDustSprite;
     Sprite* m_pGhostSprite;
 
     void UpdateMovement( float elapsedSec );
@@ -95,7 +101,7 @@ private:
 	void SelectDashAir( );
     void SelectExMove( MovementManager::AimDirection direction );
 
-    void QueueTexture( Texture2D* pTexture, bool priority = false );
+    void QueueTexture( Texture2D* pTexture, bool priority = false, int index = 0 );
 
     virtual void Kill( ) override;
 };

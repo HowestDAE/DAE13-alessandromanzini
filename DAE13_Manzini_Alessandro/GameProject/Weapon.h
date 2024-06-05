@@ -30,6 +30,9 @@ public:
 	void Draw( ) const;
 	void Update( float elapsedSec );
 
+	const std::string& GetAudioUid( ) const;
+	const std::string& GetExAudioUid( ) const;
+
 	virtual void LinkTexture( ResourcesLinker* pResourcesLinker ) = 0;
 
 protected:

@@ -7,6 +7,8 @@
 #include "VectorSprite.h"
 #include "CSVReader.h"
 #include "Constants.h"
+#include "SoundStream.h"
+#include "SoundEffect.h"
 #include <exception>
 #include <stdexcept>
 
@@ -55,6 +57,29 @@ Pattern* ResourcesLinker::GetPattern( const std::string& uid )
 	return static_cast<Pattern*>( GetTexture( uid ) );
 }
 
+SoundStream const* ResourcesLinker::GetSoundStream( const std::string& uid ) const
+{
+	return m_pSoundStreams.at( uid );
+}
+
+SoundEffect const* ResourcesLinker::GetSoundEffect( const std::string& uid ) const
+{
+	return m_pSoundEffects.at( uid );
+}
+
+void ResourcesLinker::ResetSound( ) const
+{
+	for ( std::pair<const std::string, SoundStream*> pair : m_pSoundStreams )
+	{
+		pair.second->Stop( );
+	}
+
+	for ( std::pair<const std::string, SoundEffect*> pair : m_pSoundEffects )
+	{
+		pair.second->StopAll( );
+	}
+}
+
 VectorSprite* ResourcesLinker::GetScreenFXTexture( )
 {
 	VectorSprite* pTexture{ new VectorSprite( m_pScreenFXTextures, Constants::sk_ScreenFXFrameDelay ) };
@@ -66,7 +91,12 @@ VectorSprite* ResourcesLinker::GetScreenFXTexture( )
 
 std::string ResourcesLinker::GetFontPath( )
 {
-	return std::string( "F_cuphead_vogue_xbold.otf" );
+	return std::string( "fonts/F_cuphead_vogue_xbold.otf" );
+}
+
+std::string ResourcesLinker::GetLightFontPath( )
+{
+	return std::string( "fonts/CupheadMemphis-Medium.otf" );
 }
 
 void ResourcesLinker::ClearInstantiated( )
@@ -84,6 +114,11 @@ void ResourcesLinker::InitializeTextures( )
 	InitializeBackgroundProps( );
 	InitializeScreens( );
 
+	LoadSoundsFromFile( "csv/resources/sound/general_sound_settings.csv" );
+	LoadSoundsFromFile( "csv/resources/sound/player_sound_settings.csv" );
+	LoadSoundsFromFile( "csv/resources/sound/enemies_sound_settings.csv" );
+	LoadSoundsFromFile( "csv/level_sound_settings.csv" );
+
 	//FillSettingsMap( );
 }
 
@@ -100,12 +135,16 @@ void ResourcesLinker::InitializeEntities( )
 	// Weapons
 	LoadTexturesFromFile( "csv/resources/weapon/peashooter_textures.csv", true );
 	LoadSpriteSettingsFromFile( "csv/resources/weapon/peashooter_sprite_settings.csv" );
+	
+	// Coins
+	LoadTexturesFromFile( "csv/resources/coin/coin_textures.csv" );
+	LoadSpriteSettingsFromFile( "csv/resources/coin/coin_sprite_settings.csv" );
 
 	// -- ENEMIES --
 	// Card
 	LoadTexturesFromFile( "csv/resources/enemy/card/card_textures.csv", true );
 	LoadSpriteSettingsFromFile( "csv/resources/enemy/card/card_sprite_settings.csv" );
-
+	
 	// Toyduck
 	LoadTexturesFromFile( "csv/resources/enemy/toyduck/toyduck_textures.csv", true );
 	LoadSpriteSettingsFromFile( "csv/resources/enemy/toyduck/toyduck_sprite_settings.csv" );
@@ -113,14 +152,17 @@ void ResourcesLinker::InitializeEntities( )
 	// Toycar
 	LoadTexturesFromFile( "csv/resources/enemy/toycar/toycar_textures.csv", true );
 	LoadSpriteSettingsFromFile( "csv/resources/enemy/toycar/toycar_sprite_settings.csv" );
+
+	// Funwall
+	LoadTexturesFromFile( "csv/resources/enemy/funwall/funwall_textures.csv", true );
+	LoadSpriteSettingsFromFile( "csv/resources/enemy/funwall/funwall_sprite_settings.csv" );
 }
 
 void ResourcesLinker::InitializeBackgroundProps( )
 {
-	// part 1
-	LoadTexturesFromFile( "csv/resources/background/bg_part1_textures.csv" );
-	LoadPatternSettingsFromFile( "csv/resources/background/bg_part1_pattern_settings.csv" );
-	LoadSpriteSettingsFromFile( "csv/resources/background/bg_part1_sprite_settings.csv" );
+	LoadTexturesFromFile( "csv/resources/background/bg_textures.csv" );
+	LoadPatternSettingsFromFile( "csv/resources/background/bg_pattern_settings.csv" );
+	LoadSpriteSettingsFromFile( "csv/resources/background/bg_sprite_settings.csv" );
 }
 
 void ResourcesLinker::InitializeScreens( )
@@ -158,6 +200,17 @@ void ResourcesLinker::ReleaseTextures( )
 		delete pTexture;
 	}
 	m_pScreenFXTextures.clear( );
+
+	for ( std::pair<const std::string, SoundStream*>& pair : m_pSoundStreams )
+	{
+		delete pair.second;
+	}
+	m_pSoundStreams.clear( );
+	for ( std::pair<const std::string, SoundEffect*>& pair : m_pSoundEffects )
+	{
+		delete pair.second;
+	}
+	m_pSoundEffects.clear( );
 }
 
 void ResourcesLinker::LoadTexturesFromFile( const std::string& csvPath, bool flash )
@@ -224,6 +277,39 @@ void ResourcesLinker::LoadPatternSettingsFromFile( const std::string& csvPath )
 		const PatternSettings settings{ reader.GetInt( "repetition" ) };
 		m_PatternSettingsMap[uid] = settings;
 		m_TextureTypeMap[uid] = TextureType::pattern;
+
+		reader.next( );
+	}
+}
+
+void ResourcesLinker::LoadSoundsFromFile( const std::string& csvPath )
+{
+	CSVReader reader{ csvPath };
+
+	while ( !reader.eof( ) )
+	{
+		if ( reader.GetBoolean( "loop" ) )
+		{
+			SoundStream* pSoundStream{ new SoundStream( reader.Get( "path" ) ) };
+			m_pSoundStreams[reader.Get( "label" )] = pSoundStream;
+
+			const int volume{ reader.GetInt( "volume" ) };
+			if ( volume != 0 )
+			{
+				pSoundStream->SetVolume( volume );
+			}
+		}
+		else
+		{
+			SoundEffect* pSoundEffect{ new SoundEffect( reader.Get( "path" ) ) };
+			m_pSoundEffects[reader.Get( "label" )] = pSoundEffect;
+
+			const int volume{ reader.GetInt( "volume" ) };
+			if ( volume != 0 )
+			{
+				pSoundEffect->SetVolume( volume );
+			}
+		}
 
 		reader.next( );
 	}

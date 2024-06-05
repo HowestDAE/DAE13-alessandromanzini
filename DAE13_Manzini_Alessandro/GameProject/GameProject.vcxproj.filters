@@ -33,6 +33,9 @@
     <Filter Include="Managers\Screen">
       <UniqueIdentifier>{207e4a22-5e84-409d-8696-c57b5a7d0063}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Artifacts\Collectibles">
+      <UniqueIdentifier>{4dc86bb7-8050-435b-b977-06b2c517698a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp">
@@ -158,6 +161,27 @@
     <ClCompile Include="Enemy.cpp">
       <Filter>Artifacts</Filter>
     </ClCompile>
+    <ClCompile Include="Coin.cpp">
+      <Filter>Artifacts\Collectibles</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundManager.cpp">
+      <Filter>Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="WinningScreenManager.cpp">
+      <Filter>Managers\Screen</Filter>
+    </ClCompile>
+    <ClCompile Include="ScreenManager.cpp">
+      <Filter>Managers\Screen</Filter>
+    </ClCompile>
+    <ClCompile Include="GameStats.cpp">
+      <Filter>Models</Filter>
+    </ClCompile>
+    <ClCompile Include="Funwall.cpp">
+      <Filter>Artifacts\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Lip.cpp">
+      <Filter>Artifacts\Entities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Cuphead.h">
@@ -280,8 +304,31 @@
     <ClInclude Include="Toycar.h">
       <Filter>Artifacts\Entities</Filter>
     </ClInclude>
+    <ClInclude Include="Coin.h">
+      <Filter>Artifacts\Collectibles</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundManager.h">
+      <Filter>Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="WinningScreenManager.h">
+      <Filter>Managers\Screen</Filter>
+    </ClInclude>
+    <ClInclude Include="ScreenManager.h">
+      <Filter>Managers\Screen</Filter>
+    </ClInclude>
+    <ClInclude Include="GameStats.h">
+      <Filter>Models</Filter>
+    </ClInclude>
+    <ClInclude Include="Funwall.h">
+      <Filter>Artifacts\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Lip.h">
+      <Filter>Artifacts\Entities</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="GameProject.rc" />
+    <ResourceCompile Include="GameProject.rc">
+      <Filter>GameFiles</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

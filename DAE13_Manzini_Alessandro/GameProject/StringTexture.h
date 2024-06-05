@@ -12,20 +12,23 @@ public:
 	StringTexture& operator=( const StringTexture& other ) = delete;
 	StringTexture& operator=( StringTexture&& other ) = delete;
 
-	void Draw( ) const;
+	void Draw( bool center = true ) const;
 
 	void SetColor( const Color4f& color );
+	void SetText( const std::string& text );
 	void SetPosition( const Point2f& position );
 
 private:
 	const std::string mk_FontPath;
-	const std::string mk_Text;
 	const int mk_Size;
+
+	std::string m_Text;
+	Color4f m_Color;
 
 	Texture* m_pTexture;
 	Point2f m_Position;
 
-	void Initialize( const Color4f& color = {} );
+	void Initialize( );
 	void Release( );
 
 };

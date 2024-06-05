@@ -1,31 +1,29 @@
 #pragma once
+#include "ScreenManager.h"
 #include "StringTexture.h"
 class ResourcesLinker;
 class Texture2D;
 
 class TitleScreenManager final
+	: public ScreenManager
 {
 public:
 	enum class TitleOptions;
 
 	explicit TitleScreenManager( const Rectf& bounds );
 
-	void Draw( ) const;
+	virtual void Draw( ) const override;
 	void Draw( TitleOptions option ) const;
-	void Update( float elapsedSec );
+	virtual void Update( float elapsedSec ) override;
 
-	void KeyDownEvent( const SDL_KeyboardEvent& e );
+	virtual void KeyDownEvent( const SDL_KeyboardEvent& e ) override;
 
 	bool IsOptionSelected( TitleOptions& option ) const noexcept;
 	void Clear( ) noexcept;
 
-	void LinkTexture( ResourcesLinker* pResourcesLinker );
+	virtual void LinkTexture( ResourcesLinker* pResourcesLinker ) override;
 
 private:
-	static const int smk_TextSize;
-	static const Color4f smk_DefaultColor;
-	static const Color4f smk_ActiveColor;
-
 	Texture2D* m_pTitleScreenTexture;
 	Texture2D* m_pControlsScreenTexture;
 

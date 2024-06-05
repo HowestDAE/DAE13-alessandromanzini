@@ -16,6 +16,7 @@ public:
 	bool GetIsGravityReversed( ) const;
 
 	bool GetIsTransitioning( ) const;
+	bool GetIsIFraming( ) const;
 
 	bool GetIsShooting( ) const;
 	bool GetIsExMove( ) const;
@@ -28,6 +29,7 @@ public:
 	void ToggleGravity( );
 
 	void PlatformCollisionFeedback( );
+	void VerticalBoundsCollisionFeedback( );
 	void ParryCollisionFeedback( );
 
 	void Update( float elapsedSec );
@@ -68,9 +70,18 @@ private:
 
 	bool m_IsMoving;
 
+	bool m_IsGravityReversing;
+	float m_GravityReversingAccumulatedTime;
 	bool m_IsGravityReversed;
 	Vector2f m_VelocityModifiers;
 	int m_GravityNormal;
+
+	bool m_IsParryIFraming;
+	float m_ParryIFramingElapsedTime;
+
+	bool m_IsPropelled;
+	bool m_IsPropelling;
+	float m_PropelledAccumulatedTime;
 
 	void DefineState( );
 	void UpdateState( float elapsedSec );

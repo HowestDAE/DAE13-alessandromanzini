@@ -8,6 +8,8 @@ class Texture2D;
 class Sprite;
 class Pattern;
 class VectorSprite;
+class SoundStream;
+class SoundEffect;
 
 class ResourcesLinker final
 {
@@ -24,9 +26,14 @@ public:
 	Sprite* GetSprite( const std::string& uid );
 	Pattern* GetPattern( const std::string& uid );
 
+	SoundStream const* GetSoundStream( const std::string& uid ) const;
+	SoundEffect const* GetSoundEffect( const std::string& uid ) const;
+	void ResetSound( ) const;
+
 	VectorSprite* GetScreenFXTexture( );
 
 	static std::string GetFontPath( );
+	static std::string GetLightFontPath( );
 
 	void ClearInstantiated( );
 
@@ -41,6 +48,9 @@ private:
 	std::unordered_map<std::string, PatternSettings> m_PatternSettingsMap;
 	std::unordered_map<std::string, SpriteSettings> m_SpriteSettingsMap;
 
+	std::unordered_map<std::string, SoundStream*> m_pSoundStreams;
+	std::unordered_map<std::string, SoundEffect*> m_pSoundEffects;
+
 	void InitializeTextures( );
 	void InitializeEntities( );
 	void InitializeBackgroundProps( );
@@ -51,6 +61,8 @@ private:
 	void LoadTexturesFromFile( const std::string& csvPath, bool flash = false );
 	void LoadSpriteSettingsFromFile( const std::string& csvPath );
 	void LoadPatternSettingsFromFile( const std::string& csvPath );
+
+	void LoadSoundsFromFile( const std::string& csvPath );
 
 	void PushPattern( const std::string& uid, const std::string& path, const PatternSettings& settings = {} );
 	void PushSprite( const std::string& uid, const std::string& path, const SpriteSettings& settings );

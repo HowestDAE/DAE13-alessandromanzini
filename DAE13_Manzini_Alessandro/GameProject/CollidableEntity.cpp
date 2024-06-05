@@ -9,6 +9,11 @@ CollidableEntity::CollidableEntity( int contactDamage, bool isPink )
 {
 }
 
+void CollidableEntity::DrawCollision( ) const
+{
+	mk_pCollisionManager->Draw( );
+}
+
 int CollidableEntity::GetContactDamage( ) const
 {
 	return mk_ContactDamage;
@@ -29,21 +34,19 @@ void CollidableEntity::SetCollisionManager( CollisionManager const* pCollisionMa
 	mk_pCollisionManager = pCollisionManager;
 }
 
-void CollidableEntity::DrawCollision( ) const
-{
-	mk_pCollisionManager->Draw( );
-}
-
 bool CollidableEntity::CheckCollision( CollidableEntity& other )
 {
 	const CollisionManager* pOtherManager{ other.GetCollisionManager( ) };
 	CollisionInfo collisionInfo{};
 
-	if ( mk_pCollisionManager->CheckCollision( *pOtherManager, collisionInfo ) )
+	if ( mk_pCollisionManager->CheckCollision( *pOtherManager, collisionInfo ) ) 
 	{
-		if ( collisionInfo.selfHit ) Hit( other.GetContactDamage( ) );
-		if ( collisionInfo.otherHit ) other.Hit( GetContactDamage( ) );
-		return true;
+		if ( !(GetIFrameState( ) || other.GetIFrameState( )) ) // collision happens only when both are hittable
+		{
+			if ( collisionInfo.selfHit ) Hit( other.GetContactDamage( ) );
+			if ( collisionInfo.otherHit ) other.Hit( GetContactDamage( ) );
+			return true;
+		}
 	}
 	return false;
 }

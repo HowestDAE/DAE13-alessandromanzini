@@ -19,7 +19,8 @@ public:
 	virtual bool CheckCollision( CollidableEntity& other ) override;
 
 	void Reset( const Point2f& origin, float radius, float rotation );
-	void SetSprite( Sprite* pSprite );
+
+	virtual void Kill( ) override;
 
 	virtual void LinkTexture( ResourcesLinker* pResourceLinker ) override;
 
@@ -27,7 +28,8 @@ private:
 	ProjectileSettings const* const mk_pProjectileSettings;
 	CollisionManager m_CollisionManager;
 
-	Sprite* m_pSprite;
+	Sprite* m_pLoopSprite;
+	Sprite* m_pDeathSprite;
 
 	Vector2f m_CollisionLocation;
 

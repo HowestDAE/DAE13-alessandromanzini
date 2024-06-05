@@ -20,7 +20,7 @@ public:
 	Entity& operator=( Entity&& other ) = delete;
 
 	virtual void Draw( ) const override;
-	void DrawBackside( ) const;
+	virtual void DrawBackside( ) const;
 	virtual void Update( float elapsedSec ) override;
 
 	virtual bool CheckCollision( PlatformManager const* pPlatformManager );
@@ -36,9 +36,13 @@ public:
 protected:
 	Vector2f m_Velocity;
 
+	void Draw( int index ) const;
+
 	virtual void UpdateLocation( float elapsedSec );
 	virtual void UpdateHitFlashing( float elapsedSec, float epsilonTime, bool toggle = false );
 	virtual void Hit( int damage ) override;
+
+	virtual bool GetIFrameState( ) const override;
 
 	virtual void Kill( );
 	void Revive( int hp );

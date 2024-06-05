@@ -1,0 +1,3 @@
+label; path;
+coin_idle; coin/AS_spinning_coin_1x16.png;
+coin_collected; coin/AS_coin_collected_4x5.png;

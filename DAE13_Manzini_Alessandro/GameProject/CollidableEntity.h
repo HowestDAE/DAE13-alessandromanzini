@@ -14,16 +14,18 @@ public:
 	CollidableEntity& operator=( const CollidableEntity& rhs) = delete;
 	CollidableEntity& operator=( CollidableEntity&& rhs ) = delete;
 
+	void DrawCollision( ) const;
+
 	int GetContactDamage( ) const;
 	int GetIsPink( ) const;
 
-	CollisionManager const* GetCollisionManager( ) const;
 	void SetCollisionManager( CollisionManager const* pCollisionManager );
+	CollisionManager const* GetCollisionManager( ) const;
 
-	void DrawCollision( ) const;
+	virtual bool GetIFrameState( ) const = 0;
 
-	virtual bool CheckCollision( CollidableEntity& other );
 	virtual void Hit( int damage ) = 0;
+	virtual bool CheckCollision( CollidableEntity& other );	
 
 private:
 	const int mk_ContactDamage;

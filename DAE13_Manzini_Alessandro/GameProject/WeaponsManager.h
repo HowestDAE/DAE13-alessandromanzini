@@ -32,6 +32,8 @@ public:
 	bool RequireExMoveQueue( );
 	bool GetIsExMoveOngoing( ) const;
 
+	void StopAudioLoop( );
+
 	void LinkTexture( ResourcesLinker* pResourcesLinker );
 
 private:
@@ -49,5 +51,7 @@ private:
 
 	int m_ExMoves;
 	float m_ExProgress;
+
+	bool m_IsAudioLoopPlaying;
 };
 

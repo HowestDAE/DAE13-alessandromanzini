@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Cuphead.h"
 #include "Constants.h"
+#include "SoundManager.h"
 #include "ResourcesLinker.h"
 #include "Texture2D.h"
 #include "Sprite.h"
@@ -16,6 +17,7 @@ Cuphead::Cuphead(const Point2f& position, HUDManager* pHUDManager )
 	, m_MovementManager{}
 	, m_IsInvincible{ false }
 	, m_IFramesElapsedTime{}
+	, m_LockControls{}
 	, m_StandingCollisionManager{ std::vector<CollisionCircle>{ CollisionCircle{ 45.f, 30.f, 30.f, CollisionType::forceHit }, CollisionCircle{ 45.f, 75.f, 30.f, CollisionType::forceHit } }, &m_Location }
 	, m_DuckingCollisionManager{ std::vector<CollisionCircle>{ CollisionCircle{ 45.f, 30.f, 30.f, CollisionType::forceHit } }, &m_Location }
 	, m_ReversedStandingCollisionManager{ std::vector<CollisionCircle>{ CollisionCircle{ 45.f, 60.f, 30.f, CollisionType::forceHit }, CollisionCircle{ 45.f, 105.f, 30.f, CollisionType::forceHit } }, &m_Location }
@@ -23,7 +25,7 @@ Cuphead::Cuphead(const Point2f& position, HUDManager* pHUDManager )
 {
 	m_Velocity = Vector2f{ 0.f, 0.f };
 	SetCollisionManager( &m_StandingCollisionManager );
-	InitializeQueues( );
+	InitializeQueues( 2 );
 }
 
 void Cuphead::Draw( ) const
@@ -31,8 +33,9 @@ void Cuphead::Draw( ) const
 	// Player should be drawn on top of projectiles
 	if ( !m_TextureFlashing )
 	{
-		Entity::Draw( );
+		Entity::Draw( 0 );
 	}
+	Entity::Draw( 1 );
 }
 
 void Cuphead::DrawProjectiles( ) const
@@ -54,23 +57,48 @@ void Cuphead::Update( float elapsedSec )
 
 void Cuphead::KeyPressEvent( const SDL_KeyboardEvent& e )
 {
-	m_MovementManager.KeyPressEvent( e );
+	if ( !m_LockControls )
+	{
+		m_MovementManager.KeyPressEvent( e );
+	}
 }
 
 bool Cuphead::CheckCollision( PlatformManager const* pPlatformManager )
 {
 	if ( !GetIsAlive( ) ) return false;
 
-	Vector2f displacement{};
-	const bool collision{ pPlatformManager->CheckCollision( this, displacement ) };
-	
-	if ( displacement.y )
+	Vector2f displacement{}, cameraDisplacement{};
+	const bool platformCollision{ pPlatformManager->CheckCollision( this, displacement ) },
+		cameraCollision{ pPlatformManager->CheckCameraBoundsCollision( this, displacement ) };
+	const bool collision{ platformCollision || cameraCollision };
 	{
-		m_Velocity.y = 0;
-		m_MovementManager.PlatformCollisionFeedback( );
+		// Platform Collision
+		if ( displacement.y )
+		{
+			const float speedThreshold{ 300.f };
+			if ( abs( m_Velocity.y ) > speedThreshold )
+			{
+				QueueTexture( m_pJumpDustSprite, false, 1 );
+			}
+
+			m_Velocity.y = 0;
+			m_MovementManager.PlatformCollisionFeedback( );
+		}
+
+		m_Location += displacement + cameraDisplacement;
 	}
 
-	m_Location += displacement;
+	{
+		// Bounds Collision
+		if ( pPlatformManager->CheckVerticalBounds( this ) )
+		{
+			const int outOfBoundsDamage{ 1 };
+			Hit( outOfBoundsDamage );
+			//m_Velocity.Set( 0.f, 0.f );
+			m_MovementManager.VerticalBoundsCollisionFeedback( );
+		}
+	}
+
 	return collision;
 }
 
@@ -109,6 +137,13 @@ bool Cuphead::CheckCollision( Card& card )
 	return false;
 }
 
+void Cuphead::Win( ) noexcept
+{
+	m_Velocity.x = Constants::sk_CupheadRunSpeed;
+	m_LockControls = true;
+	Entity::QueueTexture( 0, m_pRunSprite ); // manual query to make sure cuphead faces right
+}
+
 float Cuphead::GetTextureWidth( ) const
 {
 	return m_pIdleSprite->GetWidth();
@@ -122,6 +157,7 @@ void Cuphead::LinkTexture( ResourcesLinker* pResourcesLinker )
 	m_pDuckSprite = pResourcesLinker->GetSprite( "cuphead_duck" );
 	m_pDuckShootSprite = pResourcesLinker->GetSprite( "cuphead_duckshoot" );
 	m_pJumpSprite = pResourcesLinker->GetSprite( "cuphead_jump" );
+	m_pJumpDustSprite = pResourcesLinker->GetSprite( "cuphead_jump_dust" );
 	m_pParrySprite = pResourcesLinker->GetSprite( "cuphead_parry" );
 	m_pDashGroundSprite = pResourcesLinker->GetSprite( "cuphead_dash_ground" );
 	m_pDashAirSprite = pResourcesLinker->GetSprite( "cuphead_dash_air" );
@@ -143,6 +179,7 @@ void Cuphead::LinkTexture( ResourcesLinker* pResourcesLinker )
 	m_pRunShootStraightSprite = pResourcesLinker->GetSprite( "cuphead_runshoot_straight" );
 	m_pRunShootDiagonalupSprite = pResourcesLinker->GetSprite( "cuphead_runshoot_diagonalup" );
 	m_pHitSprite = pResourcesLinker->GetSprite( "cuphead_hit" );
+	m_pHitDustSprite = pResourcesLinker->GetSprite( "cuphead_hit_dust" );
 	m_pGhostSprite = pResourcesLinker->GetSprite( "cuphead_ghost" );
 
 	SelectIdle( );
@@ -153,7 +190,7 @@ void Cuphead::LinkTexture( ResourcesLinker* pResourcesLinker )
 void Cuphead::UpdateMovement( float elapsedSec )
 {
 	m_MovementManager.SetExingState( m_WeaponManager.GetIsExMoveOngoing( ) );
-	if ( GetIsAlive( ) )
+	if ( !m_LockControls )
 	{
 		m_MovementManager.Update( elapsedSec );
 		m_MovementManager.UpdateVelocity( m_Velocity, elapsedSec );
@@ -197,15 +234,18 @@ void Cuphead::UpdateHitFlashing( float elapsedSec, float epsilonTime, bool toggl
 
 void Cuphead::Hit( int damage )
 {
-	if ( !m_IsInvincible && GetIsAlive( ) )
+	if ( !m_IsInvincible && !m_MovementManager.GetIsIFraming() )
 	{
 		QueueTexture( m_pHitSprite, true );
+		QueueTexture( m_pHitDustSprite, true, 1 );
 		Entity::Hit( damage );
 
 		if ( GetIsAlive( ) )
 		{
 			m_IsInvincible = true;
 			m_IFramesElapsedTime = 0.f;
+
+			SoundManager::Play( "cuphead_hit" );
 		}
 	}
 }
@@ -247,6 +287,10 @@ void Cuphead::TryShoot( )
 	else if ( m_MovementManager.GetIsShooting( ) )
 	{
 		m_WeaponManager.Shoot( origin, radius, rotation );
+	}
+	else
+	{
+		m_WeaponManager.StopAudioLoop( );
 	}
 }
 
@@ -427,10 +471,10 @@ void Cuphead::SelectExMove( MovementManager::AimDirection direction )
 	QueueTexture( pTexture, true );
 }
 
-void Cuphead::QueueTexture( Texture2D* pTexture, bool priority )
+void Cuphead::QueueTexture( Texture2D* pTexture, bool priority, int index )
 {
 	const bool flipX{ !m_MovementManager.GetIsFacingRight( ) }, flipY{ m_MovementManager.GetIsGravityReversed() };
-	Entity::QueueTexture( 0, pTexture, flipX, flipY, priority );
+	Entity::QueueTexture( index, pTexture, flipX, flipY, priority );
 }
 
 void Cuphead::Kill( )
@@ -441,5 +485,8 @@ void Cuphead::Kill( )
 	m_Velocity.Set( 0.f, Constants::sk_CupheadGhostSpeed );
 
 	m_MovementManager.Reset( );
+	m_LockControls = true;
 	QueueTexture( m_pGhostSprite );
+
+	SoundManager::Play( "cuphead_death" );
 }

@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Game.h"
 #include "iostream"
+#include "GameStats.h"
 #include "Texture2D.h"
 #include "VectorSprite.h"
 
@@ -11,9 +12,11 @@ Game::Game( const Window& window )
 	, m_Camera{ GetViewPort( ) }
 	, m_pStageManager{}
 	, m_TitleScreenManager{ GetViewPort( ) }
+	, m_pWinningScreenManager{}
 	, m_pScreenFXTexture{}
 {
 	Initialize();
+	m_pWinningScreenManager->LinkTexture( &m_ResourcesLinker );
 }
 
 Game::~Game( )
@@ -24,6 +27,10 @@ Game::~Game( )
 void Game::Initialize( )
 {
 	m_TitleScreenManager.LinkTexture( &m_ResourcesLinker );
+	
+	SoundManager::LinkResources( &m_ResourcesLinker );
+
+	m_pWinningScreenManager = new WinningScreenManager( m_ResourcesLinker.GetLightFontPath( ), GetViewPort( ) );
 
 	//m_pScreenFXTexture = m_pResourcesLinker->GetScreenFXTexture( );
 }
@@ -46,6 +53,10 @@ void Game::CleanupGameResources( bool deepClean )
 	{
 		m_TitleScreenManager.LinkTexture( &m_ResourcesLinker );
 	}
+	else
+	{
+		delete m_pWinningScreenManager;
+	}
 
 	if ( m_pStageManager )
 	{
@@ -59,17 +70,15 @@ void Game::Update( float elapsedSec )
 	switch ( m_GameState )
 	{
 	case GameState::title:
-		m_TitleScreenManager.Update( elapsedSec );
-		ProcessTitleManagerState( );
+		UpdateTitleState( elapsedSec );
 		break;
+
 	case GameState::stage:
-		if ( m_pStageManager->GetRequestTitleScreen( ) )
-		{
-			TerminateGame( );
-			return;
-		}
-		m_pStageManager->Update( elapsedSec );
-		m_Camera.Update( elapsedSec );
+		UpdateStageState( elapsedSec );
+		break;
+		
+	case GameState::success:
+		UpdateSuccessState( elapsedSec );
 		break;
 	}
 
@@ -83,13 +92,17 @@ void Game::Draw( ) const
 	case GameState::title:
 		m_TitleScreenManager.Draw( );
 		break;
-	//case GameState::starting:
+
 	case GameState::stage:
 		m_Camera.Draw( );
 		if ( m_pStageManager->GetIsHalted( ) )
 		{
 			m_TitleScreenManager.Draw( TitleScreenManager::TitleOptions::controls );
 		}
+		break;
+
+	case GameState::success:
+		m_pWinningScreenManager->Draw( );
 		break;
 	}
 
@@ -105,6 +118,9 @@ void Game::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )
 		break;
 	case GameState::stage:
 		m_pStageManager->KeyPressEvent( e );
+		break;
+	case GameState::success:
+		m_pWinningScreenManager->KeyDownEvent( e );
 		break;
 	}
 }
@@ -125,7 +141,9 @@ void Game::ProcessMouseMotionEvent( const SDL_MouseMotionEvent& e )
 
 void Game::ProcessMouseDownEvent( const SDL_MouseButtonEvent& e )
 {
-	std::cout << e.x << " " << e.y << std::endl;
+	const Point2f cursorPos{ Point2f{ float(e.x), float(e.y) } + m_Camera.GetCameraLocation( ) };
+	std::cout << "[GAME] Click event. Camera cursor at (" << cursorPos.x << ", " << cursorPos.y << ")" << std::endl;
+	std::cout << "[GAME] Click event. Cursor at (" << e.x << ", " << e.y << ")" << std::endl << std::endl;
 }
 
 void Game::ProcessMouseUpEvent( const SDL_MouseButtonEvent& e )
@@ -148,10 +166,50 @@ void Game::StartGame( )
 
 void Game::TerminateGame( )
 {
-	m_GameState = GameState::title;
+	SoundManager::Reset( );
 
 	CleanupGameResources( );
 	m_Camera.Reset( );
+}
+
+void Game::UpdateTitleState( float elapsedSec )
+{
+	m_TitleScreenManager.Update( elapsedSec );
+	ProcessTitleManagerState( );
+}
+
+void Game::UpdateStageState( float elapsedSec )
+{
+	if ( m_pStageManager->GetRequestTitleScreen( ) )
+	{
+		m_GameState = GameState::title;
+		TerminateGame( );
+		return;
+	}
+
+	GameStats gameStats{};
+	if ( m_pStageManager->GetRequestWinScreen( gameStats ) )
+	{
+		m_GameState = GameState::success;
+		m_pWinningScreenManager->SetStatistics( gameStats );
+		TerminateGame( );
+		m_pWinningScreenManager->Initialize( );
+		m_pWinningScreenManager->LinkTexture( &m_ResourcesLinker );
+		return;
+	}
+
+	m_pStageManager->Update( elapsedSec );
+	m_Camera.Update( elapsedSec );
+}
+
+void Game::UpdateSuccessState( float elapsedSec )
+{
+	m_pWinningScreenManager->Update( elapsedSec );
+
+	if ( m_pWinningScreenManager->GetReturnToTileScreen( ) )
+	{
+		m_GameState = GameState::title;
+	}
 }
 
 void Game::ProcessTitleManagerState( )

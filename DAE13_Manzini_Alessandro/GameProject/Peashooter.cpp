@@ -14,7 +14,11 @@ Peashooter::Peashooter( )
 			Constants::sk_PeashooterDamage,
 			Constants::sk_ProjectileSpeed,
 			Constants::sk_PeashooterRange,
-			CollisionCircle{ 130.f, 0.f, 10.f }
+			CollisionCircle{ 130.f, 0.f, 10.f },
+			"peashooter",
+			"peashooter_death",
+			"peashooter_spawn_loop",
+			"projectile_hit"
 		},
 		ProjectileSettings
 		{
@@ -23,7 +27,11 @@ Peashooter::Peashooter( )
 			Constants::sk_PeashooterExDamage,
 			Constants::sk_ProjectileSpeed,
 			Constants::sk_PeashooterExRange,
-			CollisionCircle{ }
+			CollisionCircle{ 130.f, 0.f, 40.f },
+			"peashooter_ex",
+			"peashooter_death",
+			"peashooter_ex_spawn",
+			"peashooter_ex_hit"
 		},
 		Constants::sk_PeashooterExProgressPerHit )
 	, m_IsAlternatedShot{}
@@ -53,13 +61,11 @@ void Peashooter::LinkTexture( ResourcesLinker* pResourcesLinker )
 {
 	for ( Projectile* pProjectile : m_pProjectiles )
 	{
-		Sprite* pSprite{ pResourcesLinker->GetSprite( "peashooter" ) };
-		pProjectile->SetSprite( pSprite );
+		pProjectile->LinkTexture( pResourcesLinker );
 	}
 
 	for ( Projectile* pExMove : m_pExMoves )
 	{
-		Sprite* pSprite{ pResourcesLinker->GetSprite( "peashooter_ex" ) };
-		pExMove->SetSprite( pSprite );
+		pExMove->LinkTexture( pResourcesLinker );
 	}
 }

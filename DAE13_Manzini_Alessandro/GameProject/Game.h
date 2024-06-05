@@ -4,6 +4,8 @@
 #include "Camera.h"
 #include "StageManager.h"
 #include "TitleScreenManager.h"
+#include "WinningScreenManager.h"
+#include "SoundManager.h"
 
 enum class GameState;
 
@@ -36,6 +38,7 @@ private:
 	StageManager* m_pStageManager;
 
 	TitleScreenManager m_TitleScreenManager;
+	WinningScreenManager* m_pWinningScreenManager;
 
 	VectorSprite* m_pScreenFXTexture;
 
@@ -48,6 +51,10 @@ private:
 
 	void StartGame( );
 	void TerminateGame( );
+
+	void UpdateTitleState( float elapsedSec );
+	void UpdateStageState( float elapsedSec );
+	void UpdateSuccessState( float elapsedSec );
 
 	void ProcessTitleManagerState( );
 };

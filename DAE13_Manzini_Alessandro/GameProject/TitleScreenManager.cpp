@@ -3,14 +3,11 @@
 #include "ResourcesLinker.h"
 #include "Texture2D.h"
 
-const int TitleScreenManager::smk_TextSize{ 30 };
-const Color4f TitleScreenManager::smk_DefaultColor{ 0.48f, 0.48f, 0.44f, 1.f };
-const Color4f TitleScreenManager::smk_ActiveColor{ 1.f, 0.97f, 1.f, 1.f };
-
 TitleScreenManager::TitleScreenManager( const Rectf& bounds )
-	: m_StartText{ Point2f{ bounds.width/2, 440.f }, "START", ResourcesLinker::GetFontPath(), smk_TextSize, smk_DefaultColor }
-	, m_ControlsText{ Point2f{ bounds.width / 2, 400.f }, "CONTROLS", ResourcesLinker::GetFontPath( ), smk_TextSize, smk_DefaultColor }
-	, m_ExitText{ Point2f{ bounds.width / 2, 360.f }, "EXIT", ResourcesLinker::GetFontPath( ), smk_TextSize, smk_DefaultColor }
+	: ScreenManager( bounds )
+	, m_StartText{ Point2f{ bounds.width/2, 440.f }, "START", ResourcesLinker::GetFontPath(), smk_HeadingTextSize, smk_DefaultColor }
+	, m_ControlsText{ Point2f{ bounds.width / 2, 400.f }, "CONTROLS", ResourcesLinker::GetFontPath( ), smk_HeadingTextSize, smk_DefaultColor }
+	, m_ExitText{ Point2f{ bounds.width / 2, 360.f }, "EXIT", ResourcesLinker::GetFontPath( ), smk_HeadingTextSize, smk_DefaultColor }
 	, m_IsOptionSelected{}
 {
 	SelectOption( TitleOptions::start );

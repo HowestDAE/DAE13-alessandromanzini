@@ -9,6 +9,7 @@ class CollisionManager final
 public:
 	CollisionManager( );
 	explicit CollisionManager( const std::vector<CollisionCircle>& collisionCircles, Vector2f const* pDisplacement );
+	explicit CollisionManager( std::vector<CollisionCircle>&& collisionCircles, Vector2f const* pDisplacement );
 	explicit CollisionManager( const CollisionCircle& collisionCircle, Vector2f const* pDisplacement );
 
 	const std::vector<CollisionCircle>& GetCollisionCircles( ) const;
@@ -19,7 +20,7 @@ public:
 
 private:
 	std::vector<CollisionCircle> m_CollisionCircles;
-	Vector2f const* const mk_pDisplacementVector;
+	Vector2f const* mk_pDisplacementVector;
 
 };
 

@@ -9,6 +9,8 @@ class Toycar final :
 public:
     explicit Toycar( const Point2f& position, float aggroRadius, float dropRadius, unsigned int variation = 0, bool updown = false );
 
+    virtual void DrawBackside( ) const override;
+
     virtual void UpdateLocation( float elapsedSec ) override;
 
     virtual void LinkTexture( ResourcesLinker* pResourcesLinker ) override;
@@ -16,13 +18,13 @@ public:
 private:
     const unsigned int smk_VariationsCount{ 4 };
 
-    const unsigned int mk_Variation;
+    const unsigned int mk_Count;
     const bool mk_Updown;
 
     CollisionManager m_CollisionManager;
     Vector2f m_CollisionLocation;
 
-    Sprite* m_pIdleSprite;
+    std::vector<Sprite*> m_pIdleSprites;
 
 };
 

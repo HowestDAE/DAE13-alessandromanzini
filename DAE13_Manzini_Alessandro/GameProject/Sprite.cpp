@@ -24,7 +24,7 @@ Sprite::Sprite( Texture const* pTexture, Texture const* pFlashTexture, int rows,
 	, mk_Boomerang{ boomerang }
 	, mk_TotalAnimationTime{ rows * cols * frameDelay }
 	, mk_MustComplete{ mustComplete }
-	, m_NoRepeat{}
+	, m_NoRepeat{ mustComplete }
 	, m_CanDraw{ true }
 {
 	Reset( );
@@ -85,6 +85,9 @@ void Sprite::Reset( )
 	m_AccumulatedTime = 0.f;
 	m_LastFrameReached = false;
 	m_CanDraw = true;
+
+	m_SourceRect.left = 0;
+	m_SourceRect.bottom = 0;
 }
 
 float Sprite::GetWidth( ) const

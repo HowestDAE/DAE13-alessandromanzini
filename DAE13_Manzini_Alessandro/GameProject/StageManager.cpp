@@ -1,39 +1,58 @@
 #include "pch.h"
 #include "StageManager.h"
+#include "SoundManager.h"
 #include "Constants.h"
 #include "ResourcesLinker.h"
 #include "PlatformManager.h"
 #include "Cuphead.h"
 #include "Card.h"
+#include "Coin.h"
 #include "Toyduck.h"
 #include "Toycar.h"
+#include "Funwall.h"
 #include "NonInterractableProp.h"
 #include "Projectile.h"
 #include "CSVReader.h"
+#include <iostream>
 
 const float StageManager::smk_RequestTitleScreenDelay{ 1.5f };
+const float StageManager::smk_RequestWinScreenDelay{ 2.f };
 
 StageManager::StageManager( Camera* pCamera, ResourcesLinker* pResourcesLinker )
 	: m_pCamera{ pCamera }
 	, m_pResourcesLinker{ pResourcesLinker }
-	, m_PlatformManager{ "csv/platform_layout.csv" }
+	, m_PlatformManager{ "csv/platform_layout.csv", "csv/finishline_layout.csv", pCamera->GetViewPort( )}
 	, m_HUDManager{}
 	, m_IsHalted{ true }
 	, m_IsCameraFixed{ false }
+
+	, m_TotalElapsedTime{}
 
 	, m_RequestTitleScreenElapsedTime{}
 	, m_RequestingTitleScreen{}
 	, m_RequestTitleScreen{}
 
-	, m_pCards{}
+	, m_RequestWinScreenElapsedTime{}
+	, m_RequestingWinScreen{}
+	, m_RequestWinScreen{}
+
+	, m_DeathScreenLoaded{}
+
+	, mk_pLockedEnemy{}
+
 	, m_pEntities{}
+	, m_pEnemies{}
+	, m_pCards{}
+	, m_pCoins{}
 	, m_BackgroundProps{}
 	, m_FrontgroundProps{}
+
+	, m_CollectedCoinsCount{}
 {
 	Initialize( );
 }
 
-StageManager::~StageManager( )
+StageManager::~StageManager( ) noexcept
 {
 	delete m_pPlayer;
 
@@ -49,27 +68,33 @@ StageManager::~StageManager( )
 void StageManager::Start( ) noexcept
 {
 	m_IsHalted = false;
+	SoundManager::Loop( "bg_music" );
+	SoundManager::Play( "intro" );
 }
 
 void StageManager::Pause( ) noexcept
 {
 	m_IsHalted = true;
+	SoundManager::Loop( "bg_music", true );
 }
 
 void StageManager::Update( float elapsedSec )
 {
 	if ( m_IsHalted ) return;
 
+	m_TotalElapsedTime += elapsedSec;
+
 	UpdateBackground( elapsedSec );
 	UpdateEntities( elapsedSec );
-	CheckRequestTitleScreen( elapsedSec );
+	CheckScreenRequests( elapsedSec );
 	
-	if ( !m_IsCameraFixed )
+	if ( !m_IsCameraFixed && !GetIsGameOver( ) )
 	{
-		m_pCamera->Aim( m_pPlayer->GetLocation( ).ToPoint2f(), m_pPlayer->GetTextureWidth( ) );
+		m_pCamera->Aim( m_PlatformManager.GetCameraPoint( m_pPlayer ), m_pPlayer->GetTextureWidth( ) );
 	}
 
 	CheckCollisions( );
+	CheckPlayerState( );
 
 	m_HUDManager.Update( elapsedSec );
 }
@@ -119,6 +144,20 @@ bool StageManager::GetRequestTitleScreen( ) const
 	return m_RequestTitleScreen;
 }
 
+bool StageManager::GetRequestWinScreen( GameStats& gameStats ) const
+{
+	if ( m_RequestWinScreen )
+	{
+		gameStats.time = m_TotalElapsedTime;
+		gameStats.collectedCoins = m_CollectedCoinsCount;
+		gameStats.totalCoins = static_cast<int>( m_pCoins.size( ) );
+		gameStats.grade = 'A';
+
+		return true;
+	}
+	return false;
+}
+
 const std::vector<NonInterractableProp>& StageManager::GetBackgroundProps( ) const
 {
 	return m_BackgroundProps;
@@ -152,8 +191,9 @@ const std::vector<Entity*>& StageManager::GetEntities( ) const
 void StageManager::Initialize( )
 {
 	InitializeProps( "csv/bg_design.csv" );
-	InitializeEntities( );
+	InitializeEntities( "csv/enemies_layout.csv", "csv/cards_layout.csv", "csv/coins_layout.csv" );
 	InitializeHUD( );
+	InitializeSounds( "csv/level_sound_settings.csv" );
 
 	LoadLevelStartAnimation( );
 }
@@ -172,13 +212,14 @@ void StageManager::InitializeProps( const std::string& propsCsvPath )
 	}
 }
 
-void StageManager::InitializeEntities( )
+void StageManager::InitializeEntities( const std::string& enemiesCsvPath, const std::string& cardsCsvPath, const std::string& coinsCsvPath )
 {
 	m_pPlayer = new Cuphead( Constants::sk_CupheadStartingPosition, &m_HUDManager );
 	m_pPlayer->LinkTexture( m_pResourcesLinker );
 
-	LoadEnemiesFromFile( "csv/enemies_layout.csv", m_pEnemies );
-	LoadEntitiesFromFile( "csv/cards_layout.csv", m_pCards );
+	LoadEnemiesFromFile( enemiesCsvPath, m_pEnemies );
+	LoadEntitiesFromFile( cardsCsvPath, m_pCards );
+	LoadEntitiesFromFile( coinsCsvPath, m_pCoins );
 }
 
 void StageManager::InitializeHUD( )
@@ -186,11 +227,39 @@ void StageManager::InitializeHUD( )
 	m_HUDManager.LinkTexture( m_pResourcesLinker );
 }
 
+void StageManager::InitializeSounds( const std::string& soundsCsvPath )
+{
+}
+
 void StageManager::LoadLevelStartAnimation( )
 {
 	m_pCamera->QueueScreenTexture( m_pResourcesLinker->GetSprite( "iris_transition" ) );
 	m_pCamera->QueueScreenTexture( m_pResourcesLinker->GetSprite( "run_n_gun" ) );
 	m_pCamera->FeedInScreenTexture( );
+
+	SoundManager::Reset( );
+}
+
+void StageManager::LoadPlayerDeathAnimation( )
+{
+	m_pCamera->QueueScreenTexture( m_pResourcesLinker->GetSprite( "you_died_screen" ) );
+	m_pCamera->FeedInScreenTexture( );
+
+	SoundManager::Loop( "bg_music", true );
+	SoundManager::Play( "game_over" );
+	
+	m_DeathScreenLoaded = true;
+}
+
+void StageManager::LoadLevelWinAnimation( )
+{
+	m_pCamera->QueueScreenTexture( m_pResourcesLinker->GetSprite( "bravo" ) );
+	m_pCamera->QueueScreenTexture( m_pResourcesLinker->GetSprite( "iris_transition_reversed" ) );
+	m_pCamera->FeedInScreenTexture( );
+
+	SoundManager::Play( "bravo" );
+	
+	m_RequestingWinScreen = true;
 }
 
 void StageManager::LoadEntitiesFromFile( const std::string& csvPath, std::vector<Entity*>& pEntities )
@@ -246,12 +315,20 @@ Entity* StageManager::CreateEntity( const CSVReader& reader )
 		pEntity = new Card( Point2f{ reader.GetFloat( "x" ), reader.GetFloat( "y" ) } );
 		break;
 
-	case 1: // Toyduck
-		pEntity = new Toyduck( Point2f{ reader.GetFloat( "x" ), reader.GetFloat( "y" ) }, reader.GetFloat( "aggro" ), reader.GetFloat( "drop" ) );
+	case 1: // Coin
+		pEntity = new Coin( Point2f{ reader.GetFloat( "x" ), reader.GetFloat( "y" ) } );
 		break;
 
-	case 2: // Toycar
-		pEntity = new Toycar( Point2f{ reader.GetFloat( "x" ), reader.GetFloat( "y" ) }, reader.GetFloat( "aggro" ), reader.GetFloat( "drop" ), 3 );
+	case 2: // Toyduck
+		pEntity = new Toyduck( Point2f{ reader.GetFloat( "x" ), reader.GetFloat( "y" ) }, reader.GetFloat( "aggro" ), reader.GetFloat( "drop" ), reader.GetBoolean( "quirk" ) );
+		break;
+
+	case 3: // Toycar
+		pEntity = new Toycar( Point2f{ reader.GetFloat( "x" ), reader.GetFloat( "y" ) }, reader.GetFloat( "aggro" ), reader.GetFloat( "drop" ), 4, reader.GetBoolean( "quirk" ) );
+		break;
+
+	case 4: // Funwall
+		pEntity = new Funwall( Point2f{ reader.GetFloat( "x" ), reader.GetFloat( "y" ) }, reader.GetFloat( "aggro" ), reader.GetFloat( "drop" ) );
 		break;
 	}
 	pEntity->LinkTexture( m_pResourcesLinker );
@@ -276,13 +353,35 @@ void StageManager::UpdateEntities( float elapsedSec )
 {
 	m_pPlayer->Update( elapsedSec );
 
-	for ( Entity* pEntity : m_pEntities )
+	for ( Enemy* pEnemy : m_pEnemies )
 	{
-		pEntity->Update( elapsedSec );
+		pEnemy->Update( elapsedSec, m_pPlayer->GetLocation () );
+
+		if ( pEnemy->GetIsScreenLock( ) )
+		{
+			LockCamera( m_PlatformManager.GetCameraPoint( pEnemy ) );
+			mk_pLockedEnemy = pEnemy;
+		}
+	}
+
+	for ( Entity* pCard : m_pCards )
+	{
+		pCard->Update( elapsedSec );
+	}
+
+	for ( Entity* pCoin : m_pCoins )
+	{
+		pCoin->Update( elapsedSec );
+	}
+
+	if ( m_IsCameraFixed && !mk_pLockedEnemy->GetIsAlive( ) )
+	{
+		UnlockCamera( );
+		mk_pLockedEnemy = nullptr;
 	}
 }
 
-void StageManager::CheckRequestTitleScreen( float elapsedSec )
+void StageManager::CheckScreenRequests( float elapsedSec )
 {
 	if ( m_RequestingTitleScreen )
 	{
@@ -292,12 +391,36 @@ void StageManager::CheckRequestTitleScreen( float elapsedSec )
 			m_RequestTitleScreen = true;
 		}
 	}
+	
+	if ( m_RequestingWinScreen )
+	{
+		m_RequestWinScreenElapsedTime += elapsedSec;
+		if ( m_RequestWinScreenElapsedTime >= smk_RequestWinScreenDelay )
+		{
+			m_RequestWinScreen = true;
+		}
+	}
 }
 
 void StageManager::CheckCollisions( )
 {
+	CheckPlayerCollisions( );
+	CheckEntitiesCollisions( );
+}
+
+void StageManager::CheckPlayerCollisions( )
+{
 	m_pPlayer->CheckCollision( &m_PlatformManager );
 
+	if ( m_PlatformManager.CheckFinishLine( m_pPlayer ) && !GetIsGameOver( ) )
+	{
+		LoadLevelWinAnimation( );
+		m_pPlayer->Win( );
+	}
+}
+
+void StageManager::CheckEntitiesCollisions( )
+{
 	for ( Enemy* pEnemy : m_pEnemies )
 	{
 		if ( pEnemy->CompareAggroDistance( m_pPlayer->GetLocation( ) ) )
@@ -308,21 +431,52 @@ void StageManager::CheckCollisions( )
 			}
 		}
 	}
+
 	for ( Entity* pCard : m_pCards )
 	{
-		m_pPlayer->CheckCollision( *static_cast<Card*>( pCard ) );
+		m_pPlayer->CheckCollision( *static_cast<Card*>(pCard) );
+	}
+
+	for ( Entity* pCoin : m_pCoins )
+	{
+		if ( static_cast<Coin*>(pCoin)->CheckCollision( *m_pPlayer ) )
+		{
+			CollectCoin( );
+		}
+	}
+}
+
+void StageManager::CheckPlayerState( )
+{
+	if ( !m_pPlayer->GetIsAlive( ) && !GetIsGameOver( ) )
+	{
+		LoadPlayerDeathAnimation( );
 	}
 }
 
 void StageManager::LockCamera( const Point2f& centerPoint )
 {
-	m_IsCameraFixed = true;
-	m_pCamera->Aim( centerPoint );
-	// create boundaries with platformmanager
+	if ( !m_IsCameraFixed )
+	{
+		m_IsCameraFixed = true;
+		m_pCamera->Aim( centerPoint );
+		m_PlatformManager.SetCameraBounds( centerPoint );
+	}
 }
 
 void StageManager::UnlockCamera( )
 {
 	m_IsCameraFixed = false;
-	// clear platformmanager boundaries
+	m_PlatformManager.DropCameraBounds( );
+}
+
+void StageManager::CollectCoin( ) noexcept
+{
+	++m_CollectedCoinsCount;
+	std::cout << "[STAGE] Coin collected. Coins: " << m_CollectedCoinsCount << std::endl;
+}
+
+bool StageManager::GetIsGameOver( ) const
+{
+	return m_DeathScreenLoaded || m_RequestingWinScreen;
 }

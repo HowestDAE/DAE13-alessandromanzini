@@ -3,6 +3,7 @@
 #include "string_manip.cpp"
 #include <fstream>
 #include <iostream>
+#include <cassert>
 
 CSVReader::CSVReader( const std::string& csvPath )
 	: m_LabelIndexMap{}
@@ -82,11 +83,16 @@ void CSVReader::LoadDataFromFile( const std::string& csvPath )
 	csv.open( csvPath );
 	if ( !csv )
 	{
-		throw std::invalid_argument( "Couldn't open file at '" + csvPath + "'" );
+		throw std::runtime_error( "Couldn't open file at '" + csvPath + "'." );
 	}
 
 	while ( std::getline( csv, line ) ) // while there are lines, keep reading
 	{
+		if ( !csv.good( ) && !csv.eof( ) )
+		{
+			throw std::runtime_error( "Error while reading csv file at '" + csvPath + "'.\nrdstate: " + std::to_string(csv.rdstate()) );
+		}
+
 		trim( line );
 		if ( line.empty( ) ) continue; // avoid blank lines
 
@@ -127,5 +133,9 @@ void CSVReader::ExtractHeaders( )
 
 int CSVReader::MapLabelToIndex( const std::string& label ) const
 {
+	if ( m_LabelIndexMap.find( label ) == m_LabelIndexMap.end( ) )
+	{
+		throw std::invalid_argument( "Label '" + label + "' not found. " );
+	}
 	return m_LabelIndexMap.at( label );
 }

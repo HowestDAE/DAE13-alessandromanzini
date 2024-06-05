@@ -1,0 +1,3 @@
+label; path; loop; volume;	# Max volume - 128, Default volume - 0
+bg_music; sounds/funhouse_fazzle_loop.mp3; 1; 25;
+intro; sounds/announcer/runngun_intro.mp3; 0; 38;

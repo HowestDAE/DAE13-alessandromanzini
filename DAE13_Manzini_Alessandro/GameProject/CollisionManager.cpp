@@ -13,6 +13,12 @@ CollisionManager::CollisionManager( const std::vector<CollisionCircle>& collisio
 {
 }
 
+CollisionManager::CollisionManager( std::vector<CollisionCircle>&& collisionCircles, Vector2f const* pDisplacement )
+	: m_CollisionCircles{ collisionCircles }
+	, mk_pDisplacementVector{ pDisplacement }
+{
+}
+
 CollisionManager::CollisionManager( const CollisionCircle& collisionCircle, Vector2f const* pDisplacement )
 	: CollisionManager( std::vector<CollisionCircle>{ collisionCircle }, pDisplacement )
 {

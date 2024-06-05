@@ -1,0 +1,3 @@
+label; path; loop; volume;	# Max volume - 128, Default volume - 0
+toyduck_idle_loop; sounds/enemies/toyduck/toyduck_idle_loop.mp3; 0; 18;
+toyduck_death; sounds/enemies/toyduck/toyduck_death.mp3; 0; 35;

@@ -35,7 +35,7 @@ void Entity::Draw( ) const
 {
     for ( int i{ m_BacksideLimitIndex }; i < m_TextureInfos.size(); ++i )
     {
-        TexturedModel::Draw( m_TextureInfos[i] );
+        Draw( i );
     }
     DrawCollision( );
 }
@@ -44,7 +44,7 @@ void Entity::DrawBackside( ) const
 {
     for ( int i{}; i < m_BacksideLimitIndex; ++i )
     {
-        TexturedModel::Draw( m_TextureInfos[i] );
+        Draw( i );
     }
 }
 
@@ -63,31 +63,11 @@ void Entity::Update( float elapsedSec )
     UpdateHitFlashing( elapsedSec, Constants::sk_DefaultFlashDuration );
 }
 
-void Entity::UpdateLocation( float elapsedSec )
-{
-    m_Location += m_Velocity * elapsedSec;
-}
-
-void Entity::UpdateHitFlashing( float elapsedSec, float epsilonTime, bool toggle )
-{
-    if ( m_TextureFlashing || toggle )
-    {
-        m_FlashElapsedTime += elapsedSec;
-
-        if ( m_FlashElapsedTime >= epsilonTime )
-        {
-            // toggle if toggle, otherwise se to false
-            m_TextureFlashing = toggle && !m_TextureFlashing;
-            m_FlashElapsedTime = 0.f;
-        }
-    }
-}
-
 bool Entity::CheckCollision( PlatformManager const* pPlatformManager )
 {
     Vector2f displacement{};
     const bool collision{ pPlatformManager->CheckCollision( this, displacement ) };
-    
+
     m_Location += displacement;
     return collision;
 }
@@ -111,7 +91,7 @@ float Entity::GetTextureWidth( ) const
 {
     if ( m_TextureInfos[0].pTexture )
     {
-        return m_TextureInfos[0].pTexture->GetWidth();
+        return m_TextureInfos[0].pTexture->GetWidth( );
     }
     return 0.f;
 }
@@ -134,9 +114,34 @@ Vector2f Entity::GetTextureOffset( ) const
     return Vector2f{};
 }
 
+void Entity::Draw( int index ) const
+{
+    TexturedModel::Draw( m_TextureInfos[index] );
+}
+
+void Entity::UpdateLocation( float elapsedSec )
+{
+    m_Location += m_Velocity * elapsedSec;
+}
+
+void Entity::UpdateHitFlashing( float elapsedSec, float epsilonTime, bool toggle )
+{
+    if ( m_TextureFlashing || toggle )
+    {
+        m_FlashElapsedTime += elapsedSec;
+
+        if ( m_FlashElapsedTime >= epsilonTime )
+        {
+            // toggle if toggle, otherwise se to false
+            m_TextureFlashing = toggle && !m_TextureFlashing;
+            m_FlashElapsedTime = 0.f;
+        }
+    }
+}
+
 void Entity::Hit( int damage )
 {
-    if ( GetIsAlive( ) )
+    if ( GetIsAlive( ) && damage > 0 )
     {
         m_HP -= damage;
 
@@ -149,6 +154,11 @@ void Entity::Hit( int damage )
             Kill( );
         }
     }
+}
+
+bool Entity::GetIFrameState( ) const
+{
+    return m_TextureFlashing;
 }
 
 void Entity::InitializeQueues( unsigned int count, unsigned int backsideIndex )
@@ -179,7 +189,7 @@ void Entity::QueueTexture( unsigned int index, Texture2D* pTexture, bool flipX, 
 
 bool Entity::IsQueueReady( unsigned int index ) const
 {
-    return m_AnimationQueues[index].GetReady( );
+    return m_TextureInfos[index].pTexture && m_TextureInfos[index].pTexture->GetIsReady( );
 }
 
 void Entity::Kill( )

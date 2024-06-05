@@ -36,7 +36,7 @@ void AnimationQueue::NextAnimation( TextureInfo& textureInfo )
 
 void AnimationQueue::NextAnimation( TextureInfo& textureInfo, bool )
 {
-    if ( GetReady( ) && textureInfo.pTexture && textureInfo.pTexture->GetIsReady( ) )
+    if ( GetReady( ) && textureInfo.pTexture && textureInfo.pTexture->GetIsReady( ) && textureInfo.pTexture->GetAnimationTimer() != 0.f )
     {
         textureInfo.pTexture = nullptr;
     }

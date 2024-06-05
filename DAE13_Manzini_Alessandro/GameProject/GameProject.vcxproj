@@ -150,6 +150,7 @@ xcopy "$(SolutionDir)Resources\*.*" "$(TargetDir)" /y /d /s</Command>
     <ClCompile Include="AnimationQueue.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Card.cpp" />
+    <ClCompile Include="Coin.cpp" />
     <ClCompile Include="CollidableEntity.cpp" />
     <ClCompile Include="CollisionCircle.cpp" />
     <ClCompile Include="CollisionInfo.cpp" />
@@ -159,9 +160,12 @@ xcopy "$(SolutionDir)Resources\*.*" "$(TargetDir)" /y /d /s</Command>
     <ClCompile Include="Cuphead.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Entity.cpp" />
+    <ClCompile Include="Funwall.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="GameStats.cpp" />
     <ClCompile Include="HUDManager.cpp" />
     <ClCompile Include="KeysState.cpp" />
+    <ClCompile Include="Lip.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MovementManager.cpp" />
     <ClCompile Include="NonInterractableProp.cpp" />
@@ -173,6 +177,8 @@ xcopy "$(SolutionDir)Resources\*.*" "$(TargetDir)" /y /d /s</Command>
     <ClCompile Include="Projectile.cpp" />
     <ClCompile Include="ProjectileSettings.cpp" />
     <ClCompile Include="ResourcesLinker.cpp" />
+    <ClCompile Include="ScreenManager.cpp" />
+    <ClCompile Include="SoundManager.cpp" />
     <ClCompile Include="Spread.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="SpriteSettings.cpp" />
@@ -188,11 +194,13 @@ xcopy "$(SolutionDir)Resources\*.*" "$(TargetDir)" /y /d /s</Command>
     <ClCompile Include="VectorSprite.cpp" />
     <ClCompile Include="Weapon.cpp" />
     <ClCompile Include="WeaponsManager.cpp" />
+    <ClCompile Include="WinningScreenManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AnimationQueue.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Card.h" />
+    <ClInclude Include="Coin.h" />
     <ClInclude Include="CollidableEntity.h" />
     <ClInclude Include="CollisionCircle.h" />
     <ClInclude Include="CollisionInfo.h" />
@@ -202,9 +210,12 @@ xcopy "$(SolutionDir)Resources\*.*" "$(TargetDir)" /y /d /s</Command>
     <ClInclude Include="Cuphead.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Entity.h" />
+    <ClInclude Include="Funwall.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="GameStats.h" />
     <ClInclude Include="HUDManager.h" />
     <ClInclude Include="KeysState.h" />
+    <ClInclude Include="Lip.h" />
     <ClInclude Include="MovementManager.h" />
     <ClInclude Include="NonInterractableProp.h" />
     <ClInclude Include="Pattern.h" />
@@ -216,6 +227,8 @@ xcopy "$(SolutionDir)Resources\*.*" "$(TargetDir)" /y /d /s</Command>
     <ClInclude Include="ProjectileSettings.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="ResourcesLinker.h" />
+    <ClInclude Include="ScreenManager.h" />
+    <ClInclude Include="SoundManager.h" />
     <ClInclude Include="Spread.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="SpriteSettings.h" />
@@ -230,6 +243,7 @@ xcopy "$(SolutionDir)Resources\*.*" "$(TargetDir)" /y /d /s</Command>
     <ClInclude Include="VectorSprite.h" />
     <ClInclude Include="Weapon.h" />
     <ClInclude Include="WeaponsManager.h" />
+    <ClInclude Include="WinningScreenManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="GameProject.rc" />

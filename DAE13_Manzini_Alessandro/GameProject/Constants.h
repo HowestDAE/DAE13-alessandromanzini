@@ -22,14 +22,20 @@ public:
 	static const float sk_CupheadDashCooldownTime;
 	static const float sk_CupheadExPushBackSpeed;
 	static const float sk_CupheadGhostSpeed;
+	static const float sk_CupheadOutOfBoundsSpeed;
+	static const float sk_CupheadPropelledCooldownTime;
+	static const float sk_CupheadGravityReversingTime;
+	static const float sk_CupheadParryIFrameTime;
 
 	static const int sk_ExMovesLimit;
 
 	static const int sk_ToyduckStartingHP;
 	static const float sk_ToyduckSpeed;
 
-	static const int sk_ToycarStartingHP;
 	static const float sk_ToycarSpeed;
+
+	static const int sk_FunwallHP;
+	static const float sk_LipSpeed;
 
 	static const float sk_GravityPullSpeed;
 	static const float sk_GravityPullAcceleration;

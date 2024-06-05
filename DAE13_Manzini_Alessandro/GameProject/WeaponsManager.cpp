@@ -4,6 +4,7 @@
 #include "StageManager.h"
 #include "Peashooter.h"
 #include "Spread.h"
+#include "SoundManager.h"
 
 const float WeaponsManager::smk_ShotDelay{ .15f };
 const float WeaponsManager::smk_ExIntermediateDelay{ .3f };
@@ -17,6 +18,7 @@ WeaponsManager::WeaponsManager( )
 	, m_ExNeedsQueue{}
 	, m_ExMoves{}
 	, m_ExProgress{}
+	, m_IsAudioLoopPlaying{}
 {
 }
 
@@ -36,11 +38,13 @@ WeaponsManager::WeaponsManager( WeaponsManager&& other ) noexcept
 	, m_ExNeedsQueue{ other.m_ExNeedsQueue }
 	, m_ExMoves{ other.m_ExMoves }
 	, m_ExProgress{ other.m_ExProgress }
+	, m_IsAudioLoopPlaying{}
 {
 }
 
 void WeaponsManager::SwapWeapons( )
 {
+	StopAudioLoop( );
 	m_EquippedWeaponIndex = (m_EquippedWeaponIndex + 1) % smk_WeaponsCount;
 }
 
@@ -51,6 +55,12 @@ void WeaponsManager::Shoot( const Point2f& origin, float radius, float rotation 
 		m_ShotAccumulatedTime = 0.f;
 
 		m_pWeapons[m_EquippedWeaponIndex]->SpawnProjectile( origin, radius, rotation );
+
+		if ( !m_IsAudioLoopPlaying )
+		{
+			SoundManager::Play( m_pWeapons[m_EquippedWeaponIndex]->GetAudioUid( ), -1 );
+			m_IsAudioLoopPlaying = true;
+		}
 	}
 }
 
@@ -63,6 +73,8 @@ void WeaponsManager::ShootEX( const Point2f& origin, float radius, float rotatio
 		m_ExNeedsQueue = true;
 
 		m_pWeapons[m_EquippedWeaponIndex]->SpawnEx( origin, radius, rotation );
+
+		SoundManager::Play( m_pWeapons[m_EquippedWeaponIndex]->GetExAudioUid( ) );
 	}
 }
 
@@ -76,7 +88,7 @@ void WeaponsManager::CheckCollision( CollidableEntity& other )
 
 void WeaponsManager::Draw( ) const
 {
-	for ( int index{}; index < smk_WeaponsCount; ++index )
+	for ( int index{}; index < smk_WeaponsCount-1; ++index )
 	{
 		m_pWeapons[index]->Draw();
 	}
@@ -125,6 +137,15 @@ bool WeaponsManager::RequireExMoveQueue( )
 bool WeaponsManager::GetIsExMoveOngoing( ) const
 {
 	return m_ExAccumulatedTime < smk_ExIntermediateDelay;
+}
+
+void WeaponsManager::StopAudioLoop( )
+{
+	if ( m_IsAudioLoopPlaying )
+	{
+		SoundManager::Stop( m_pWeapons[m_EquippedWeaponIndex]->GetAudioUid( ) );
+		m_IsAudioLoopPlaying = false;
+	}
 }
 
 void WeaponsManager::LinkTexture( ResourcesLinker* pResourcesLinker )

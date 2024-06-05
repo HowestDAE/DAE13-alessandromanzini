@@ -18,6 +18,7 @@ public:
 
 	virtual void Draw( const Point2f& pos, bool flipX = false, bool flipY = false, bool flash = false ) const override;
 	void Draw( const Point2f& pos, float percentage ) const;
+	void Draw( const Point2f& pos, float rotation, bool pointToCenter ) const;
 	virtual void Update( float elapsedSec ) override;
 
 	virtual void ForceReady( ) override;

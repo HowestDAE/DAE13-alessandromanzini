@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "Camera.h"
+#include "Constants.h"
 #include "StageManager.h"
 #include "Projectile.h"
 #include "NonInterractableProp.h"
@@ -18,7 +19,7 @@ const float Camera::smk_CameraMovementEpsilon{ 10.f };
 Camera::Camera( const Rectf& viewPort )
 	: mk_pStageManager{}
 	, mk_ViewPort{ viewPort }
-	, m_CameraLocationVector{}
+	, m_CameraLocationVector{ Constants::sk_CupheadStartingPosition }
 	, m_CameraTranslationVector{}
 	, m_AimLocationVector{}
 	, m_ScreenOverlayQueue{}
@@ -90,6 +91,16 @@ void Camera::FeedInScreenTexture( )
 	m_ScreenOverlayQueue.NextAnimation( m_ScreenTexture, true );
 }
 
+Rectf Camera::GetViewPort( ) const
+{
+	return mk_ViewPort;
+}
+
+Vector2f Camera::GetCameraLocation( ) const
+{
+	return m_CameraLocationVector;
+}
+
 void Camera::Reset( )
 {
 	m_CameraLocationVector.Set( 0.f, 0.f );
@@ -105,7 +116,7 @@ void Camera::DrawPlatform( ) const
 	Cuphead const* pCuphead{ mk_pStageManager->GetPlayer( ) };
 
 	pPlatformManager->Draw( );
-	pPlatformManager->Draw( pCuphead );
+	//pPlatformManager->Draw( pCuphead );
 }
 
 void Camera::DrawHUD( ) const

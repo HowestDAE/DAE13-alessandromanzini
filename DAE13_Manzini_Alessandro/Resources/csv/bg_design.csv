@@ -58,15 +58,15 @@ fg3_curtain; -1; 4900.f; 530.f;
 fg3_blueplant2; -1; 4850.f; 590.f;
 fg3_greyplant; -1; 5705; -100.f;
 fg3_topgreyplant; -1; 6250; 600.f;
-fg3_blueplant; -1; 6580.f; -145.f;
-fg3_blueplant2; -1; 6710.f; 565.f;
+fg3_blueplant; -1; 6580.f; -135.f;
+fg3_blueplant2; -1; 6640.f; 575.f;
 
 fg2_star1; -2; 1330.f; 485.f;
 fg2_star1; -2; 3030.f; 485.f;
 fg2_star1; -2; 4580.f; 525.f;
 fg2_star1; -2; 5835.f; 515.f;
 fg2_frogbot; -2; 4030.f; -190.f;
-fg2_frogbot; -2; 6900.f; -230.f;
+fg2_frogbot; -2; 6870.f; -200.f;
 fg2_planet; -2; 5745.f; -195.f;
 
 fg1_star; -3; 882.f; 470.f;

@@ -115,3 +115,13 @@ void Weapon::Update( float elapsedSec )
 		pExMove->Update( elapsedSec );
 	}
 }
+
+const std::string& Weapon::GetAudioUid( ) const
+{
+	return mk_ProjectileSettings.spawnAudioUid;
+}
+
+const std::string& Weapon::GetExAudioUid( ) const
+{
+	return mk_ExMoveSettings.spawnAudioUid;
+}

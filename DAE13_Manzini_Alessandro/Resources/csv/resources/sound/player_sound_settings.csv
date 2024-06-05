@@ -1,0 +1,12 @@
+label; path; loop; volume;	# Max volume - 128, Default volume - 0
+cuphead_jump; sounds/player/cuphead_jump.mp3; 0; 26;
+cuphead_parry; sounds/player/cuphead_parry.mp3; 0; 42;
+cuphead_dash; sounds/player/cuphead_dash.mp3; 0; 20;
+
+cuphead_hit; sounds/player/cuphead_hit.mp3; 0; 128;
+cuphead_death; sounds/player/cuphead_death.mp3; 0; 35;
+
+projectile_hit; sounds/weapon/projectile_hit.mp3; 0; 20;
+peashooter_spawn_loop; sounds/weapon/peashooter_loop.mp3; 0; 10;
+peashooter_ex_spawn; sounds/weapon/peashooter_ex_spawn.mp3; 0; 50;
+peashooter_ex_hit; sounds/weapon/peashooter_ex_hit.mp3; 0; 22;
