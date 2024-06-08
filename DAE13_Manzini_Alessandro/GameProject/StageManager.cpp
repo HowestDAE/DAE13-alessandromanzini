@@ -18,6 +18,8 @@
 const float StageManager::smk_RequestTitleScreenDelay{ 1.5f };
 const float StageManager::smk_RequestWinScreenDelay{ 2.f };
 
+std::vector<Entity*> StageManager::sm_pCompositionEntities{};
+
 StageManager::StageManager( Camera* pCamera, ResourcesLinker* pResourcesLinker )
 	: m_pCamera{ pCamera }
 	, m_pResourcesLinker{ pResourcesLinker }
@@ -337,6 +339,16 @@ Entity* StageManager::CreateEntity( const CSVReader& reader )
 	return pEntity;
 }
 
+void StageManager::PushCompositionEntity( Entity* pEntity )
+{
+	sm_pCompositionEntities.push_back( pEntity );
+}
+
+void StageManager::PopCompositionEntity( Entity* pEntity )
+{
+	sm_pCompositionEntities.erase( std::remove( sm_pCompositionEntities.begin( ), sm_pCompositionEntities.end( ), pEntity ), sm_pCompositionEntities.end( ) );
+}
+
 void StageManager::UpdateBackground( float elapsedSec )
 {
 	for ( NonInterractableProp& prop : m_BackgroundProps )
@@ -355,7 +367,7 @@ void StageManager::UpdateEntities( float elapsedSec )
 
 	for ( Enemy* pEnemy : m_pEnemies )
 	{
-		pEnemy->Update( elapsedSec, m_pPlayer->GetLocation () );
+		pEnemy->Update( elapsedSec, m_pPlayer->GetLocation() );
 
 		if ( pEnemy->GetIsScreenLock( ) )
 		{
@@ -443,6 +455,11 @@ void StageManager::CheckEntitiesCollisions( )
 		{
 			CollectCoin( );
 		}
+	}
+
+	for ( Entity* pEntity : sm_pCompositionEntities )
+	{
+		m_pPlayer->CheckCollision( *pEntity );
 	}
 }
 

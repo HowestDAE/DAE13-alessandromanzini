@@ -29,16 +29,16 @@ void SoundManager::Loop( const std::string& uid, bool pause )
 
 void SoundManager::Play( const std::string& uid, int count )
 {
-	SoundEffect const* const pSoundEffect{ smk_pResourcesLinker->GetSoundEffect( uid ) };
+	SoundEffect* const pSoundEffect{ smk_pResourcesLinker->GetSoundEffect( uid ) };
 	
 	pSoundEffect->Play( count );
 }
 
 void SoundManager::Stop( const std::string& uid )
 {
-	SoundEffect const* const pSoundEffect{ smk_pResourcesLinker->GetSoundEffect( uid ) };
+	SoundEffect* const pSoundEffect{ smk_pResourcesLinker->GetSoundEffect( uid ) };
 
-	pSoundEffect->StopAll( );
+	pSoundEffect->Stop( );
 }
 
 void SoundManager::Reset( )

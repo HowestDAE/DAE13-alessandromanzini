@@ -2,7 +2,26 @@ label; rows; cols; delay; boomerang; x; y; mustcomplete;
 funwall_boil; 1; 3; 0.1f; 0; 0.f; 0.f; 0;
 funwall_eye_idle; 1; 3; 0.1f; 1; 100.f; 380.f; 0;
 funwall_eye_hit; 1; 7; 0.04f; 0; 100.f; 380.f; 1;
+
 funwall_honk_bottom; 8; 4; 0.045f; 0; 55.f; 145.f; 1;
 funwall_honk_top; 8; 4; 0.045f; 0; 55.f; 565.f; 1;
+funwall_honk_bottom_vfx; 3; 3; 0.07f; 0; -20.f; 95.f; 1;
+funwall_honk_top_vfx; 3; 3; 0.07f; 0; -20.f; 535.f; 1;
+
+funwall_mouth_opening_top; 2; 4; 0.08f; 0; -10.f; 0.f; 1;
+funwall_mouth_opening_bottom; 2; 4; 0.08f; 0; -10.f; 0.f; 1;
+funwall_mouth_open_top; 1; 3; 0.1f; 0; 0.f; 0.f; 0;
+funwall_mouth_open_bottom; 1; 3; 0.1f; 0; 0.f; 0.f; 0;
+funwall_mouth_closing_top; 2; 4; 0.08f; 0; 0.f; 0.f; 1;
+funwall_mouth_closing_bottom; 2; 4; 0.08f; 0; 0.f; 0.f; 1;
+
+funwall_mouth_cover_top; 1; 3; 0.1f; 0; 0.f; -1.f; 0;
+funwall_mouth_cover_bottom; 1; 3; 0.1f; 0; 0.f; 0.f; 0;
+
+funwall_uhoh_bottom; 2; 6; 0.07f; 1; 55.f; 145.f; 1;
+
+funwall_death; 1; 3; 0.1f; 0; 0.f; 0.f; 0;
+funwall_death_cover; 1; 3; 0.1f; 0; 105.f; 0.f; 0;
+funwall_death_vfx; 2; 5; 0.05f; 0; -210.f; -70.f; 1;
 
 lips_loop; 2; 5; 0.07f; 0; 0.f; 0.f; 0;

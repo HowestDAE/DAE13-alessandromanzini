@@ -2,7 +2,25 @@ label; path;
 funwall_boil; enemy/funwall/AS_funwall_boil_1x3.png;
 funwall_eye_idle; enemy/funwall/AS_funwall_eye_idle_1x3.png;
 funwall_eye_hit; enemy/funwall/AS_funwall_eye_hit_1x7.png;
+
 funwall_honk_bottom; enemy/funwall/AS_funwall_horn_bottom_8x4.png;
 funwall_honk_top; enemy/funwall/AS_funwall_horn_top_8x4.png;
+funwall_honk_bottom_vfx; enemy/funwall/AS_funwall_horn_vfx_3x3.png;
+funwall_honk_top_vfx; enemy/funwall/AS_funwall_horn_vfx_3x3.png;
+
+funwall_mouth_opening_top; enemy/funwall/AS_funwall_opening_mouth_top_2x4.png;
+funwall_mouth_opening_bottom; enemy/funwall/AS_funwall_opening_mouth_bottom_2x4.png;
+funwall_mouth_open_top; enemy/funwall/AS_funwall_open_mouth_top_1x3.png;
+funwall_mouth_open_bottom; enemy/funwall/AS_funwall_open_mouth_bottom_1x3.png;
+funwall_mouth_closing_top; enemy/funwall/AS_funwall_closing_mouth_top_2x4.png;
+funwall_mouth_closing_bottom; enemy/funwall/AS_funwall_closing_mouth_bottom_2x4.png;
+funwall_mouth_cover_top; enemy/funwall/AS_funwall_open_mouth_cover_top_1x3.png;
+funwall_mouth_cover_bottom; enemy/funwall/AS_funwall_open_mouth_cover_bottom_1x3.png;
+
+funwall_uhoh_bottom; enemy/funwall/AS_funwall_uhoh_bottom_2x6.png;
+
+funwall_death; enemy/funwall/AS_funwall_death_1x3.png;
+funwall_death_cover; enemy/funwall/AS_funwall_death_cover_1x3.png;
+funwall_death_vfx; enemy/funwall/AS_funwall_death_vfx_2x5.png;
 
 lips_loop; enemy/lips/AS_lips_loop_2x5.png;

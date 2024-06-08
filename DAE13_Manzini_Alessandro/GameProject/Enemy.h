@@ -10,6 +10,8 @@ public:
     virtual void Update( float elapsedSec, const Vector2f& targetLocation );
 
     virtual bool CompareAggroDistance( const Vector2f& targetLocation );
+    
+    virtual void Reset( const Point2f& position );
 
     bool GetIsScreenLock( ) const;
 

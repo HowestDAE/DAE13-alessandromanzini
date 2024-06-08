@@ -189,7 +189,13 @@ void Entity::QueueTexture( unsigned int index, Texture2D* pTexture, bool flipX, 
 
 bool Entity::IsQueueReady( unsigned int index ) const
 {
-    return m_TextureInfos[index].pTexture && m_TextureInfos[index].pTexture->GetIsReady( );
+    return !m_TextureInfos[index].pTexture || m_TextureInfos[index].pTexture->GetIsReady( );
+}
+
+void Entity::ClearQueue( unsigned int index )
+{
+    m_AnimationQueues[index].Clear( );
+    m_TextureInfos[index] = TextureInfo{};
 }
 
 void Entity::Kill( )

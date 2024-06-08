@@ -20,11 +20,15 @@ Pattern::Pattern( Texture const* pTexture, Vector2f offset, int repetition )
 
 void Pattern::Draw( const Point2f& pos, bool flipX, bool flipY, bool flash ) const
 {
-	for ( int i{}; i < mk_Repetition + 1; ++i ) // Draw at least once (if repetition = 0, i < 1)
+	if ( mk_Repetition )
 	{
-		const Vector2f adjustesLocationVector{ GetWidth( ) * i, 0.f };
-		Texture2D::Draw( pos + adjustesLocationVector, Rectf{}, flipX, flipY );
+		for ( int i{}; i < mk_Repetition; ++i ) // Draw at least once (if repetition = 0, i < 1)
+		{
+			const Vector2f adjustesLocationVector{ GetWidth( ) * (i + 1), 0.f };
+			Texture2D::Draw( pos + adjustesLocationVector, Rectf{}, flipX, flipY );
+		}
 	}
+	Texture2D::Draw( pos, Rectf{}, flipX, flipY );
 }
 
 void Pattern::Draw( const Point2f& pos, float percentage ) const

@@ -7,6 +7,6 @@ cuphead_hit; sounds/player/cuphead_hit.mp3; 0; 128;
 cuphead_death; sounds/player/cuphead_death.mp3; 0; 35;
 
 projectile_hit; sounds/weapon/projectile_hit.mp3; 0; 20;
-peashooter_spawn_loop; sounds/weapon/peashooter_loop.mp3; 0; 10;
+peashooter_spawn_loop; sounds/weapon/peashooter_loop.mp3; 0; 14;
 peashooter_ex_spawn; sounds/weapon/peashooter_ex_spawn.mp3; 0; 50;
 peashooter_ex_hit; sounds/weapon/peashooter_ex_hit.mp3; 0; 22;

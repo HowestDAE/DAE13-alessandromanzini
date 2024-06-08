@@ -4,6 +4,7 @@
 
 SoundEffect::SoundEffect( const std::string& path )
 	:m_pMixChunk{ Mix_LoadWAV( path.c_str( ) ) }
+	, m_Channel{ - 1 }
 {
 	if ( m_pMixChunk == nullptr )
 	{
@@ -22,15 +23,15 @@ bool SoundEffect::IsLoaded( ) const
 	return m_pMixChunk != nullptr;
 }
 
-bool SoundEffect::Play( const int loops ) const
+bool SoundEffect::Play( const int loops )
 {
 	// Don't save the channel as a data member, 
 	// because when it stops playing the channel becomes free
 	// and available for usage by other effects
 	if ( m_pMixChunk != nullptr )
 	{
-		const int channel{ Mix_PlayChannel( -1, m_pMixChunk, loops ) };
-		return channel == -1 ? false : true;
+		m_Channel = Mix_PlayChannel( -1, m_pMixChunk, loops );
+		return m_Channel == -1 ? false : true;
 	}
 	else
 	{
@@ -55,6 +56,15 @@ int SoundEffect::GetVolume( ) const
 	else
 	{
 		return -1;
+	}
+}
+
+void SoundEffect::Stop( )
+{
+	if ( m_Channel != -1 )
+	{
+		Mix_HaltChannel( m_Channel );
+		m_Channel = -1;
 	}
 }
 

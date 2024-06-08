@@ -22,6 +22,7 @@ void Enemy::Update( float elapsedSec )
 
 void Enemy::Update( float elapsedSec, const Vector2f& targetLocation )
 {
+	Update( elapsedSec );
 }
 
 bool Enemy::CompareAggroDistance( const Vector2f& targetLocation )
@@ -48,6 +49,10 @@ bool Enemy::CompareAggroDistance( const Vector2f& targetLocation )
 	}
 
 	return m_IsAggro;
+}
+
+void Enemy::Reset( const Point2f& position )
+{
 }
 
 bool Enemy::GetIsScreenLock( ) const

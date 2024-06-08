@@ -127,6 +127,15 @@ void BaseGame::InitializeGameEngine()
 		return;
 	}
 	
+	int channels = Mix_AllocateChannels( 16 ); // Increase the number of channels to 16
+	if ( channels < 16 )
+	{
+		std::cerr << "Could not allocate 16 channels, only " << channels << " channels available." << std::endl;
+	}
+	else
+	{
+		std::cout << "Allocated " << channels << " channels for mixing." << std::endl;
+	}
 
 	m_Initialized = true;
 }

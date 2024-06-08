@@ -1,3 +1,13 @@
 label; path; loop; volume;	# Max volume - 128, Default volume - 0
-toyduck_idle_loop; sounds/enemies/toyduck/toyduck_idle_loop.mp3; 0; 18;
+toyduck_idle_loop; sounds/enemies/toyduck/toyduck_idle_loop.mp3; 0; 26;
 toyduck_death; sounds/enemies/toyduck/toyduck_death.mp3; 0; 35;
+
+toycar_honk; sounds/enemies/toycar/car_honk.mp3; 0; 38;
+toycar_idle; sounds/enemies/toycar/car_idle.mp3; 0; 12;
+
+funwall_kiss; sounds/enemies/funwall/funwall_kiss.mp3; 0; 43;
+funwall_mouth_open; sounds/enemies/funwall/funwall_mouth_open.mp3; 0; 40;
+funwall_mouth_close; sounds/enemies/funwall/funwall_mouth_close.mp3; 0; 40;
+funwall_hit; sounds/enemies/funwall/funwall_hit.mp3; 0; 30;
+funwall_death; sounds/enemies/funwall/funwall_death.mp3; 0; 46;
+funwall_explosion; sounds/enemies/funwall/funwall_explosion.mp3; 0; 62;

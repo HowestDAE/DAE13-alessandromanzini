@@ -46,6 +46,9 @@ public:
 	Cuphead const* GetPlayer( ) const;
 	const std::vector<Entity*>& GetEntities( ) const;
 
+	static void PushCompositionEntity( Entity* pEntity );
+	static void PopCompositionEntity( Entity* pEntity );
+
 private:
 	enum class BackgroundScope;
 
@@ -84,6 +87,8 @@ private:
 	std::vector<Enemy*> m_pEnemies;
 	std::vector<Entity*> m_pCards;
 	std::vector<Entity*> m_pCoins;
+
+	static std::vector<Entity*> sm_pCompositionEntities;
 
 	void Initialize( );
 	void InitializeProps( const std::string& propsCsvPath );

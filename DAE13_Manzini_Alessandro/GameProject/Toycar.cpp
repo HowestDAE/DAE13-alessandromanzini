@@ -2,11 +2,13 @@
 #include "Toycar.h"
 #include "Constants.h"
 #include "Sprite.h"
+#include "SoundManager.h"
 
 Toycar::Toycar( const Point2f& position, float aggroRadius, float dropRadius, unsigned int count, bool updown )
 	: Enemy( position, 1, aggroRadius, dropRadius )
 	, mk_Count{ count }
 	, mk_Updown{ updown }
+	, m_HasAggroed{ false }
 	, m_pIdleSprites{ mk_Count }
 	, m_CollisionLocation{ m_Location }
 {
@@ -38,6 +40,12 @@ void Toycar::UpdateLocation( float elapsedSec )
 	m_CollisionLocation += m_Velocity * elapsedSec;
 }
 
+void Toycar::Reset( const Point2f& position )
+{
+	m_Location = m_CollisionLocation = Vector2f{ position };
+	m_HasAggroed = false;
+}
+
 void Toycar::LinkTexture( ResourcesLinker* pResourcesLinker )
 {
 	// Every card has 2 circles (count*2)
@@ -55,4 +63,19 @@ void Toycar::LinkTexture( ResourcesLinker* pResourcesLinker )
 	}	
 	m_CollisionManager = CollisionManager( std::move( collisionCircles ), &m_CollisionLocation );
 	
+}
+
+void Toycar::AggroEvent( )
+{
+	if ( !m_HasAggroed )
+	{
+		SoundManager::Play( "toycar_honk" );
+		SoundManager::Play( "toycar_idle", 20 );
+		m_HasAggroed = true;	
+	}
+}
+
+void Toycar::DropEvent( )
+{
+	SoundManager::Stop( "toycar_idle" );
 }

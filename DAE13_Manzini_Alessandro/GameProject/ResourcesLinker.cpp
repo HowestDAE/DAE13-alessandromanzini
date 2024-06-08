@@ -62,7 +62,7 @@ SoundStream const* ResourcesLinker::GetSoundStream( const std::string& uid ) con
 	return m_pSoundStreams.at( uid );
 }
 
-SoundEffect const* ResourcesLinker::GetSoundEffect( const std::string& uid ) const
+SoundEffect* ResourcesLinker::GetSoundEffect( const std::string& uid ) const
 {
 	return m_pSoundEffects.at( uid );
 }
@@ -74,10 +74,7 @@ void ResourcesLinker::ResetSound( ) const
 		pair.second->Stop( );
 	}
 
-	for ( std::pair<const std::string, SoundEffect*> pair : m_pSoundEffects )
-	{
-		pair.second->StopAll( );
-	}
+	SoundEffect::StopAll( );
 }
 
 VectorSprite* ResourcesLinker::GetScreenFXTexture( )
@@ -133,8 +130,8 @@ void ResourcesLinker::InitializeEntities( )
 	LoadSpriteSettingsFromFile( "csv/resources/hud/hud_sprite_settings.csv" );
 
 	// Weapons
-	LoadTexturesFromFile( "csv/resources/weapon/peashooter_textures.csv", true );
-	LoadSpriteSettingsFromFile( "csv/resources/weapon/peashooter_sprite_settings.csv" );
+	LoadTexturesFromFile( "csv/resources/weapon/weapon_textures.csv", true );
+	LoadSpriteSettingsFromFile( "csv/resources/weapon/weapon_sprite_settings.csv" );
 	
 	// Coins
 	LoadTexturesFromFile( "csv/resources/coin/coin_textures.csv" );

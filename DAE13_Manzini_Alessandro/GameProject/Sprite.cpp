@@ -127,7 +127,7 @@ int Sprite::GetCurrentFrame( ) const
 
 void Sprite::SetCurrentFrame( int currentFrame )
 {
-	m_CurrentFrame = currentFrame;
+	m_CurrentFrame = currentFrame % (mk_Cols * mk_Rows);
 }
 
 void Sprite::SetNoRepeat( bool noRepeat )

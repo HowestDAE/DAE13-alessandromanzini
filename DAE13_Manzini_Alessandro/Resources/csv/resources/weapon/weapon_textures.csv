@@ -2,3 +2,6 @@ label; path;
 peashooter; player/weapon/AS_peashooter_loop_1x6.png;
 peashooter_ex; player/weapon/AS_peashooter_ex_loop_2x4.png;
 peashooter_death; player/weapon/AS_peashooter_death_1x6.png;
+
+spread; player/weapon/AS_spread_loop_1x4.png;
+spread_death; player/weapon/AS_spread_death_1x5.png;

@@ -27,7 +27,7 @@ public:
 	Pattern* GetPattern( const std::string& uid );
 
 	SoundStream const* GetSoundStream( const std::string& uid ) const;
-	SoundEffect const* GetSoundEffect( const std::string& uid ) const;
+	SoundEffect* GetSoundEffect( const std::string& uid ) const;
 	void ResetSound( ) const;
 
 	VectorSprite* GetScreenFXTexture( );

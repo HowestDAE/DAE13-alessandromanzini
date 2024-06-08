@@ -51,6 +51,7 @@ protected:
 	void QueueTexture( unsigned int index, const TextureInfo& textureInfo, bool priority = false );
 	void QueueTexture( unsigned int index, Texture2D* pTexture, bool flipX = false, bool flipY = false, bool priority = false );
 	bool IsQueueReady( unsigned int index ) const;
+	void ClearQueue( unsigned int index );
 
 private:
 	bool m_IsAlive;
