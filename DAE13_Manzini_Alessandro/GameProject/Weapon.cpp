@@ -125,3 +125,16 @@ const std::string& Weapon::GetExAudioUid( ) const
 {
 	return mk_ExMoveSettings.spawnAudioUid;
 }
+
+void Weapon::LinkTexture( ResourcesLinker* pResourcesLinker )
+{
+	for ( Projectile* pProjectile : m_pProjectiles )
+	{
+		pProjectile->LinkTexture( pResourcesLinker );
+	}
+
+	for ( Projectile* pExMove : m_pExMoves )
+	{
+		pExMove->LinkTexture( pResourcesLinker );
+	}
+}

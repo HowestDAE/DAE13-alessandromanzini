@@ -55,3 +55,70 @@ fg2_frogbot; background/part1/fg2/ST_fg2_frogbot_33.png;
 fg2_planet; background/part1/fg2/ST_fg2_planet_34.png; 
 
 fg1_star; background/part1/fg1/ST_fg1_star1_31.png; 
+
+
+bg4_sky; background/part2/bg_sky.png;
+
+bg2_hallway; background/part2/bg_hallway_room.png;
+bg2_checker_floor; background/part2/checker_floor.png;
+bg2_skylight_room; background/part2/skylight_room.png;
+bg2_simple_divider; background/part2/simple_divider.png;
+bg2_wonky_room; background/part2/bg_wonky_room.png;
+bg2_wonky_room2; background/part2/bg_wonky_room_2.png;
+bg2_corner; background/part2/bg_corner.png;
+
+bg1_curved_staircase; background/part2/curved_staircase.png;
+bg1_door_diver; background/part2/bg_door_diver.png;
+bg1_sculpture; background/part2/sculpture.png;
+
+mg2_sculpture_duo; background/part2/bg_sculpture_duo.png;
+
+mg1_grid_bottom; background/part2/mg1/ST_grid_bottom.png;
+mg1_grid_top; background/part2/mg1/ST_grid_top.png;
+
+fg2_spikey; background/part2/fg2/ST_fg2_spikey.png;
+
+bg5_lollipop2; background/part3/lollipop2.png;
+bg5_lollipop3; background/part3/lollipop3.png;
+bg5_circle2; background/part3/circle2.png;
+
+bg4_rainbow_loop; background/part3/rainbow_loop.png;
+
+bg3_clouds_loop; background/part3/clouds_loop.png;
+bg3_circle; background/part3/circle.png;
+bg3_stairhands; background/part3/stairhands.png;
+bg3_stairs; background/part3/stairs.png;
+
+bg2_pianokeys; background/part3/pianokeys.png;
+
+bg1_curtain; background/part3/curtain.png;
+bg1_lollipop; background/part3/lollipop.png;
+bg1_juggling; background/part3/juggling.png;
+
+mg2_radioflower; background/part3/radioflower.png;
+mg2_micflower; background/part3/micflower.png;
+
+mg1_xxl_platform; background/part3/xxl_platform.png;
+mg1_xxl_platform2; background/part3/xxl_platform2.png;
+mg1_xxl_platform3; background/part3/xxl_platform3.png;
+mg1_xxl_platform4; background/part3/xxl_platform4.png;
+mg1_platform; background/part3/platform.png;
+mg1_platform2; background/part3/platform2.png;
+mg1_platform3; background/part3/platform3.png;
+mg1_platform4; background/part3/platform4.png;
+mg1_xxxl_platform; background/part3/xxxl_platform.png;
+mg1_xxxl_platform2; background/part3/xxxl_platform2.png;
+mg1_wallbg; background/part3/wallbg.png;
+mg1_levelend; background/part3/levelend.png;
+mg1_levelend_curtains; background/part3/level_end_curtains.png;
+mg1_wall_extention; background/part3/wall_extention.png;
+mg1_wall_extention_top; background/part3/wall_extention_top.png;
+mg1_arrow; background/part3/arrow.png;
+
+fg1_rainbow; background/part3/fg_rainbow.png;
+fg1_rainbow2; background/part3/fg_rainbow2.png;
+fg1_levelend; background/part3/fg_levelend.png;
+fg1_triangle; background/part3/levelend_triangle.png;
+
+fg2_plainflower; background/part3/plainflower.png;
+fg2_whitecloud; background/part3/whitecloud.png;

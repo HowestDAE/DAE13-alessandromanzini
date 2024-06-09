@@ -75,6 +75,8 @@ private:
 
 	bool m_DeathScreenLoaded;
 
+	bool m_IntroPlayed;
+
 	int m_CollectedCoinsCount;
 
 	std::vector<NonInterractableProp> m_BackgroundProps;

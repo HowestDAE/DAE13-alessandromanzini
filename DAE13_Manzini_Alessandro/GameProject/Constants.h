@@ -9,6 +9,7 @@ public:
 
 	static const Point2f sk_HUD_HP_Position;
 	static const Point2f sk_HUD_Excards_Position;
+	static const Point2f sk_HUD_WeaponIcon_Position;
 
 	static const Point2f sk_CupheadStartingPosition;
 

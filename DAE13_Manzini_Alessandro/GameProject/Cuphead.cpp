@@ -203,6 +203,12 @@ void Cuphead::UpdateWeapons( float elapsedSec )
 {
 	m_WeaponManager.Update( elapsedSec );
 	TryShoot( );
+
+	if ( m_MovementManager.GetSwapWeapons( ) )
+	{
+		m_WeaponManager.SwapWeapons( );
+		m_pHUDManager->SwapWeapon( m_WeaponManager.GetEquippedWeaponType( ) );
+	}
 }
 
 void Cuphead::UpdateIFrames( float elapsedSec )

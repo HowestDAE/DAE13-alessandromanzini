@@ -48,7 +48,7 @@ void WeaponsManager::SwapWeapons( )
 	m_EquippedWeaponIndex = (m_EquippedWeaponIndex + 1) % smk_WeaponsCount;
 }
 
-void WeaponsManager::Shoot( const Point2f& origin, float radius, float rotation )
+bool WeaponsManager::Shoot( const Point2f& origin, float radius, float rotation )
 {
 	if ( m_ShotAccumulatedTime >= smk_ShotDelay )
 	{
@@ -61,10 +61,13 @@ void WeaponsManager::Shoot( const Point2f& origin, float radius, float rotation 
 			SoundManager::Play( m_pWeapons[m_EquippedWeaponIndex]->GetAudioUid( ), -1 );
 			m_IsAudioLoopPlaying = true;
 		}
+
+		return true;
 	}
+	return false;
 }
 
-void WeaponsManager::ShootEX( const Point2f& origin, float radius, float rotation )
+bool WeaponsManager::ShootEX( const Point2f& origin, float radius, float rotation )
 {
 	if ( m_ExAccumulatedTime >= smk_ExDelay && m_ExMoves > 0 )
 	{
@@ -75,7 +78,10 @@ void WeaponsManager::ShootEX( const Point2f& origin, float radius, float rotatio
 		m_pWeapons[m_EquippedWeaponIndex]->SpawnEx( origin, radius, rotation );
 
 		SoundManager::Play( m_pWeapons[m_EquippedWeaponIndex]->GetExAudioUid( ) );
+
+		return true;
 	}
+	return false;
 }
 
 void WeaponsManager::CheckCollision( CollidableEntity& other )
@@ -88,7 +94,7 @@ void WeaponsManager::CheckCollision( CollidableEntity& other )
 
 void WeaponsManager::Draw( ) const
 {
-	for ( int index{}; index < smk_WeaponsCount-1; ++index )
+	for ( int index{}; index < smk_WeaponsCount; ++index )
 	{
 		m_pWeapons[index]->Draw();
 	}
@@ -137,6 +143,11 @@ bool WeaponsManager::RequireExMoveQueue( )
 bool WeaponsManager::GetIsExMoveOngoing( ) const
 {
 	return m_ExAccumulatedTime < smk_ExIntermediateDelay;
+}
+
+Weapon::WeaponType WeaponsManager::GetEquippedWeaponType( ) const
+{
+	return m_pWeapons[m_EquippedWeaponIndex]->GetType();
 }
 
 void WeaponsManager::StopAudioLoop( )

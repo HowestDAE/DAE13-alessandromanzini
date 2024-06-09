@@ -17,8 +17,8 @@ public:
 	WeaponsManager& operator=( WeaponsManager&& rhs ) = delete;
 
 	void SwapWeapons( );
-	void Shoot( const Point2f& origin, float radius, float rotation );
-	void ShootEX( const Point2f& origin, float radius, float rotation );
+	bool Shoot( const Point2f& origin, float radius, float rotation );
+	bool ShootEX( const Point2f& origin, float radius, float rotation );
 
 	void CheckCollision( CollidableEntity& other );
 
@@ -31,6 +31,8 @@ public:
 	// Gets the ex queue flag and turns it to false
 	bool RequireExMoveQueue( );
 	bool GetIsExMoveOngoing( ) const;
+
+	Weapon::WeaponType GetEquippedWeaponType( ) const;
 
 	void StopAudioLoop( );
 

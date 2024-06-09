@@ -34,6 +34,7 @@ private:
 	static const float smk_GreenwichMeridian;
 	static const float smk_CameraPulsation;
 	static const float smk_CameraMovementEpsilon;
+	static const float smk_MaxCameraX;
 
 	Vector2f m_CameraLocationVector;
 	Vector2f m_CameraTranslationVector;

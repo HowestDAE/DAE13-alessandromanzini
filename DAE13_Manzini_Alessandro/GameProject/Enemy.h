@@ -21,6 +21,8 @@ protected:
 
     bool GetIsAggro( ) const;
 
+    virtual bool GetIFrameState( ) const override;
+
 private:
     float m_AggroRadius;
     float mk_DropRadius;

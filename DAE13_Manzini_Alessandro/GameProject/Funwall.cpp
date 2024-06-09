@@ -58,11 +58,12 @@ Funwall::~Funwall( ) noexcept
 
 void Funwall::Draw( ) const
 {
+	m_pUhohEnemies[m_UhohIndex]->Draw( );
+
 	for ( int i{}; i < smk_SidesCount; ++i )
 	{
 		m_Lips[i].Draw( );
 	}
-	m_pUhohEnemies[m_UhohIndex]->Draw( );
 
 	Enemy::Draw( );
 
@@ -274,6 +275,7 @@ void Funwall::Kill( )
 	QueueTexture( 0, m_pDeathSprite );
 	QueueTexture( 2, TextureInfo{ m_pDeathCoverSprite }, true );
 	ClearQueue( 1 );
+	ClearQueue( 3 );
 
 	SoundManager::Play( "funwall_death" );
 	SoundManager::Play( "funwall_explosion" );

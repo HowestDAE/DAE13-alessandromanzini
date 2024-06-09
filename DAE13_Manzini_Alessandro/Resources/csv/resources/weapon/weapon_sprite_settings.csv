@@ -4,4 +4,5 @@ peashooter_ex;2;4;0.1f;0;-90.f;0.f;0;
 peashooter_death; 1; 6; 0.027f; 0; 65.f; -55.f; 1;
 
 spread;1;4;0.1f;0;0.f;0.f;0;
-spread_death; 1; 5;0.03f; 0; 30.f; -55.f; 1;
+spread_ex;1;4;0.1f;0;-90.f;0.f;0;
+spread_death; 1; 5;0.03f; 0; 20.f; -20.f; 1;

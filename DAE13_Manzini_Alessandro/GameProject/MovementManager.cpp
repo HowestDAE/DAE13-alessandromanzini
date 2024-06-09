@@ -4,6 +4,9 @@
 #include "Constants.h"
 #include <iostream>
 
+const float MovementManager::smk_InputDelay{ 0.25f };
+const float MovementManager::smk_ToAirborneTime{ 0.17f };
+
 MovementManager::MovementManager( )
 	: m_KeysStates{}
 	, m_DirectionData{ AimDirection::none, true }
@@ -31,6 +34,8 @@ MovementManager::MovementManager( )
 	, m_IsPropelled{}
 	, m_IsPropelling{}
 	, m_PropelledAccumulatedTime{}
+	, m_SwapWeaponsRequested{}
+	, m_SwapWeaponsAccumulatedTime{}
 {
 	m_KeysStates.stopKeyPressed = true;
 }
@@ -85,6 +90,11 @@ bool MovementManager::GetIsParrying( ) const
 	return m_IsParrying;
 }
 
+bool MovementManager::GetSwapWeapons( ) const
+{
+	return m_SwapWeaponsRequested;
+}
+
 void MovementManager::SetExingState( bool isExing )
 {
 	m_IsExMoving = isExing;
@@ -126,7 +136,11 @@ void MovementManager::Update( float elapsedSec )
 	UpdateState( elapsedSec );
 
 	ProcessMovementData( );
-	m_IsAirborne = true;
+
+	if ( m_AirborneAccumulatedTime >= smk_ToAirborneTime )
+	{
+		m_IsAirborne = true;
+	}
 }
 
 void MovementManager::UpdateVelocity( Vector2f& velocity, float elapsedSec )
@@ -232,6 +246,7 @@ void MovementManager::KeyPressEvent( const SDL_KeyboardEvent& e )
 		m_KeysStates.exMoveKeyPressed = pressed;
 		break;
 	case SDLK_x:
+		m_KeysStates.swapWeaponsKeyChanged = (m_KeysStates.swapWeaponsKeyPressed != pressed);
 		m_KeysStates.swapWeaponsKeyPressed = pressed;
 		break;
 	default:
@@ -272,6 +287,9 @@ void MovementManager::Reset( )
 	m_IsPropelled = false;
 	m_IsPropelling = false;
 	m_PropelledAccumulatedTime = 0.f;
+
+	m_SwapWeaponsRequested = false;
+	m_SwapWeaponsAccumulatedTime = 0.f;
 }
 
 void MovementManager::DefineState( )
@@ -318,16 +336,18 @@ void MovementManager::UpdateState( float elapsedSec )
 			m_IsDashing = false;
 			m_DashingAccumulatedTime = 0.f;
 			m_DashingCooldownAccumulatedTime = 0.f;
+			m_AirborneAccumulatedTime = 0.f;
 		}
 	}
 	else
 	{
 		m_DashingCooldownAccumulatedTime += elapsedSec;
 
-		if ( m_IsAirborne )
+		m_AirborneAccumulatedTime += elapsedSec;
+		/*if ( m_IsAirborne )
 		{
 			m_AirborneAccumulatedTime += elapsedSec;
-		}
+		}*/
 
 		if ( m_IsGravityReversing )
 		{
@@ -365,6 +385,17 @@ void MovementManager::UpdateState( float elapsedSec )
 			m_IsParryIFraming = false;
 			m_ParryIFramingElapsedTime = 0.f;
 		}
+	}
+
+	m_SwapWeaponsAccumulatedTime += elapsedSec;
+	if ( m_KeysStates.swapWeaponsKeyPressed && m_SwapWeaponsAccumulatedTime >= smk_InputDelay )
+	{
+		m_SwapWeaponsAccumulatedTime = 0.f;
+		m_SwapWeaponsRequested = true;
+	}
+	else
+	{
+		m_SwapWeaponsRequested = false;
 	}
 }
 

@@ -7,9 +7,12 @@ public:
     Spread( );
     virtual ~Spread( ) = default;
 
+    virtual void SpawnProjectile( const Point2f& origin, float radius, float rotation ) override;
+    virtual void SpawnEx( const Point2f& origin, float radius, float rotation ) override;
+
     virtual Weapon::WeaponType GetType( ) const override;
-    virtual void LinkTexture( ResourcesLinker* pResourcesLinker ) override;
 
 private:
+
 };
 

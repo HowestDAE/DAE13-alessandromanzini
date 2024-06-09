@@ -35,11 +35,17 @@ void Pattern::Draw( const Point2f& pos, float percentage ) const
 {
 	// giving a height of 0.f draws the entire image, therefore we must return
 	const float epsilon{ .0001f };
-	if ( percentage <= epsilon )
+	
+	if ( percentage >= 1.f - epsilon )
 	{
+		Texture2D::Draw( pos, Rectf{} );
 		return;
 	}
-	Texture2D::Draw( pos, Rectf{ 0.f, 0.f, GetWidth(), GetHeight() * percentage } );
+	else if ( percentage > epsilon )
+	{
+		Texture2D::Draw( pos, Rectf{ 0.f, 0.f, GetWidth(), GetHeight() * percentage } );
+	}
+
 }
 
 void Pattern::Draw( const Point2f& pos, float rotation, bool pointToCenter ) const

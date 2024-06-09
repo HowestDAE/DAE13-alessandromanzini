@@ -25,6 +25,8 @@ public:
 
 	bool GetIsParrying( ) const;
 
+	bool GetSwapWeapons( ) const;
+
 	void SetExingState( bool isExing );
 	void ToggleGravity( );
 
@@ -40,6 +42,8 @@ public:
 	void Reset( );
 
 private:
+	const static float smk_InputDelay;
+
 	struct DirectionData
 	{
 		AimDirection direction;
@@ -64,6 +68,7 @@ private:
 
 	bool m_IsAirborne;
 	float m_AirborneAccumulatedTime;
+	const static float smk_ToAirborneTime;
 
 	bool m_IsParrying;
 	bool m_IsParried;
@@ -82,6 +87,9 @@ private:
 	bool m_IsPropelled;
 	bool m_IsPropelling;
 	float m_PropelledAccumulatedTime;
+
+	bool m_SwapWeaponsRequested;
+	float m_SwapWeaponsAccumulatedTime;
 
 	void DefineState( );
 	void UpdateState( float elapsedSec );

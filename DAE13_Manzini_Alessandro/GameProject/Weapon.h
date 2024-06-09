@@ -33,7 +33,7 @@ public:
 	const std::string& GetAudioUid( ) const;
 	const std::string& GetExAudioUid( ) const;
 
-	virtual void LinkTexture( ResourcesLinker* pResourcesLinker ) = 0;
+	virtual void LinkTexture( ResourcesLinker* pResourcesLinker );
 
 protected:
 	const ProjectileSettings mk_ProjectileSettings;

@@ -11,3 +11,7 @@ mg2_crater_loop; 4;
 
 mg1_floor_loop; 4;
 mg1_topfloor_loop; 2;
+
+bg4_rainbow_loop; 4;
+
+bg3_clouds_loop; 3;

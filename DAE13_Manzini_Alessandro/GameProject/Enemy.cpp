@@ -72,3 +72,8 @@ bool Enemy::GetIsAggro( ) const
 {
 	return m_IsAggro;
 }
+
+bool Enemy::GetIFrameState( ) const
+{
+	return false;
+}

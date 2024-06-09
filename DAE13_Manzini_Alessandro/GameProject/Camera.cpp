@@ -16,6 +16,8 @@ const float Camera::smk_CameraPulsation{ float(M_PI / 2.) / (smk_GreenwichMeridi
 
 const float Camera::smk_CameraMovementEpsilon{ 10.f };
 
+const float Camera::smk_MaxCameraX{ 15260.f };
+
 Camera::Camera( const Rectf& viewPort )
 	: mk_pStageManager{}
 	, mk_ViewPort{ viewPort }
@@ -36,11 +38,19 @@ void Camera::Aim( const Point2f& position, float width )
 {
 	// [position.x - viewport/2] gives the position relative to the actual point. 
 	// [+ width/2] makes it relative to the texture.
-	const float screenTranslation{ position.x - mk_ViewPort.width / 2 + width / 2 };
+	float screenTranslation{ position.x - mk_ViewPort.width / 2 + width / 2 };
 
 	// avoid going off the screen
-	m_AimLocationVector.Set( (screenTranslation < 0.f) ? 0.f : screenTranslation, 0.f );
+	if( screenTranslation > smk_MaxCameraX )
+	{
+		screenTranslation = smk_MaxCameraX;
+	}
+	else if( screenTranslation < 0.f )
+	{
+		screenTranslation = 0.f;
+	}
 
+	m_AimLocationVector.Set( screenTranslation, 0.f );
 	m_CameraTranslationVector = m_AimLocationVector - m_CameraLocationVector;
 }
 

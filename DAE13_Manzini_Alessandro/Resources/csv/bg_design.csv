@@ -1,5 +1,9 @@
 label; depth; x; y;
 bg5_bg_loop; 6; 0.f; 0.f;
+bg5_lollipop2; 6; 6400.f; 510.f;
+bg3_circle; 6; 6250.f; 400.f;
+bg5_lollipop3; 6; 7620.f; 100.f;
+bg5_circle2; 6; 7600.f; 400.f;
 
 bg4_curtain_loop; 5; 300.f; 230.f;
 
@@ -24,7 +28,7 @@ bg1_cloud1; 2; 3500.f; 466.f;
 bg1_greyplant; 2; 3590.f; 210.f;
 bg1_blueplant; 2; 3890.f; 170.f;
 
-mg2_mantis; 1; 2035.f; 215.f;
+mg2_mantis; 1; 2035.f; 215.f; # part1 
 mg2_craterstart; 1; 780.f; 127.f;
 mg2_crater_loop; 1; 1283.f; 127.f;
 mg2_trunk; 1; 977.f; 247.f;
@@ -70,4 +74,75 @@ fg2_frogbot; -2; 6870.f; -200.f;
 fg2_planet; -2; 5745.f; -195.f;
 
 fg1_star; -3; 882.f; 470.f;
-fg1_star; -3; 2600.f; 472.f }; .8f;
+fg1_star; -3; 2600.f; 472.f; .8f;
+
+bg4_rainbow_loop; 5; 8400.f; 160.f;
+
+bg4_sky; 5; 5400.f; 300.f;
+bg4_sky; 5; 6700.f; 300.f;
+
+bg2_checker_floor; 4; 7800.f; -20.f;
+bg2_wonky_room2; 4; 8600.f; 220.f;
+bg2_simple_divider; 4; 9000.f; 0.f;
+
+bg2_checker_floor; 3; 6100.f; -70.f;
+bg2_checker_floor; 3; 7900.f; -70.f;
+bg2_hallway; 3; 4840.f; -70.f;
+bg2_skylight_room; 3; 6320.f; 230.f;
+bg2_skylight_room; 3; 8060.f; 200.f;
+bg2_wonky_room; 3; 7140.f; -150.f;
+bg2_simple_divider; 3; 6990.f; -50.f;
+bg2_simple_divider; 3; 7790.f; -80.f;
+
+bg2_corner; 3; 8710.f; -50.f;
+
+bg1_door_diver; 2; 6500.f; 50.f;
+bg1_curved_staircase; 2; 7420.f; 150.f;
+bg1_sculpture; 2; 7820.f; 70.f;
+
+mg2_sculpture_duo; 1; 6480.f; 50.f;
+
+bg2_pianokeys; 5; 8900.f; -100.f;
+
+bg3_clouds_loop; 4; 10000.f; 110.f;
+bg3_clouds_loop; 4; 10200.f; 0.f;
+bg3_stairs; 4; 9800.f; -300.f;
+bg3_stairhands; 4; 9670.f; -20.f;
+
+
+bg1_curtain; 2; 11080.f; 320.f;
+bg1_lollipop; 2; 10805.f; -385.f;
+bg1_juggling; 2; 14050.f; 190.f;
+
+mg1_grid_bottom; 0; 5730.f; -285.f;
+mg1_grid_top; 0; 5765.f; 450.f;
+
+fg2_spikey; -2; 7200.f; 540.f;
+
+mg2_radioflower; 1; 13460.f; -40.f;
+mg2_micflower; 1; 14160.f; -230.f;
+
+mg1_xxl_platform; 0; 11865.f; 560.f;
+mg1_xxl_platform2; 0; 11920.f; -20.f;
+mg1_platform2; 0; 12650.f; 515.f;
+mg1_xxl_platform4; 0; 13155.f; 515.f;
+mg1_xxl_platform3; 0; 13085.f; -50.f;
+mg1_platform3; 0; 13925.f; -50.f;
+mg1_platform; 0; 14150.f; 500.f;
+mg1_xxxl_platform2; 0; 14650.f; -150.f;
+mg1_xxxl_platform; 0; 14650.f; 545.f;
+mg1_wallbg; 0; 15530.f; -70.f;
+mg1_levelend; 0; 15920; -49.f;
+mg1_wall_extention; 0; 15538.f; -100.f;
+mg1_wall_extention_top; 0; 15538.f; 610.f;
+mg1_arrow; 0; 16080.f; 120.f;
+
+fg1_rainbow2; -1; 15500.f; -340.f;
+fg1_rainbow; -1; 14660; -230.f;
+fg1_rainbow; -1; 17800; -310.f;
+fg1_levelend; -1; 19360; -20.f;
+fg1_triangle; -1; 19340.f; -40.f;
+mg1_levelend_curtains; -1; 18680; 585.f;
+
+fg2_plainflower; -2; 15760; -340.f;
+fg2_whitecloud; -2; 19440.f; 560.f;

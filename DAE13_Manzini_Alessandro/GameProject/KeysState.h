@@ -19,6 +19,8 @@ struct KeysState final
 	bool shootKeyPressed;
 	bool lockKeyPressed;
 	bool exMoveKeyPressed;
+
 	bool swapWeaponsKeyPressed;
+	bool swapWeaponsKeyChanged;
 };
 

@@ -40,6 +40,8 @@ StageManager::StageManager( Camera* pCamera, ResourcesLinker* pResourcesLinker )
 
 	, m_DeathScreenLoaded{}
 
+	, m_IntroPlayed{}
+
 	, mk_pLockedEnemy{}
 
 	, m_pEntities{}
@@ -71,7 +73,12 @@ void StageManager::Start( ) noexcept
 {
 	m_IsHalted = false;
 	SoundManager::Loop( "bg_music" );
-	SoundManager::Play( "intro" );
+
+	if( !m_IntroPlayed )
+	{
+		m_IntroPlayed = true;
+		SoundManager::Play( "intro" );	
+	}
 }
 
 void StageManager::Pause( ) noexcept
@@ -367,7 +374,7 @@ void StageManager::UpdateEntities( float elapsedSec )
 
 	for ( Enemy* pEnemy : m_pEnemies )
 	{
-		pEnemy->Update( elapsedSec, m_pPlayer->GetLocation() );
+		pEnemy->Update( elapsedSec, m_pPlayer->GetLocation( ) );
 
 		if ( pEnemy->GetIsScreenLock( ) )
 		{
@@ -433,9 +440,11 @@ void StageManager::CheckPlayerCollisions( )
 
 void StageManager::CheckEntitiesCollisions( )
 {
+	const Vector2f aggroTarget{ m_pPlayer->GetIsAlive( ) ? m_pPlayer->GetLocation( ) : m_pCamera->GetCameraLocation( ) };
+
 	for ( Enemy* pEnemy : m_pEnemies )
 	{
-		if ( pEnemy->CompareAggroDistance( m_pPlayer->GetLocation( ) ) )
+		if ( pEnemy->CompareAggroDistance( aggroTarget ) )
 		{
 			if ( pEnemy->GetIsAlive( ) )
 			{

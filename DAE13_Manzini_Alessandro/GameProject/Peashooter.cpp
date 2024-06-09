@@ -56,16 +56,3 @@ void Peashooter::SpawnProjectile( const Point2f& origin, float radius, float rot
 
 	m_IsAlternatedShot = !m_IsAlternatedShot;
 }
-
-void Peashooter::LinkTexture( ResourcesLinker* pResourcesLinker )
-{
-	for ( Projectile* pProjectile : m_pProjectiles )
-	{
-		pProjectile->LinkTexture( pResourcesLinker );
-	}
-
-	for ( Projectile* pExMove : m_pExMoves )
-	{
-		pExMove->LinkTexture( pResourcesLinker );
-	}
-}
