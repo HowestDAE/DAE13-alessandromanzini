@@ -7,7 +7,6 @@ class Card final
 {
 public:
     explicit Card( const Point2f& position );
-    virtual ~Card( ) noexcept = default;
 
     virtual void Draw( ) const override;
     virtual void Update( float elapsedSec ) override;

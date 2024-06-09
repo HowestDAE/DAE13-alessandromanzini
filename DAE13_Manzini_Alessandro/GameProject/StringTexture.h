@@ -5,7 +5,7 @@ class StringTexture final
 {
 public:
 	explicit StringTexture( const Point2f& position, const std::string& text, const std::string& fontPath, int size, const Color4f& color = {} );
-	~StringTexture( );
+	~StringTexture( ) noexcept;
 
 	StringTexture( const StringTexture& other );
 	StringTexture( StringTexture&& other ) noexcept;

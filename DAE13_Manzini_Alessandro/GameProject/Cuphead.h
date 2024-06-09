@@ -12,7 +12,6 @@ class Cuphead final
 {
 public:
     explicit Cuphead( const Point2f& position, HUDManager* pHUDManager );
-    virtual ~Cuphead( ) noexcept = default;
 
     virtual void Draw( ) const override;
     void DrawProjectiles( ) const;

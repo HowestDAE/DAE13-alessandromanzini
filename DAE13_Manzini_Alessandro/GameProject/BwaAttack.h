@@ -8,7 +8,7 @@ struct Letter
 	Point2f position;
 };
 
-class BwaAttack :
+class BwaAttack final :
     public Entity
 {
 public:

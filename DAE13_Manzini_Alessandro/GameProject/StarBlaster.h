@@ -8,7 +8,7 @@ class StarBlaster final :
 {
 public:
 	explicit StarBlaster( const Point2f& position, float aggroRadius, float dropRadius, bool variation = false );
-	virtual ~StarBlaster( ) noexcept;
+	virtual ~StarBlaster( ) noexcept override;
 
 	StarBlaster( const StarBlaster& ) = delete;
 	StarBlaster( StarBlaster&& ) = delete;

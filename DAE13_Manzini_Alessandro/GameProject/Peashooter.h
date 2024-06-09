@@ -5,7 +5,6 @@ class Peashooter final :
 {
 public:
     Peashooter();
-    virtual ~Peashooter( ) noexcept = default;
 
     virtual Weapon::WeaponType GetType( ) const override;
 
