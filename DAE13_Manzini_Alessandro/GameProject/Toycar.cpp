@@ -46,6 +46,12 @@ void Toycar::Reset( const Point2f& position )
 	m_HasAggroed = false;
 }
 
+void Toycar::Reset( )
+{
+	m_Location = m_CollisionLocation = Vector2f{ mk_StartLocation };
+	m_HasAggroed = false;
+}
+
 void Toycar::LinkTexture( ResourcesLinker* pResourcesLinker )
 {
 	// Every card has 2 circles (count*2)

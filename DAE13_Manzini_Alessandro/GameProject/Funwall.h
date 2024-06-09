@@ -7,7 +7,7 @@ class Funwall final :
     public Enemy
 {
 public:
-    explicit Funwall( const Point2f& position, float aggroRadius, float dropRadius );
+    explicit Funwall( const Point2f& position, float aggroRadius, float dropRadius, bool tongueVariation );
     virtual ~Funwall( ) noexcept override;
 
     Funwall( const Funwall& ) = delete;
@@ -29,6 +29,12 @@ public:
 
 private:
     const static float smk_LipsSpawnDelay;
+    const static Vector2f smk_ToycarBottomSpawnOffset;
+    const static Vector2f smk_ToycarTopSpawnOffset;
+    const static Vector2f smk_TongueBottomSpawnOffset;
+    const static Vector2f smk_TongueTopSpawnOffset;
+
+    const bool mk_TongueVariation;
 
     CollisionManager m_CollisionManager;
 
@@ -52,7 +58,6 @@ private:
     static const float smk_UhohCastDelay;
     static const float smk_UhohAttackDelay;
     static const float smk_UhohRecoverDelay;
-    const Point2f mk_pUhohEnemiesStartingPositions[smk_SidesCount];
     Sprite* m_pUhohSprite[smk_SidesCount];
     Sprite* m_pOpeningSprite[smk_SidesCount];
     Sprite* m_pOpenSprite[smk_SidesCount];
@@ -66,6 +71,8 @@ private:
 
     static const float smk_HitSFXDelay;
     float m_HitSFXTimer;
+
+    void InitializeUhOhEntities( float aggroRadius, float dropRadius );
 
     void UpdateHonkAttack( float elapsedSec, const Vector2f& targetLocation );
     void UpdateUhohAttack( float elapsedSec );

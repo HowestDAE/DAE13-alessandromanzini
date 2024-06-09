@@ -66,6 +66,11 @@ bool Projectile::CheckCollision( CollidableEntity& other )
 	return false;
 }
 
+bool Projectile::GetIFrameState( ) const
+{
+	return !GetIsAlive( );
+}
+
 void Projectile::Reset( const Point2f& origin, float radius, float rotation )
 {
 	m_pLoopSprite->Reset( );

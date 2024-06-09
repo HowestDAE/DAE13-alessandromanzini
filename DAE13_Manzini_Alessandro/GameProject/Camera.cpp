@@ -124,8 +124,6 @@ void Camera::DrawPlatform( ) const
 {
 	PlatformManager const* pPlatformManager{ mk_pStageManager->GetPlatformManager( ) };
 	Cuphead const* pCuphead{ mk_pStageManager->GetPlayer( ) };
-
-	pPlatformManager->Draw( );
 	//pPlatformManager->Draw( pCuphead );
 }
 

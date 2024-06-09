@@ -11,3 +11,8 @@ funwall_mouth_close; sounds/enemies/funwall/funwall_mouth_close.mp3; 0; 40;
 funwall_hit; sounds/enemies/funwall/funwall_hit.mp3; 0; 30;
 funwall_death; sounds/enemies/funwall/funwall_death.mp3; 0; 46;
 funwall_explosion; sounds/enemies/funwall/funwall_explosion.mp3; 0; 62;
+
+cannon_spawn; sounds/enemies/starblaster/cannon_spawn.mp3; 0; 40;
+
+tuba_attack; sounds/enemies/tuba/tuba_attack.mp3; 0; 40;
+tuba_death; sounds/enemies/tuba/tuba_death.mp3; 0; 44;

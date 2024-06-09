@@ -1,0 +1,8 @@
+label; path;
+tuba_idle; enemy/tuba/AS_tuba_idle_1x7.png;
+tuba_attack; enemy/tuba/AS_tuba_attack_4x5.png;
+tuba_attack_cover; enemy/tuba/AS_tuba_attack_cover_4x5.png;
+tuba_a_letter; enemy/tuba/AS_a_1x5.png;
+tuba_bw_letter; enemy/tuba/AS_bw_1x5.png;
+tuba_exclamation_mark; enemy/tuba/AS_exclamation_mark_1x5.png;
+tuba_death; enemy/tuba/AS_tuba_death_1x19.png;

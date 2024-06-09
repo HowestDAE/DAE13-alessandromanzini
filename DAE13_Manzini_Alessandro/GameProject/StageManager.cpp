@@ -10,6 +10,8 @@
 #include "Toyduck.h"
 #include "Toycar.h"
 #include "Funwall.h"
+#include "StarBlaster.h"
+#include "Tuba.h"
 #include "NonInterractableProp.h"
 #include "Projectile.h"
 #include "CSVReader.h"
@@ -54,6 +56,7 @@ StageManager::StageManager( Camera* pCamera, ResourcesLinker* pResourcesLinker )
 	, m_CollectedCoinsCount{}
 {
 	Initialize( );
+
 }
 
 StageManager::~StageManager( ) noexcept
@@ -159,8 +162,47 @@ bool StageManager::GetRequestWinScreen( GameStats& gameStats ) const
 	{
 		gameStats.time = m_TotalElapsedTime;
 		gameStats.collectedCoins = m_CollectedCoinsCount;
-		gameStats.totalCoins = static_cast<int>( m_pCoins.size( ) );
-		gameStats.grade = 'A';
+		gameStats.totalCoins = static_cast<int>(m_pCoins.size( ));
+
+		{
+			// Calculate score
+			int score{};
+			if ( m_TotalElapsedTime < 3 * 60 )
+			{
+				score = 5;
+			}
+			else if ( m_TotalElapsedTime < 4 * 60 )
+			{
+				score = 4;
+			}
+			else if ( m_TotalElapsedTime < 5 * 60 )
+			{
+				score = 3;
+			}
+			score -= gameStats.totalCoins - gameStats.collectedCoins;
+
+			switch ( score )
+			{
+			case 5:
+				gameStats.grade = 'S';
+				break;
+			case 4:
+				gameStats.grade = "A";
+				break;
+			case 3:
+				gameStats.grade = "B";
+				break;
+			case 2:
+				gameStats.grade = "C";
+				break;
+			case 1:
+				gameStats.grade = "D";
+				break;
+			default:
+				gameStats.grade = "F";
+				break;
+			}
+		}
 
 		return true;
 	}
@@ -337,7 +379,15 @@ Entity* StageManager::CreateEntity( const CSVReader& reader )
 		break;
 
 	case 4: // Funwall
-		pEntity = new Funwall( Point2f{ reader.GetFloat( "x" ), reader.GetFloat( "y" ) }, reader.GetFloat( "aggro" ), reader.GetFloat( "drop" ) );
+		pEntity = new Funwall( Point2f{ reader.GetFloat( "x" ), reader.GetFloat( "y" ) }, reader.GetFloat( "aggro" ), reader.GetFloat( "drop" ), reader.GetBoolean("quirk" ) );
+		break;
+
+	case 5: // Starblaster
+		pEntity = new StarBlaster( Point2f{ reader.GetFloat( "x" ), reader.GetFloat( "y" ) }, reader.GetFloat( "aggro" ), reader.GetFloat( "drop" ), reader.GetBoolean( "quirk" ) );
+		break;
+
+	case 6: // Tuba
+		pEntity = new Tuba( Point2f{ reader.GetFloat( "x" ), reader.GetFloat( "y" ) }, reader.GetFloat( "aggro" ), reader.GetFloat( "drop" ) );
 		break;
 	}
 	pEntity->LinkTexture( m_pResourcesLinker );

@@ -24,3 +24,7 @@ funwall_death_cover; enemy/funwall/AS_funwall_death_cover_1x3.png;
 funwall_death_vfx; enemy/funwall/AS_funwall_death_vfx_2x5.png;
 
 lips_loop; enemy/lips/AS_lips_loop_2x5.png;
+
+tongue_intro; enemy/tongue/AS_funwall_tongue_intro_13x1.png;
+tongue_loop; enemy/tongue/AS_funwall_tongue_loop_8x1.png;
+tongue_outro; enemy/tongue/AS_funwall_tongue_outro_8x1.png;

@@ -12,6 +12,7 @@ public:
     virtual bool CompareAggroDistance( const Vector2f& targetLocation );
     
     virtual void Reset( const Point2f& position );
+    virtual void Reset( );
 
     bool GetIsScreenLock( ) const;
 
@@ -22,6 +23,8 @@ protected:
     bool GetIsAggro( ) const;
 
     virtual bool GetIFrameState( ) const override;
+
+    const Point2f mk_StartLocation;
 
 private:
     float m_AggroRadius;

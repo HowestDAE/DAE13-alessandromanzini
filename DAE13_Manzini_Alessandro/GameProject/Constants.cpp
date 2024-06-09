@@ -7,7 +7,7 @@ const Point2f Constants::sk_HUD_HP_Position{ 20.f, 20.f };
 const Point2f Constants::sk_HUD_Excards_Position{ 115.f, 20.f };
 const Point2f Constants::sk_HUD_WeaponIcon_Position{ 30.f, 45.f };
 
-const Point2f Constants::sk_CupheadStartingPosition{ 14000, 300.f }; // 285, 100
+const Point2f Constants::sk_CupheadStartingPosition{ 15000, 100.f }; // 285, 100
 
 const int Constants::sk_CupheadStartingHP{ 3 };
 const float Constants::sk_CupheadIFramesDuration{ 3.f };
@@ -31,8 +31,17 @@ const float Constants::sk_ToyduckSpeed{ 125.f };
 
 const float Constants::sk_ToycarSpeed{ 270.f };
 
-const int Constants::sk_FunwallHP{ 1 }; // 8000
+const int Constants::sk_FunwallHP{ 8000 }; // 8000
 const float Constants::sk_LipSpeed{ 400.f };
+const float Constants::sk_TongueIntroSpeed{ 1400.f };
+const float Constants::sk_TongueOutroSpeed{	1900.f };
+
+const float Constants::sk_StarblasterProjectileSpeed{ 400.f };
+const float Constants::sk_StarblasterProjectileRange{ 300.f };
+
+const int Constants::sk_TubaHP{ 500 }; // 8000
+const float Constants::sk_TubaDeathSpeed{ 250.f };
+const Vector2f Constants::sk_BwaSpeed{ 1100.f, 400.f };
 
 const float Constants::sk_GravityPullSpeed{ 1000.f }; // 1000
 const float Constants::sk_GravityPullAcceleration{ 90.f }; // 90
@@ -40,7 +49,7 @@ const float Constants::sk_GravityPullAcceleration{ 90.f }; // 90
 const float Constants::sk_ProjectileSpeed{ 1050.f }; // 1050
 
 const int Constants::sk_PeashooterCount{ 24 };
-const int Constants::sk_PeashooterDamage{ 40 };
+const int Constants::sk_PeashooterDamage{ 4000 }; // 40
 const float Constants::sk_PeashooterRange{ 1000.f };
 const float Constants::sk_PeashooterExProgressPerHit{ 1.f / 32 }; // 1.f / 32
 

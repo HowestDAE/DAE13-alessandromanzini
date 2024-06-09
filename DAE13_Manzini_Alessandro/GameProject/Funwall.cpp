@@ -5,16 +5,23 @@
 #include "Sprite.h"
 #include "SoundManager.h"
 #include "Toycar.h"
+#include "Tongue.h"
 
 const float Funwall::smk_LipsSpawnDelay{ 0.675f };
 const float Funwall::smk_HitSFXDelay{ 1.3f };
 const float Funwall::smk_UhohAttackDelay{ 4.5f };
 const float Funwall::smk_UhohCastDelay{ smk_UhohAttackDelay - .65f };
-const float Funwall::smk_UhohRecoverDelay{ smk_UhohAttackDelay + 3.f };
+const float Funwall::smk_UhohRecoverDelay{ smk_UhohAttackDelay + 4.f };
 
-Funwall::Funwall( const Point2f& position, float aggroRadius, float dropRadius )
+const Vector2f Funwall::smk_ToycarBottomSpawnOffset{ 190.f, 140.f };
+const Vector2f Funwall::smk_ToycarTopSpawnOffset{ 190.f, 560.f };
+const Vector2f Funwall::smk_TongueBottomSpawnOffset{ -850.f, 140.f };
+const Vector2f Funwall::smk_TongueTopSpawnOffset{ -850.f, 570.f };
+
+Funwall::Funwall( const Point2f& position, float aggroRadius, float dropRadius, bool tongueVariation )
 	: Enemy( position, Constants::sk_FunwallHP, aggroRadius, dropRadius, 1, false, true )
 	, m_CollisionManager{ std::vector<CollisionCircle>{ CollisionCircle{ 180.f, 280.f, 150.f }, CollisionCircle{ 180.f, 580.f, 150.f } }, &m_Location }
+	, mk_TongueVariation{ tongueVariation }
 	, m_Lips{}
 	, m_pHonkSprites{}
 	, m_pHonkVFXSprites{}
@@ -22,7 +29,6 @@ Funwall::Funwall( const Point2f& position, float aggroRadius, float dropRadius )
 	, m_HonkCooldownTimes{}
 	, m_HasHonked{}
 	, m_HitSFXTimer{ smk_HitSFXDelay }
-	, mk_pUhohEnemiesStartingPositions{  position + Vector2f{ 190.f, 140.f }, position + Vector2f{ 190.f, 560.f } }
 	, m_pUhohSprite{}
 	, m_HasCastedUhoh{}
 	, m_HasAttackedUhoh{}
@@ -36,11 +42,7 @@ Funwall::Funwall( const Point2f& position, float aggroRadius, float dropRadius )
 	StageManager::PushCompositionEntity( &m_Lips[0] );
 	StageManager::PushCompositionEntity( &m_Lips[1] );
 
-	const Point2f outOfBounds{ -10000.f, -10000.f };
-	m_pUhohEnemies[0] = new Toycar( outOfBounds, dropRadius, dropRadius, 2 );
-	m_pUhohEnemies[1] = new Toycar( outOfBounds, dropRadius, dropRadius, 2, true );
-	StageManager::PushCompositionEntity( m_pUhohEnemies[0] );
-	StageManager::PushCompositionEntity( m_pUhohEnemies[1] );
+	InitializeUhOhEntities( aggroRadius, dropRadius );
 }
 
 Funwall::~Funwall( ) noexcept
@@ -166,6 +168,26 @@ void Funwall::LinkTexture( ResourcesLinker* pResourcesLinker )
 	}
 }
 
+void Funwall::InitializeUhOhEntities( float aggroRadius, float dropRadius )
+{
+	if ( mk_TongueVariation )
+	{
+		m_pUhohEnemies[0] = new Tongue( (m_Location + smk_TongueBottomSpawnOffset).ToPoint2f(), dropRadius, dropRadius );
+		m_pUhohEnemies[1] = new Tongue( (m_Location + smk_TongueTopSpawnOffset).ToPoint2f( ), dropRadius, dropRadius, true );
+	}
+	else
+	{
+		const Point2f outOfBounds{ -10000.f, -10000.f };
+		m_pUhohEnemies[0] = new Toycar( (m_Location + smk_ToycarBottomSpawnOffset).ToPoint2f( ), dropRadius, dropRadius, 2 );
+		m_pUhohEnemies[1] = new Toycar( (m_Location + smk_ToycarTopSpawnOffset).ToPoint2f( ), dropRadius, dropRadius, 2, true );
+		m_pUhohEnemies[0]->Reset( outOfBounds );
+		m_pUhohEnemies[1]->Reset( outOfBounds );
+	}
+
+	StageManager::PushCompositionEntity( m_pUhohEnemies[0] );
+	StageManager::PushCompositionEntity( m_pUhohEnemies[1] );
+}
+
 void Funwall::UpdateHonkAttack( float elapsedSec, const Vector2f& targetLocation )
 {
 	const int reservedHonkIndex{ 4 };
@@ -217,7 +239,7 @@ void Funwall::UpdateUhohAttack( float elapsedSec )
 		// 3 is a dedicated channel for the uhoh attack
 		QueueTexture( 3, TextureInfo{ m_pMouthCoverSprite[m_UhohIndex] }, true );
 
-		m_pUhohEnemies[m_UhohIndex]->Reset( mk_pUhohEnemiesStartingPositions[m_UhohIndex] );
+		m_pUhohEnemies[m_UhohIndex]->Reset( );
 
 		m_HasAttackedUhoh = true;
 	}

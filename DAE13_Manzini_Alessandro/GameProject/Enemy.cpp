@@ -7,6 +7,7 @@ Enemy::Enemy( const Point2f& position, int hp, float aggroRadius, float dropRadi
 	, m_AggroRadius{ powf( aggroRadius, 2 ) }
 	, mk_DropRadius{ powf( dropRadius, 2 ) }
 	, mk_ScreenLock{ screenLock }
+	, mk_StartLocation{ position }
 	, m_IsAggro{ false }
 {
 }
@@ -53,6 +54,12 @@ bool Enemy::CompareAggroDistance( const Vector2f& targetLocation )
 
 void Enemy::Reset( const Point2f& position )
 {
+	m_Location = Vector2f{ position };
+}
+
+void Enemy::Reset( )
+{
+	m_Location = Vector2f{ mk_StartLocation };
 }
 
 bool Enemy::GetIsScreenLock( ) const

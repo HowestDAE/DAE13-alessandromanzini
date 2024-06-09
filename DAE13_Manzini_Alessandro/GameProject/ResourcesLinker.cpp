@@ -153,6 +153,14 @@ void ResourcesLinker::InitializeEntities( )
 	// Funwall
 	LoadTexturesFromFile( "csv/resources/enemy/funwall/funwall_textures.csv", true );
 	LoadSpriteSettingsFromFile( "csv/resources/enemy/funwall/funwall_sprite_settings.csv" );
+
+	// Starblaster
+	LoadTexturesFromFile( "csv/resources/enemy/starblaster/starblaster_textures.csv", true );
+	LoadSpriteSettingsFromFile( "csv/resources/enemy/starblaster/starblaster_sprite_settings.csv" );
+
+	// Tuba
+	LoadTexturesFromFile( "csv/resources/enemy/tuba/tuba_textures.csv", true );
+	LoadSpriteSettingsFromFile( "csv/resources/enemy/tuba/tuba_sprite_settings.csv" );
 }
 
 void ResourcesLinker::InitializeBackgroundProps( )
@@ -165,7 +173,7 @@ void ResourcesLinker::InitializeBackgroundProps( )
 void ResourcesLinker::InitializeScreens( )
 {
 	// Screen FX
-	/*{
+	{
 		const int screenFxCount{ 127 };
 		const std::string basePath{ "screen/ST_screen_fx/cuphead_screen_fx_" };
 		
@@ -177,7 +185,7 @@ void ResourcesLinker::InitializeScreens( )
 			m_pScreenFXTextures[i] = new Texture( path + std::to_string( i ) + ".png", false, true );
 
 		}
-	}*/
+	}
 	LoadTexturesFromFile( "csv/resources/screen/screen_textures.csv" );
 	LoadSpriteSettingsFromFile( "csv/resources/screen/screen_sprite_settings.csv" );
 }

@@ -37,6 +37,15 @@ public:
 
 	static const int sk_FunwallHP;
 	static const float sk_LipSpeed;
+	static const float sk_TongueIntroSpeed;
+	static const float sk_TongueOutroSpeed;
+
+	static const float sk_StarblasterProjectileSpeed;
+	static const float sk_StarblasterProjectileRange;
+
+	static const int sk_TubaHP;
+	static const float sk_TubaDeathSpeed;
+	static const Vector2f sk_BwaSpeed;
 
 	static const float sk_GravityPullSpeed;
 	static const float sk_GravityPullAcceleration;

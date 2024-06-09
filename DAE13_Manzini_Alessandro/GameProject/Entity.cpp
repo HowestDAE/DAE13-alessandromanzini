@@ -37,7 +37,6 @@ void Entity::Draw( ) const
     {
         Draw( i );
     }
-    DrawCollision( );
 }
 
 void Entity::DrawBackside( ) const

@@ -1,0 +1,8 @@
+label; rows; cols; delay; boomerang; x; y; mustcomplete;
+tuba_idle; 1; 7; 0.1f; 1; 0.f; 0.f; 0;
+tuba_attack;  4; 5; 0.1f; 0; -100.f; 0.f; 1;
+tuba_attack_cover; 4; 5; 0.1f; 0; -100.f; 0.f; 1;
+tuba_a_letter; 1; 5; 0.1f; 1; 0.f; 0.f; 0;
+tuba_bw_letter; 1; 5; 0.1f; 1; 0.f; 0.f; 0;
+tuba_exclamation_mark; 1; 5; 0.1f; 1; 0.f; 0.f; 0;
+tuba_death; 1; 19; 0.06f; 0; 0.f; 0.f; 0;

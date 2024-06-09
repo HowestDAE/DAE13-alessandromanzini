@@ -13,6 +13,7 @@ public:
 
     virtual void UpdateLocation( float elapsedSec ) override;
     virtual void Reset( const Point2f& position ) override;
+    virtual void Reset( ) override;
 
     virtual void LinkTexture( ResourcesLinker* pResourcesLinker ) override;
 

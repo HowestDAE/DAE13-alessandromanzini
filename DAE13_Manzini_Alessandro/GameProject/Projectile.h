@@ -17,6 +17,7 @@ public:
 	void Update( float elapsedSec );
 
 	virtual bool CheckCollision( CollidableEntity& other ) override;
+	virtual bool GetIFrameState( ) const override;
 
 	void Reset( const Point2f& origin, float radius, float rotation );
 

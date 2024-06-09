@@ -32,7 +32,7 @@ void Game::Initialize( )
 
 	m_pWinningScreenManager = new WinningScreenManager( m_ResourcesLinker.GetLightFontPath( ), GetViewPort( ) );
 
-	//m_pScreenFXTexture = m_pResourcesLinker->GetScreenFXTexture( );
+	m_pScreenFXTexture = m_ResourcesLinker.GetScreenFXTexture( );
 }
 
 void Game::InitializeGameResources( )
@@ -82,7 +82,7 @@ void Game::Update( float elapsedSec )
 		break;
 	}
 
-	//m_pScreenFXTexture->Update( elapsedSec );
+	m_pScreenFXTexture->Update( elapsedSec );
 }
 
 void Game::Draw( ) const
@@ -106,7 +106,7 @@ void Game::Draw( ) const
 		break;
 	}
 
-	//m_pScreenFXTexture->Draw( GetViewPort() );
+	m_pScreenFXTexture->Draw( GetViewPort() );
 }
 
 void Game::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )
@@ -195,6 +195,7 @@ void Game::UpdateStageState( float elapsedSec )
 		TerminateGame( );
 		m_pWinningScreenManager->Initialize( );
 		m_pWinningScreenManager->LinkTexture( &m_ResourcesLinker );
+		m_pScreenFXTexture = m_ResourcesLinker.GetScreenFXTexture( );
 		return;
 	}
 

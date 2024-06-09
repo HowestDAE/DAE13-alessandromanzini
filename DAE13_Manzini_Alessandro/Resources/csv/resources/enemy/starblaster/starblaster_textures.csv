@@ -1,0 +1,18 @@
+label; path;
+starblaster_star_a_idle; enemy/starblaster/AS_starblaster_star_a_idle_1x5.png;
+starblaster_star_b_idle; enemy/starblaster/AS_starblaster_star_b_idle_1x5.png;
+starblaster_star_a_shoot; enemy/starblaster/AS_starblaster_star_a_shoot_1x3.png;
+starblaster_star_b_shoot; enemy/starblaster/AS_starblaster_star_b_shoot_1x3.png;
+
+starblaster_ordinal_idle; enemy/starblaster/AS_starblaster_ordinal_idle_1x1.png;
+starblaster_ordinal_rotate; enemy/starblaster/AS_starblaster_ordinal_rotate_1x5.png;
+starblaster_ordinal_shoot; enemy/starblaster/AS_starblaster_ordinal_shoot_1x4.png;
+starblaster_ordinal_shoot_vfx; enemy/starblaster/AS_starblaster_ordinal_shoot_vfx_2x7.png;
+
+starblaster_cardinal_idle; enemy/starblaster/AS_starblaster_cardinal_idle_1x1.png;
+starblaster_cardinal_rotate; enemy/starblaster/AS_starblaster_cardinal_rotate_1x5.png;
+starblaster_cardinal_shoot; enemy/starblaster/AS_starblaster_cardinal_shoot_1x4.png;
+starblaster_cardinal_shoot_vfx; enemy/starblaster/AS_starblaster_cardinal_shoot_vfx_2x7.png;
+
+cannon_ball; enemy/starblaster/AS_cannon_ball_1x1.png;
+cannon_death; enemy/starblaster/AS_cannon_death_4x5.png;
