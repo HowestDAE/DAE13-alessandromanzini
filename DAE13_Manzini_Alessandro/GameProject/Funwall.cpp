@@ -294,6 +294,14 @@ void Funwall::Kill( )
 {
 	Enemy::Kill( );
 
+	if ( mk_TongueVariation )
+	{
+		for ( int i{}; i < smk_SidesCount; ++i )
+		{
+			static_cast<Tongue*>(m_pUhohEnemies[i])->Kill( );
+		}
+	}
+
 	QueueTexture( 0, m_pDeathSprite );
 	QueueTexture( 2, TextureInfo{ m_pDeathCoverSprite }, true );
 	ClearQueue( 1 );

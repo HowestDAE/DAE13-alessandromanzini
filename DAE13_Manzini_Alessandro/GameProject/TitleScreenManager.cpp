@@ -46,21 +46,30 @@ void TitleScreenManager::Update( float elapsedSec )
 
 void TitleScreenManager::KeyDownEvent( const SDL_KeyboardEvent& e )
 {
-	switch ( e.keysym.sym )
+	if( !m_IsOptionSelected )
 	{
-	case SDLK_UP:
-		PreviousOption( );
-		break;
-	case SDLK_DOWN:
-		NextOption( );
-		break;
-	case SDLK_RETURN:
-		m_IsOptionSelected = true;
-		break;
-	case SDLK_ESCAPE:
-	case SDLK_q:
-		m_IsOptionSelected = false;
-		break;
+		switch ( e.keysym.sym )
+		{
+		case SDLK_UP:
+			PreviousOption( );
+			break;
+		case SDLK_DOWN:
+			NextOption( );
+			break;
+		case SDLK_RETURN:
+			m_IsOptionSelected = true;
+			break;
+		}
+	}
+	else
+	{
+		switch ( e.keysym.sym )
+		{
+		case SDLK_ESCAPE:
+		case SDLK_q:
+			m_IsOptionSelected = false;
+			break;
+		}
 	}
 }
 

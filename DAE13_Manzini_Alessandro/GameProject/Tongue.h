@@ -13,6 +13,9 @@ public:
     virtual void Reset( const Point2f& position ) override;
     virtual void Reset( ) override;
 
+    virtual void Kill( ) override;
+    virtual bool GetIFrameState( ) const override;
+
     virtual void LinkTexture( ResourcesLinker* pResourcesLinker ) override;
 
 private:

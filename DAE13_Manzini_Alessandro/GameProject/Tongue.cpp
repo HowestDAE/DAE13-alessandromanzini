@@ -55,6 +55,17 @@ void Tongue::Reset( )
 	m_CollisionVelocity.Set( -Constants::sk_TongueIntroSpeed, 0.f );
 }
 
+void Tongue::Kill( )
+{
+	Enemy::Kill( );
+	m_TongueElapsedTime = smk_TongueDuration;
+}
+
+bool Tongue::GetIFrameState( ) const
+{
+	return !GetIsAlive();
+}
+
 void Tongue::LinkTexture( ResourcesLinker* pResourcesLinker )
 {
 	m_pIntroSprite = pResourcesLinker->GetSprite( "tongue_intro" );
