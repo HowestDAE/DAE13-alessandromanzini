@@ -21,7 +21,7 @@ const float Camera::smk_MaxCameraX{ 15260.f };
 Camera::Camera( const Rectf& viewPort )
 	: mk_pStageManager{}
 	, mk_ViewPort{ viewPort }
-	, m_CameraLocationVector{ Constants::sk_CupheadStartingPosition }
+	, m_CameraLocationVector{}
 	, m_CameraTranslationVector{}
 	, m_AimLocationVector{}
 	, m_ScreenOverlayQueue{}

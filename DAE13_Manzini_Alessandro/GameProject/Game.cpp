@@ -170,6 +170,8 @@ void Game::TerminateGame( )
 
 	CleanupGameResources( );
 	m_Camera.Reset( );
+
+	m_pScreenFXTexture = m_ResourcesLinker.GetScreenFXTexture( );
 }
 
 void Game::UpdateTitleState( float elapsedSec )
@@ -195,7 +197,6 @@ void Game::UpdateStageState( float elapsedSec )
 		TerminateGame( );
 		m_pWinningScreenManager->Initialize( );
 		m_pWinningScreenManager->LinkTexture( &m_ResourcesLinker );
-		m_pScreenFXTexture = m_ResourcesLinker.GetScreenFXTexture( );
 		return;
 	}
 
