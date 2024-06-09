@@ -7,7 +7,7 @@ const Point2f Constants::sk_HUD_HP_Position{ 20.f, 20.f };
 const Point2f Constants::sk_HUD_Excards_Position{ 115.f, 20.f };
 const Point2f Constants::sk_HUD_WeaponIcon_Position{ 30.f, 45.f };
 
-const Point2f Constants::sk_CupheadStartingPosition{ 15000, 100.f }; // 285, 100
+const Point2f Constants::sk_CupheadStartingPosition{ 285.f, 100.f }; // 285, 100
 
 const int Constants::sk_CupheadStartingHP{ 3 };
 const float Constants::sk_CupheadIFramesDuration{ 3.f };
@@ -49,7 +49,7 @@ const float Constants::sk_GravityPullAcceleration{ 90.f }; // 90
 const float Constants::sk_ProjectileSpeed{ 1050.f }; // 1050
 
 const int Constants::sk_PeashooterCount{ 24 };
-const int Constants::sk_PeashooterDamage{ 400 }; // 40
+const int Constants::sk_PeashooterDamage{ 40 }; // 40
 const float Constants::sk_PeashooterRange{ 1000.f };
 const float Constants::sk_PeashooterExProgressPerHit{ 1.f / 32 }; // 1.f / 32
 

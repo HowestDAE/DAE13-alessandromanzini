@@ -104,11 +104,15 @@ Use this space to show useful examples of how a game can be played.
 Additional screenshots and demos work well in this space. 
 
 ### Controls
-* left/right arrows to move
-* down arrow to duck
-* space to jump
-* lshift to dash
-* 'a' to shoot
+* LEFT/RIGHT ARROWS to move
+* DOWN ARROW to duck (inverted if gravity inverted)
+* SPACE to jump
+* LSHIFT to dash
+* A to shoot
+* Z to dash
+* X to switch weapons
+* ESC to pause (Controls screen)
+* Hold Q to quit the level
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -119,17 +123,27 @@ Additional screenshots and demos work well in this space.
 
 ### Object composition 
 The ResourcesLinker (class that initializes and links textures) is aggregated in the StageManager (class that initializes, updates and manages all entities).
+The linked textures themselved are aggregated to the entities by the ResourceManager.
 The Camera is associated with the StageManager.
 
 StageManager has a PlatformManager as part of the composition.
 
 Cuphead (player class) has a WeaponManager and a MovementManager as part of the composition.
+All entities that shoot have a BulletManager or Bullet entities as part of the composition.
+All entities also have the composition about the texture and animation management.
 
 ### Inheritance 
-The basic abstract TextureManager is the parent of SpriteManager, PatternManager and CompositeSpriteManager. These classes generate and make use of textures in the game.
+The basic abstract TextureManager is the parent of SpriteManager, PatternManager. These classes generate and make use of textures in the game.
 
 TexturedModel is the base class for all entities. It splits into NonInterractableProp and Entities. 
 Entities will have all gameplay characters as children.
+Enemies, child of entities, will have all enemies as children.
+
+All Entities are also children of the CollisionEntity class, which provides collision detection and resolution.
+
+Weapons (like peashooter or spread) are children of the Weapon class.
+
+All screen managers are children of the ScreenManager class.
 
 ### ..
 
@@ -149,10 +163,10 @@ Entities will have all gameplay characters as children.
 - [x] week 04 topics applied
 - [x] week 05 topics applied
 - [x] week 06 topics applied
-- [ ] week 07 topics applied
-- [ ] week 08 topics applied
-- [ ] week 09 topics applied (optional)
-- [ ] week 10 topics applied (optional)
+- [x] week 07 topics applied
+- [x] week 08 topics applied
+- [x] week 09 topics applied (optional)
+- [x] week 10 topics applied (optional)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
