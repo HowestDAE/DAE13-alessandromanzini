@@ -8,6 +8,7 @@
 #include "Cuphead.h"
 #include "Toyduck.h"
 #include <math.h>
+#include <utils.h>
 
 // We only want the first fourth of the wave. Thus M_PI_2 instead of 2*M_PI.
 const float Camera::smk_CameraMaxSpeed{ 700.f };
@@ -140,6 +141,9 @@ void Camera::DrawScreenOverlay( ) const
 	{
 		m_ScreenTexture.pTexture->Draw( Point2f{ 0.f, 0.f } );
 	}
+
+	utils::SetColor( Color4f{ 0.f, 0.f, 0.f, mk_pStageManager->GetScreenOpacity( ) } );
+	utils::FillRect( mk_ViewPort );
 }
 
 void Camera::DrawBackground( const std::vector<NonInterractableProp>& props ) const

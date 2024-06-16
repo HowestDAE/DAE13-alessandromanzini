@@ -37,6 +37,8 @@ public:
 	bool GetRequestTitleScreen( ) const;
 	bool GetRequestWinScreen( GameStats& gameStats ) const;
 
+	float GetScreenOpacity( ) const;
+
 	const std::vector<NonInterractableProp>& GetBackgroundProps( ) const;
 	const std::vector<NonInterractableProp>& GetFrontgroundProps( ) const;
 

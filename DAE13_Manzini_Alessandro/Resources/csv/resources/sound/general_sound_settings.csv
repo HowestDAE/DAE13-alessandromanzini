@@ -4,3 +4,6 @@ game_over; sounds/game_over.mp3; 0; 40;
 bravo; sounds/announcer/bravo.mp3; 0; 50;
 
 coin_pickup; sounds/coin/coin_pickup.mp3; 0; 35;
+
+menu_change; sounds/hud/menu_change.mp3; 0; 35;
+start_game; sounds/hud/start_game.mp3; 0; 50;

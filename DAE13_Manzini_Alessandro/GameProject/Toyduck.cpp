@@ -56,7 +56,7 @@ CollisionManager Toyduck::GenerateCollisionManager( bool updown )
 
 void Toyduck::AggroEvent( )
 {
-	SoundManager::Play( "toyduck_idle_loop", -1 );
+	SoundManager::Play( "toyduck_idle_loop", 20 );
 }
 
 void Toyduck::DropEvent( )

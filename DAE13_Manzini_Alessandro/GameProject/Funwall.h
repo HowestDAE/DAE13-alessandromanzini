@@ -52,7 +52,7 @@ private:
     Sprite* m_pHonkSprites[smk_SidesCount];
     Sprite* m_pHonkVFXSprites[smk_SidesCount];
     float m_HonkCooldownTimes[smk_SidesCount];
-    bool m_HasHonked;
+    bool m_HasHonked[smk_SidesCount];
     Lip m_Lips[smk_SidesCount];
 
     static const float smk_UhohCastDelay;

@@ -209,6 +209,11 @@ bool StageManager::GetRequestWinScreen( GameStats& gameStats ) const
 	return false;
 }
 
+float StageManager::GetScreenOpacity( ) const
+{
+	return m_RequestTitleScreenElapsedTime / smk_RequestTitleScreenDelay;
+}
+
 const std::vector<NonInterractableProp>& StageManager::GetBackgroundProps( ) const
 {
 	return m_BackgroundProps;

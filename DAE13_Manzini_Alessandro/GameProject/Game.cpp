@@ -4,6 +4,7 @@
 #include "GameStats.h"
 #include "Texture2D.h"
 #include "VectorSprite.h"
+#include "SoundManager.h"
 
 Game::Game( const Window& window ) 
 	: BaseGame{ window }

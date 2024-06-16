@@ -206,13 +206,13 @@ void Funwall::UpdateHonkAttack( float elapsedSec, const Vector2f& targetLocation
 			m_Lips[i].Reset( spawnLocation, targetLocation - spawnLocation );
 
 			RandomizeHonk( i );
-			m_HasHonked = false;
+			m_HasHonked[i] = false;
 		}
-		else if ( m_HonkCooldownTimes[i] <= smk_LipsSpawnDelay && !m_HasHonked )
+		else if ( m_HonkCooldownTimes[i] <= smk_LipsSpawnDelay && !m_HasHonked[i] )
 		{
 			// if time is about to get to 0, start shoot animation
 			QueueTexture( reservedHonkIndex + i * 2, TextureInfo{ m_pHonkSprites[i] }, true );
-			m_HasHonked = true;
+			m_HasHonked[i] = true;
 		}
 	}
 }

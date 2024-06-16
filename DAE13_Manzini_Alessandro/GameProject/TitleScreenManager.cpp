@@ -2,6 +2,7 @@
 #include "TitleScreenManager.h"
 #include "ResourcesLinker.h"
 #include "Texture2D.h"
+#include "SoundManager.h"
 
 TitleScreenManager::TitleScreenManager( const Rectf& bounds )
 	: ScreenManager( bounds )
@@ -77,6 +78,8 @@ void TitleScreenManager::NextOption( ) noexcept
 {
 	const int optionsCount{ static_cast<int>( TitleOptions::exit ) + 1 };
 	SelectOption( static_cast<TitleOptions>((static_cast<int>(m_SelectedOption) + 1) % optionsCount) );
+
+	SoundManager::Play( "menu_change" );
 }
 
 void TitleScreenManager::PreviousOption( ) noexcept
@@ -90,6 +93,8 @@ void TitleScreenManager::PreviousOption( ) noexcept
 	{
 		SelectOption( static_cast<TitleOptions>( option ) );
 	}
+
+	SoundManager::Play( "menu_change" );
 }
 
 bool TitleScreenManager::IsOptionSelected( TitleOptions& option ) const noexcept
